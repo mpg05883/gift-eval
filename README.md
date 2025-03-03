@@ -1,6 +1,4 @@
-# GIFT-EVAL: A Benchmark for General Time Series Forecasting Model Evaluation
-
-test
+# GIFT-EVAL: A Benchmark for General Time Series Forecasting Model Evaluatio
 
 [Paper](https://arxiv.org/abs/2410.10393) | [Blog Post]() | [Train-Test Dataset](https://huggingface.co/datasets/Salesforce/GiftEval) | [Pretrain Dataset](https://huggingface.co/datasets/Salesforce/GiftEvalPretrain) | [Leaderboard](https://huggingface.co/spaces/Salesforce/GIFT-Eval)
 
