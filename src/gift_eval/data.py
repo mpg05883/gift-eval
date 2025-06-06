@@ -13,28 +13,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
+import json
 import math
-from functools import cached_property
+import os
 from enum import Enum
+from functools import cached_property
 from pathlib import Path
 from typing import Iterable, Iterator
 
-import datasets
+import pyarrow.compute as pc
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
 from gluonts.dataset.common import ProcessDataEntry
 from gluonts.dataset.split import TestData, TrainingDataset, split
 from gluonts.itertools import Map
-from gluonts.time_feature import norm_freq_str
+from gluonts.time_feature import get_seasonality, norm_freq_str
 from gluonts.transform import Transformation
 from pandas.tseries.frequencies import to_offset
-import pyarrow.compute as pc
 from toolz import compose
+
+import datasets
 
 TEST_SPLIT = 0.1
 MAX_WINDOW = 20
 
+# Prediction lengths for M4 datasets
+# https://paperswithcode.com/dataset/m4
 M4_PRED_LENGTH_MAP = {
     "A": 6,
     "Q": 8,
@@ -53,6 +57,8 @@ PRED_LENGTH_MAP = {
     "S": 60,
 }
 
+# Prediction lengths from Time Series Forecasting Benchmark (TFB)
+# https://arxiv.org/abs/2403.20150
 TFB_PRED_LENGTH_MAP = {
     "A": 6,
     "H": 48,
@@ -107,34 +113,111 @@ class Dataset:
         self,
         name: str,
         term: Term | str = Term.SHORT,
-        to_univariate: bool = False,
         storage_env_var: str = "GIFT_EVAL",
+        verbose: bool = True,
     ):
+        self.name = name
+        self.term = Term(term)
+
+        if not verbose:
+            os.environ["HF_DATASETS_DISABLE_PROGRESS_BARS"] = "1"
+
+        # Change storage path depending on whether dataset is in pretrain or
+        # train-test split
         load_dotenv()
-        storage_path = Path(os.getenv(storage_env_var))
-        self.hf_dataset = datasets.load_from_disk(str(storage_path / name)).with_format(
-            "numpy"
-        )
+        directory = os.getenv(storage_env_var)
+        storage_path = str(Path(directory) / self.subdirectory / self.name)
+
+        self.hf_dataset = datasets.load_from_disk(storage_path).with_format("numpy")
+
         process = ProcessDataEntry(
-            self.freq,
+            norm_freq_str(self.freq),
             one_dim_target=self.target_dim == 1,
         )
 
         self.gluonts_dataset = Map(compose(process, itemize_start), self.hf_dataset)
-        if to_univariate:
+        self.num_entries = len(self.gluonts_dataset)
+
+        # Automatically convert multivariate datasets to univariate
+        if self.target_dim > 1:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
 
-        self.term = Term(term)
-        self.name = name
+    @cached_property
+    def key(self) -> str:
+        """
+        Returns the dataset's key for accessing dataset infomation in
+        dataset_properties.json (e.g. domain and number of variates)
+
+        Args:
+            name (str): Name of the dataset.
+        """
+        pretty_names = {
+            "saugeenday": "saugeen",
+            "temperature_rain_with_missing": "temperature_rain",
+            "kdd_cup_2018_with_missing": "kdd_cup_2018",
+            "car_parts_with_missing": "car_parts",
+        }
+        key = self.name.split("/")[0] if "/" in self.name else self.name
+        key = key.lower()
+        return pretty_names.get(key, key)
+
+    @cached_property
+    def subdirectory(
+        self,
+        file_name: str = "dataset_properties.json",
+        directory: str = "notebooks",
+    ) -> str:
+        """
+        Determines whether the storage path's subdirectory is set to "pretrain"
+        or "train_test".
+
+        `subdirectory` is set to "pretrain" if the dataset is part of the
+        pretraining split. Else, `subdirectory` is set to "train-test".
+
+        Args:
+            file_name (str, optional): Name of the JSON file containing dataset
+                properties. Defaults to "dataset_properties.json".
+            directory (str, optional): Parent directory of
+                dataset_properties.json. Defaults to "notebooks".
+
+        Returns:
+            str: "pretrain" if the dataset belongs to the pretraining split,
+                else "train_test".
+        """
+        dataset_properties = json.load(open(Path(directory) / file_name))
+        return "train_test" if self.key in dataset_properties else "pretrain"
+
+    @property
+    def config(self) -> str:
+        """
+        Returns the dataset's configuration formatted as `key`/`freq`/`term`.
+
+        The dataset's configuration is used for formatting dataset names and
+        terms in results files.
+
+        Returns:
+            str: The dataset's configuration.
+        """
+        return f"{self.key}/{self.freq}/{self.term.value}"
+
+    @cached_property
+    def seasonality(self) -> int:
+        """
+        Returns the dataset's seasonality (number of time steps per seasonal
+        cycle) using the time series's frequency.
+
+        Returns:
+            int: The number of time steps in one seasonal cycle.
+        """
+        return get_seasonality(self.freq)
 
     @cached_property
     def prediction_length(self) -> int:
         freq = norm_freq_str(to_offset(self.freq).name)
-        pred_len = (
-            M4_PRED_LENGTH_MAP[freq] if "m4" in self.name else PRED_LENGTH_MAP[freq]
-        )
+        default_pred_len = PRED_LENGTH_MAP.get(freq, TFB_PRED_LENGTH_MAP[freq])
+        pred_len = M4_PRED_LENGTH_MAP[freq] if "m4" in self.name else default_pred_len
         return self.term.multiplier * pred_len
 
     @cached_property
