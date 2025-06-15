@@ -1,35 +1,32 @@
-import os
 import gc
-import numpy as np
-
-import ray
-from ray.experimental import tqdm_ray
-
-import pandas as pd
-from pandas.tseries.frequencies import to_offset
-
-from pathlib import Path
-from tqdm import tqdm
+import os
 from collections import defaultdict
 from functools import cached_property
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import ray
+from dotenv import load_dotenv
 from gluonts.time_feature import norm_freq_str
+from pandas.tseries.frequencies import to_offset
+from ray.experimental import tqdm_ray
+from tqdm import tqdm
 
 from gift_eval.data import Dataset
+
 from .features import get_ts_features
 from .utils import persist_analysis
 
-from dotenv import load_dotenv
 load_dotenv()
 
 MAX_CONTEXT_LEN = 500
-runtime_env = {
-    'env_vars': {
-        "RAY_memory_usage_threshold": "0.85"
-    }
-}
+runtime_env = {"env_vars": {"RAY_memory_usage_threshold": "0.85"}}
 
 if not os.getenv("NUM_CPUS"):
-    print("NUM_CPUS environment variable not found. Setting to 1. Set NUM_CPUS to speed up processing.")
+    print(
+        "NUM_CPUS environment variable not found. Setting to 1. Set NUM_CPUS to speed up processing."
+    )
 NUM_CPUS = int(os.getenv("NUM_CPUS", "1"))
 
 
@@ -62,7 +59,8 @@ def process_instance(self, test_input, test_label, dataset_freq):
 
     # Compute time series features
     window_features_df = get_ts_features(
-        np_instance, norm_freq_str(to_offset(dataset_freq).name))
+        np_instance, norm_freq_str(to_offset(dataset_freq).name)
+    )
     self.pbar.update.remote(1)
     return window_features_df
 
@@ -82,17 +80,23 @@ def process_dataset(self, dataset, output_dir):
     """
     # Determine the directory for the dataset based on its term and name
     if str(dataset.term) == "Term.SHORT":
-        dataset_dir = Path(os.path.join(os.path.dirname(
-            output_dir), f"datasets/{dataset.name}"))
+        dataset_dir = Path(
+            os.path.join(os.path.dirname(output_dir), f"datasets/{dataset.name}")
+        )
     else:
         if "/" in dataset.name:
             dataset_name, dataset_freq = dataset.name.split("/")
             dataset_name = f"{dataset_name}:{dataset.term}/{dataset_freq}"
-            dataset_dir = Path(os.path.join(os.path.dirname(
-                output_dir), f"datasets/{dataset_name}"))
+            dataset_dir = Path(
+                os.path.join(os.path.dirname(output_dir), f"datasets/{dataset_name}")
+            )
         else:
-            dataset_dir = Path(os.path.join(os.path.dirname(
-                output_dir), f"datasets/{dataset.name}:{dataset.term}"))
+            dataset_dir = Path(
+                os.path.join(
+                    os.path.dirname(output_dir),
+                    f"datasets/{dataset.name}:{dataset.term}",
+                )
+            )
 
     # Create the directory if it doesn't exist
     if not dataset_dir.exists():
@@ -108,8 +112,10 @@ def process_dataset(self, dataset, output_dir):
     test_data = dataset.test_data
 
     # Process each instance in the dataset
-    features = [process_instance.remote(
-        self, test_input, test_label, dataset.freq) for test_input, test_label in test_data]
+    features = [
+        process_instance.remote(self, test_input, test_label, dataset.freq)
+        for test_input, test_label in test_data
+    ]
 
     for feature in features:
         try:
@@ -130,7 +136,7 @@ def process_dataset(self, dataset, output_dir):
     persist_analysis(all_features_df, dataset_dir)
 
 
-class Analyzer():
+class Analyzer:
     """
     Analyzer class to manage the analysis of multiple datasets, including feature computation and frequency distribution analysis.
     """
@@ -171,8 +177,9 @@ class Analyzer():
     @property
     def freq_distribution_by_dataset(self):
         """Compute the frequency distribution by dataset."""
-        freqs = [norm_freq_str(to_offset(dataset.freq).name)
-                 for dataset in self.datasets]
+        freqs = [
+            norm_freq_str(to_offset(dataset.freq).name) for dataset in self.datasets
+        ]
         freq_counts = {freq: freqs.count(freq) for freq in set(freqs)}
         return freq_counts
 
@@ -181,8 +188,9 @@ class Analyzer():
         """Compute the frequency distribution by time series count."""
         freq_ts_counts = defaultdict(lambda: 0)
         for dataset in self.datasets:
-            freq_ts_counts[norm_freq_str(
-                to_offset(dataset.freq).name)] += dataset.hf_dataset.num_rows
+            freq_ts_counts[
+                norm_freq_str(to_offset(dataset.freq).name)
+            ] += dataset.hf_dataset.num_rows
         return freq_ts_counts
 
     @property
@@ -190,8 +198,9 @@ class Analyzer():
         """Compute the frequency distribution by time series length."""
         freq_dp_counts = defaultdict(lambda: 0)
         for dataset in self.datasets:
-            freq_dp_counts[norm_freq_str(
-                to_offset(dataset.freq).name)] += dataset.sum_series_length
+            freq_dp_counts[
+                norm_freq_str(to_offset(dataset.freq).name)
+            ] += dataset.sum_series_length
         return freq_dp_counts
 
     @property
@@ -199,8 +208,9 @@ class Analyzer():
         """Compute the frequency distribution by window count."""
         freq_window_counts = defaultdict(lambda: 0)
         for dataset in self.datasets:
-            freq_window_counts[norm_freq_str(
-                to_offset(dataset.freq).name)] += dataset.hf_dataset.num_rows * dataset.windows
+            freq_window_counts[norm_freq_str(to_offset(dataset.freq).name)] += (
+                dataset.hf_dataset.num_rows * dataset.windows
+            )
         return freq_window_counts
 
     def features_by_window(self, output_dir):
@@ -210,27 +220,43 @@ class Analyzer():
         Parameters:
         - output_dir: Directory where the features will be saved.
         """
-        ray.get([process_dataset.remote(self, dataset, output_dir)
-                for dataset in self.datasets])
+        ray.get(
+            [
+                process_dataset.remote(self, dataset, output_dir)
+                for dataset in self.datasets
+            ]
+        )
         self.pbar.close.remote()
 
         all_datasets_df = []
         # Aggregate the characteristics for each dataset
-        with tqdm(total=len(self.datasets), desc="Computing ts features for whole benchmark") as pbar:
+        with tqdm(
+            total=len(self.datasets), desc="Computing ts features for whole benchmark"
+        ) as pbar:
             for dataset in self.datasets:
                 pbar.set_description(f"Loading ts features | {dataset.name}")
                 if str(dataset.term) == "Term.SHORT":
-                    dataset_df_path = os.path.join(os.path.dirname(
-                        output_dir), f"datasets/{dataset.name}/features.csv")
+                    dataset_df_path = os.path.join(
+                        os.path.dirname(output_dir),
+                        f"datasets/{dataset.name}/features.csv",
+                    )
                 else:
                     if "/" in dataset.name:
                         dataset_name, dataset_freq = dataset.name.split("/")
                         dataset_name = f"{dataset_name}:{dataset.term}/{dataset_freq}"
-                        dataset_df_path = Path(os.path.join(os.path.dirname(
-                            output_dir), f"datasets/{dataset_name}/features.csv"))
+                        dataset_df_path = Path(
+                            os.path.join(
+                                os.path.dirname(output_dir),
+                                f"datasets/{dataset_name}/features.csv",
+                            )
+                        )
                     else:
-                        dataset_df_path = Path(os.path.join(os.path.dirname(
-                            output_dir), f"datasets/{dataset.name}:{dataset.term}/features.csv"))
+                        dataset_df_path = Path(
+                            os.path.join(
+                                os.path.dirname(output_dir),
+                                f"datasets/{dataset.name}:{dataset.term}/features.csv",
+                            )
+                        )
                 df = pd.read_csv(dataset_df_path)
                 all_datasets_df.append(df)
                 pbar.update(1)

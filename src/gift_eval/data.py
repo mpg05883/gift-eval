@@ -33,12 +33,11 @@ from pandas.tseries.frequencies import to_offset
 from toolz import compose
 
 import datasets
+from datasets.utils.logging import disable_progress_bar
 
 TEST_SPLIT = 0.1
 MAX_WINDOW = 20
 
-# Prediction lengths for M4 datasets
-# https://paperswithcode.com/dataset/m4
 M4_PRED_LENGTH_MAP = {
     "A": 6,
     "Q": 8,
@@ -46,6 +45,16 @@ M4_PRED_LENGTH_MAP = {
     "W": 13,
     "D": 14,
     "H": 48,
+    "YE": 6,
+    "QE": 8,
+    "h": 48,
+    "m": 12,
+    "s": 60,
+    "w": 8,
+    "d": 30,
+    "q": 8,
+    "y": 6,
+    "ME": 12,
 }
 
 PRED_LENGTH_MAP = {
@@ -55,10 +64,20 @@ PRED_LENGTH_MAP = {
     "H": 48,
     "T": 48,
     "S": 60,
+    "min": 12,
+    "QE": 8,
+    "h": 48,
+    "m": 12,
+    "s": 60,
+    "w": 8,
+    "d": 30,
+    "q": 8,
+    "Q": 8,
+    "y": 6,
+    "A": 6,
+    "ME": 12,
 }
 
-# Prediction lengths from Time Series Forecasting Benchmark (TFB)
-# https://arxiv.org/abs/2403.20150
 TFB_PRED_LENGTH_MAP = {
     "A": 6,
     "H": 48,
@@ -68,6 +87,7 @@ TFB_PRED_LENGTH_MAP = {
     "W": 13,
     "U": 8,
     "T": 8,
+    "h": 48,
 }
 
 
@@ -114,13 +134,14 @@ class Dataset:
         name: str,
         term: Term | str = Term.SHORT,
         storage_env_var: str = "GIFT_EVAL",
+        to_univariate: bool = False,
         verbose: bool = True,
     ):
         self.name = name
         self.term = Term(term)
 
         if not verbose:
-            os.environ["HF_DATASETS_DISABLE_PROGRESS_BARS"] = "1"
+            disable_progress_bar()
 
         # Change storage path depending on whether dataset is in pretrain or
         # train-test split
@@ -136,10 +157,8 @@ class Dataset:
         )
 
         self.gluonts_dataset = Map(compose(process, itemize_start), self.hf_dataset)
-        self.num_entries = len(self.gluonts_dataset)
 
-        # Automatically convert multivariate datasets to univariate
-        if self.target_dim > 1:
+        if to_univariate:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
@@ -216,8 +235,9 @@ class Dataset:
     @cached_property
     def prediction_length(self) -> int:
         freq = norm_freq_str(to_offset(self.freq).name)
-        default_pred_len = PRED_LENGTH_MAP.get(freq, TFB_PRED_LENGTH_MAP[freq])
-        pred_len = M4_PRED_LENGTH_MAP[freq] if "m4" in self.name else default_pred_len
+        pred_len = (
+            M4_PRED_LENGTH_MAP[freq] if "m4" in self.name else PRED_LENGTH_MAP[freq]
+        )
         return self.term.multiplier * pred_len
 
     @cached_property

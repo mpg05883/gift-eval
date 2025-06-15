@@ -1,8 +1,8 @@
-
 import hydra
+from hydra.core.hydra_config import HydraConfig
 from hydra.utils import instantiate
 from omegaconf import DictConfig
-from hydra.core.hydra_config import HydraConfig
+
 from gift_eval.analysis.utils import plot_histogram
 
 
@@ -18,11 +18,9 @@ def main(cfg: DictConfig):
     print(analyzer.freq_distribution_by_window)
 
     # plot a histogram of all three frequncy distributions and save it to output_dir
-    plot_histogram(analyzer.freq_distribution_by_dataset,
-                   "dataset", output_dir)
+    plot_histogram(analyzer.freq_distribution_by_dataset, "dataset", output_dir)
     plot_histogram(analyzer.freq_distribution_by_ts, "time series", output_dir)
-    plot_histogram(analyzer.freq_distribution_by_ts_length,
-                   "ts length", output_dir)
+    plot_histogram(analyzer.freq_distribution_by_ts_length, "ts length", output_dir)
     plot_histogram(analyzer.freq_distribution_by_window, "window", output_dir)
 
     analyzer.features_by_window(output_dir)
