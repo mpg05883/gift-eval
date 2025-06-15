@@ -123,7 +123,6 @@ dependencies:
       - referencing==0.36.2
       - requests==2.32.3
       - rpds-py==0.25.1
-      - salesforce-gift-eval==0.0.0a0
       - scikit-learn==1.6.1
       - scipy==1.11.4
       - six==1.17.0
