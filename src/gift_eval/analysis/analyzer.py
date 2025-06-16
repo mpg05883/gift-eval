@@ -30,7 +30,6 @@ if not os.getenv("NUM_CPUS"):
 NUM_CPUS = int(os.getenv("NUM_CPUS", "1"))
 
 
-@ray.remote(num_cpus=NUM_CPUS)
 def process_instance(self, test_input, test_label, dataset_freq):
     """
     Process a single time series instance to compute features.
@@ -67,11 +66,9 @@ def process_instance(self, test_input, test_label, dataset_freq):
     seconds = time.time() - start_time
     # print(f'Task completed in {seconds:.2f} seconds')
     
-    self.pbar.update.remote(1)
     return window_features_df
 
 
-@ray.remote
 def process_dataset(self, dataset, output_dir):
     """
     Process an entire dataset to compute features for each time series instance.
@@ -85,22 +82,27 @@ def process_dataset(self, dataset, output_dir):
     - None, but updates the progress bar and persists the analysis results.
     """    
     # Determine the directory for the dataset based on its term and name
+    name = dataset.name
+    term = dataset.term.value
+    
+    print(output_dir)
+    
     if str(dataset.term) == "Term.SHORT":
         dataset_dir = Path(
-            os.path.join(os.path.dirname(output_dir), f"datasets/{dataset.name}")
+            os.path.join(output_dir, name, term)
         )
     else:
         if "/" in dataset.name:
-            dataset_name, dataset_freq = dataset.name.split("/")
-            dataset_name = f"{dataset_name}:{dataset.term}/{dataset_freq}"
+            name, freq = dataset.name.split("/")
             dataset_dir = Path(
-                os.path.join(os.path.dirname(output_dir), f"datasets/{dataset_name}")
+                os.path.join(output_dir, name, freq, term)
             )
         else:
             dataset_dir = Path(
                 os.path.join(
-                    os.path.dirname(output_dir),
-                    f"datasets/{dataset.name}:{dataset.term}",
+                    output_dir,
+                    name,
+                    term,
                 )
             )
 
@@ -111,29 +113,36 @@ def process_dataset(self, dataset, output_dir):
     else:
         print("Directory already exists:", dataset_dir)
         # Assume dataset has already been processed
-        self.pbar.update.remote(dataset.hf_dataset.num_rows * dataset.windows)
         return None
 
     all_features_list = []
     test_data = dataset.test_data
+    
+    kwargs = {
+        "desc": "Processing entries",
+        "total": len(test_data),
+        "unit": "entry",
+    }
 
     # Process each instance in the dataset
     features = [
-        process_instance.remote(self, test_input, test_label, dataset.freq)
-        for test_input, test_label in test_data
+        process_instance(self, test_input, test_label, dataset.freq)
+        for test_input, test_label in tqdm(test_data, **kwargs)
     ]
 
-    for feature in features:
-        try:
-            # Retrieve the result with a timeout
-            result = ray.get(feature, timeout=600)  # 300 seconds timeout
-            all_features_list.append(result)
-        except ray.exceptions.GetTimeoutError:
-            print("A task timed out and will be skipped.")
-            continue  # Skip this particular instance
-        except Exception as e:
-            print(f"An error occurred while processing: {e}")
-            continue
+    # for feature in features:
+    #     try:
+    #         # Retrieve the result with a timeout
+    #         result = ray.get(feature, timeout=300)  # 300 seconds timeout
+    #         all_features_list.append(result)
+    #     except ray.exceptions.GetTimeoutError:
+    #         print("A task timed out and will be skipped.")
+    #         continue  # Skip this particular instance
+    #     except Exception as e:
+    #         print(f"An error occurred while processing: {e}")
+    #         continue
+    
+    all_features_list = features
 
     gc.collect()
 
@@ -156,9 +165,7 @@ class Analyzer:
         """
         self.index = index
         self.datasets = [datasets[index]]
-        ray.init(runtime_env=runtime_env)
-        remote_tqdm = ray.remote(tqdm_ray.tqdm)
-        self.pbar = remote_tqdm.remote(total=self._sum_windows_count)
+        # ray.init(runtime_env=runtime_env)
 
     def print_datasets(self):
         """Print the names of all datasets."""
@@ -229,13 +236,15 @@ class Analyzer:
         Parameters:
         - output_dir: Directory where the features will be saved.
         """
-        ray.get(
-            [
-                process_dataset.remote(self, dataset, output_dir)
-                for dataset in self.datasets
-            ]
-        )
-        self.pbar.close.remote()
+        for dataset in self.datasets:
+            process_dataset(self, dataset, output_dir)
+        
+        # ray.get(
+        #     [
+        #         process_dataset(self, dataset, output_dir)
+        #         for dataset in self.datasets
+        #     ]
+        # )
 
     def features_by_window(self, output_dir):
         """
@@ -255,7 +264,7 @@ class Analyzer:
                 pbar.set_description(f"Loading ts features | {dataset.name}")
                 if str(dataset.term) == "Term.SHORT":
                     dataset_df_path = os.path.join(
-                        os.path.dirname(output_dir),
+                        output_dir,
                         f"datasets/{dataset.name}/features.csv",
                     )
                 else:
@@ -264,14 +273,14 @@ class Analyzer:
                         dataset_name = f"{dataset_name}:{dataset.term}/{dataset_freq}"
                         dataset_df_path = Path(
                             os.path.join(
-                                os.path.dirname(output_dir),
+                                output_dir,
                                 f"datasets/{dataset_name}/features.csv",
                             )
                         )
                     else:
                         dataset_df_path = Path(
                             os.path.join(
-                                os.path.dirname(output_dir),
+                                output_dir,
                                 f"datasets/{dataset.name}:{dataset.term}/features.csv",
                             )
                         )
