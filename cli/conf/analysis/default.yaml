@@ -1,11 +1,16 @@
 defaults:
-  - datasets: all_datasets
+  - datasets: train_test
   - _self_
+
+
+index: 0   
+split: "train_test"  
 
 hydra:
   run:
-    dir: outputs/${hydra:job.name}/${name}/${datasets.name}
+    dir: outputs/${hydra:job.name}/${name}/${datasets.name}/${split}
 analyzer:
   _target_: gift_eval.analysis.Analyzer
   datasets: ${datasets.datasets}
+  index: ${index} 
 name: "test"

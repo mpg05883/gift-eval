@@ -39,8 +39,8 @@ make_log_dir() {
 # - `SLURM_ARRAY_TASK_ID`: The specific task index within the array job (if
 #   applicable). E.g. 0 for task 0, 1 for task 1, etc.
 log_job_info() {
-    local num_nodes="$1"
-    local devices="$2"
+    local num_nodes="${1:-N/A}"
+    local devices="${2:-N/A}"
 
     # Check if SLURM variables are set. Otherwise, use "N/A".
     {
@@ -53,4 +53,60 @@ log_job_info() {
         echo -e "Number of Nodes\t|\t$num_nodes"
         echo -e "Devices per Node\t|\t$devices"
     } | column -t -s $'\t'
+}
+
+# Returns a "done" directory path for marking job completion and ensures the
+# directory exists using `mkdir -p`.
+# 
+# The directory path depends on whether the job is part of a SLURM array:
+# - If part of an array, the path is:
+#     ./logs/<SLURM_JOB_NAME>/done/<SLURM_ARRAY_JOB_ID>
+# - Else, the path is:
+#     ./logs/<SLURM_JOB_NAME>/done
+#
+# - `SLURM_JOB_NAME`: The name of the SLURM job.
+# - `SLURM_ARRAY_JOB_ID`: The array job ID, if applicable.
+get_done_dir() {
+    local base_dir="./logs/${SLURM_JOB_NAME}/done"
+
+    if [[ -n "$SLURM_ARRAY_JOB_ID" ]]; then
+        done_dir="${base_dir}/${SLURM_ARRAY_JOB_ID}"
+    else
+        done_dir="$base_dir"
+    fi
+
+    mkdir -p "$done_dir"
+    echo "$done_dir"
+}
+
+# Returns a file path to a "done" file to mark completion of a SLURM job or
+# array task and ensures the file exists using `touch`.
+#
+# The file name depends on whether the job is part of a SLURM array:
+# - If part of an array, the file is named:
+#     <SLURM_ARRAY_TASK_ID>.done
+# - Else, the file is named:
+#     <SLURM_JOB_ID>.done
+#
+# The file is placed inside the "done" directory created by `create_done_dir`.
+#
+# - `SLURM_JOB_ID`: The unique SLURM job ID.
+# - `SLURM_ARRAY_JOB_ID`: The ID shared across all array tasks, if applicable.
+# - `SLURM_ARRAY_TASK_ID`: The index of the array task, if applicable.
+# - `SLURM_JOB_NAME`: The name of the SLURM job (used to determine directory
+# path).
+get_done_file() {
+    local done_dir
+    done_dir=$(get_done_dir)
+
+    local done_file
+    if [[ -n "$SLURM_ARRAY_JOB_ID" ]]; then
+        done_file="${SLURM_ARRAY_TASK_ID}.done"
+    else
+        done_file="${SLURM_JOB_ID}.done"
+    fi
+
+    local done_path="${done_dir}/${done_file}"
+    touch "$done_path"
+    echo "$done_path"
 }

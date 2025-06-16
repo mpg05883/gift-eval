@@ -21,7 +21,7 @@ from .utils import persist_analysis
 load_dotenv()
 
 MAX_CONTEXT_LEN = 500
-runtime_env = {"env_vars": {"RAY_memory_usage_threshold": "0.85"}}
+runtime_env = {"env_vars": {"RAY_memory_usage_threshold": "0.85",}}
 
 if not os.getenv("NUM_CPUS"):
     print(
@@ -65,7 +65,7 @@ def process_instance(self, test_input, test_label, dataset_freq):
     )
     
     seconds = time.time() - start_time
-    print(f'Task completed in {seconds:.2f} seconds')
+    # print(f'Task completed in {seconds:.2f} seconds')
     
     self.pbar.update.remote(1)
     return window_features_df
@@ -83,9 +83,7 @@ def process_dataset(self, dataset, output_dir):
 
     Returns:
     - None, but updates the progress bar and persists the analysis results.
-    """
-    print(f"Processing name: {dataset.name}, term: {dataset.term.value}, freq: {dataset.freq}")
-    
+    """    
     # Determine the directory for the dataset based on its term and name
     if str(dataset.term) == "Term.SHORT":
         dataset_dir = Path(
@@ -149,14 +147,15 @@ class Analyzer:
     Analyzer class to manage the analysis of multiple datasets, including feature computation and frequency distribution analysis.
     """
 
-    def __init__(self, datasets: list[Dataset]):
+    def __init__(self, datasets: list[Dataset], index: int = 0):
         """
         Initialize the Analyzer with a list of datasets.
 
         Parameters:
         - datasets: List of Dataset objects to be analyzed.
         """
-        self.datasets = datasets
+        self.index = index
+        self.datasets = [datasets[index]]
         ray.init(runtime_env=runtime_env)
         remote_tqdm = ray.remote(tqdm_ray.tqdm)
         self.pbar = remote_tqdm.remote(total=self._sum_windows_count)
@@ -165,7 +164,7 @@ class Analyzer:
         """Print the names of all datasets."""
         print("-" * 80)
         for i, dataset in enumerate(self.datasets):
-            print(f"Dataset {i + 1} | name: {dataset.name}, term: {dataset.term.value}, freq: {dataset.freq}")
+            print(f"Dataset | name: {dataset.name}, term: {dataset.term.value}, freq: {dataset.freq}")
         print("-" * 80)
 
     @cached_property
@@ -222,10 +221,10 @@ class Analyzer:
                 dataset.hf_dataset.num_rows * dataset.windows
             )
         return freq_window_counts
-
-    def features_by_window(self, output_dir):
+    
+    def features_by_dataset(self, output_dir):
         """
-        Create and persist features of each window for each dataset.
+        Creates and persists features for each dataset.
 
         Parameters:
         - output_dir: Directory where the features will be saved.
@@ -237,6 +236,15 @@ class Analyzer:
             ]
         )
         self.pbar.close.remote()
+
+    def features_by_window(self, output_dir):
+        """
+        Create and persist features of each window for each dataset.
+
+        Parameters:
+        - output_dir: Directory where the features will be saved.
+        """
+        self.features_by_dataset(output_dir)
 
         all_datasets_df = []
         # Aggregate the characteristics for each dataset
