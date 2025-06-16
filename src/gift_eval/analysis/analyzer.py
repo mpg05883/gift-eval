@@ -12,7 +12,7 @@ from gluonts.time_feature import norm_freq_str
 from pandas.tseries.frequencies import to_offset
 from ray.experimental import tqdm_ray
 from tqdm import tqdm
-
+import time 
 from gift_eval.data import Dataset
 
 from .features import get_ts_features
@@ -44,6 +44,8 @@ def process_instance(self, test_input, test_label, dataset_freq):
     Returns:
     - DataFrame containing the computed features for the time series instance.
     """
+    start_time = time.time()
+    
     np_inp = np.array(test_input["target"])
     np_label = np.array(test_label["target"])
 
@@ -61,6 +63,10 @@ def process_instance(self, test_input, test_label, dataset_freq):
     window_features_df = get_ts_features(
         np_instance, norm_freq_str(to_offset(dataset_freq).name)
     )
+    
+    seconds = time.time() - start_time
+    print(f'Task completed in {seconds:.2f} seconds')
+    
     self.pbar.update.remote(1)
     return window_features_df
 
@@ -78,6 +84,8 @@ def process_dataset(self, dataset, output_dir):
     Returns:
     - None, but updates the progress bar and persists the analysis results.
     """
+    print(f"Processing name: {dataset.name}, term: {dataset.term.value}, freq: {dataset.freq}")
+    
     # Determine the directory for the dataset based on its term and name
     if str(dataset.term) == "Term.SHORT":
         dataset_dir = Path(
@@ -120,7 +128,7 @@ def process_dataset(self, dataset, output_dir):
     for feature in features:
         try:
             # Retrieve the result with a timeout
-            result = ray.get(feature, timeout=300)  # 300 seconds timeout
+            result = ray.get(feature, timeout=600)  # 300 seconds timeout
             all_features_list.append(result)
         except ray.exceptions.GetTimeoutError:
             print("A task timed out and will be skipped.")
@@ -155,8 +163,10 @@ class Analyzer:
 
     def print_datasets(self):
         """Print the names of all datasets."""
-        for dataset in self.datasets:
-            print(dataset.name)
+        print("-" * 80)
+        for i, dataset in enumerate(self.datasets):
+            print(f"Dataset {i + 1} | name: {dataset.name}, term: {dataset.term.value}, freq: {dataset.freq}")
+        print("-" * 80)
 
     @cached_property
     def _sum_series_count(self) -> int:

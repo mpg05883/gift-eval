@@ -12,10 +12,10 @@ def main(cfg: DictConfig):
     analyzer = instantiate(cfg.analyzer, _convert_="all")
     analyzer.print_datasets()
 
-    print(analyzer.freq_distribution_by_dataset)
-    print(analyzer.freq_distribution_by_ts)
-    print(analyzer.freq_distribution_by_ts_length)
-    print(analyzer.freq_distribution_by_window)
+    # print(analyzer.freq_distribution_by_dataset)
+    # print(analyzer.freq_distribution_by_ts)
+    # print(analyzer.freq_distribution_by_ts_length)
+    # print(analyzer.freq_distribution_by_window)
 
     # plot a histogram of all three frequncy distributions and save it to output_dir
     plot_histogram(analyzer.freq_distribution_by_dataset, "dataset", output_dir)

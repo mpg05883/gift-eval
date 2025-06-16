@@ -34,9 +34,21 @@ fi
 dirpath="./datasets/${split}"
 mkdir -p "$dirpath"
 
+# Count the number of datasets that've been downloaded
+num_datasets=$(find "$dirpath" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)
+
+if [ "$SLURM_ARRAY_TASK_ID" -eq 0 ] && [ "$num_datasets" -eq 50 ]; then
+    log_info "${split} datasets have already been downloaded! Exiting..."
+    exit 0
+fi
+
+if [ "$SLURM_ARRAY_TASK_ID" -eq 1 ] && [ "$num_datasets" -eq 28 ]; then
+    log_info "${split} datasets have already been downloaded! Exiting..."
+    exit 0
+fi
+
 log_job_info
 log_info "Downloading ${split}"
-
 
 if huggingface-cli download Salesforce/"${name}" \
         --repo-type=dataset \
@@ -45,7 +57,7 @@ then
     log_info "Successfully downloaded ${split} split to ${dirpath}!"
     log_error "No errors for downloading ${split} split!"
 
-    done_dir="logs/done/${SLURM_JOB_NAME}/${SLURM_ARRAY_JOB_ID}"
+    done_dir="logs/${SLURM_JOB_NAME}/done/${SLURM_ARRAY_JOB_ID}"
     mkdir -p "$done_dir"
 
     done_file="${done_dir}/${SLURM_ARRAY_TASK_ID}.done"

@@ -134,7 +134,6 @@ class Dataset:
         name: str,
         term: Term | str = Term.SHORT,
         storage_env_var: str = "GIFT_EVAL",
-        to_univariate: bool = False,
         verbose: bool = True,
     ):
         self.name = name
@@ -152,13 +151,13 @@ class Dataset:
         self.hf_dataset = datasets.load_from_disk(storage_path).with_format("numpy")
 
         process = ProcessDataEntry(
-            norm_freq_str(self.freq),
+            self.freq,
             one_dim_target=self.target_dim == 1,
         )
 
         self.gluonts_dataset = Map(compose(process, itemize_start), self.hf_dataset)
 
-        if to_univariate:
+        if self.target_dim > 1:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )

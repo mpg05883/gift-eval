@@ -1,0 +1,357 @@
+Fetching 175 files:   0%|          | 0/175 [00:00<?, ?it/s]Still waiting to acquire lock on datasets/train_test/.cache/huggingface/.gitignore.lock (elapsed: 0.2 seconds)
+Still waiting to acquire lock on datasets/train_test/.cache/huggingface/.gitignore.lock (elapsed: 0.2 seconds)
+Still waiting to acquire lock on datasets/train_test/.cache/huggingface/.gitignore.lock (elapsed: 0.1 seconds)
+Still waiting to acquire lock on datasets/train_test/.cache/huggingface/.gitignore.lock (elapsed: 0.2 seconds)
+Still waiting to acquire lock on datasets/train_test/.cache/huggingface/.gitignore.lock (elapsed: 0.1 seconds)
+Downloading 'LOOP_SEATTLE/5T/state.json' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/5T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.20ee50ff4f2a293a715a98886227e311d46d95b7.incomplete'
+Downloading '.gitattributes' to 'datasets/train_test/.cache/huggingface/download/wPaCkH-WbT7GsmxMKKrNZTV4nSM=.55cab133643a2a73e083373d2106533678d0edd5.incomplete'
+Downloading 'LOOP_SEATTLE/D/state.json' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.b95852c509b9321004356491c38058ea25c044f2.incomplete'
+Downloading 'LOOP_SEATTLE/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.221985fb0af982975cef73ed68108da4a375f41aa7e3c3ce5defa52774a073c0.incomplete'
+Downloading 'LOOP_SEATTLE/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.d1a309c06fdc72accb27d6611e0cb7a05b6c05aebf416c3ecdcef7850195f93e.incomplete'
+Downloading 'LOOP_SEATTLE/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/D/B-DLGau7qji7FOiLDm71jNznmcU=.cc5b6b6f634536118d50cb6f39632bb437a26f1c.incomplete'
+Downloading 'LOOP_SEATTLE/5T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/5T/B-DLGau7qji7FOiLDm71jNznmcU=.522f1a383666745434206b80b2028c88e7038fbb.incomplete'
+Downloading 'LOOP_SEATTLE/5T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/5T/ph-PwKzEizU51qoBvN-kh8yvA-U=.393f3aa3fb7fe37fea92599432a462b63b68734a977ee19efbd50cb9a8b9d928.incomplete'
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/D/state.json
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/5T/state.json
+Download complete. Moving file to datasets/train_test/.gitattributes
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/5T/dataset_info.json
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/D/dataset_info.json
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/D/data-00000-of-00001.arrow
+Fetching 175 files:   1%|          | 1/175 [00:00<01:54,  1.52it/s]Downloading 'LOOP_SEATTLE/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/H/B-DLGau7qji7FOiLDm71jNznmcU=.a851bcf1e0e224bf14c108e2d262ab8172cfe5ea.incomplete'
+Downloading 'M_DENSE/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/M_DENSE/D/B-DLGau7qji7FOiLDm71jNznmcU=.06c796cd293eb1facca35de90ba4a455a9740c1d.incomplete'
+Downloading 'M_DENSE/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/M_DENSE/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.85a9ae1708612a578e342838802325e250707e09ef60bf2050809a61602780f0.incomplete'
+Downloading 'M_DENSE/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/M_DENSE/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.877e2bee9af3ec32d6cb8b05baf6e826f3ea1b764a21c2b691eee6214729f30b.incomplete'
+Downloading 'M_DENSE/D/state.json' to 'datasets/train_test/.cache/huggingface/download/M_DENSE/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.1f5c5fefa63e0d7d93f9a0c50a8e3aeacc388394.incomplete'
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/H/dataset_info.json
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/H/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/M_DENSE/D/dataset_info.json
+Download complete. Moving file to datasets/train_test/M_DENSE/D/state.json
+Download complete. Moving file to datasets/train_test/M_DENSE/D/data-00000-of-00001.arrow
+Downloading 'LOOP_SEATTLE/H/state.json' to 'datasets/train_test/.cache/huggingface/download/LOOP_SEATTLE/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.657c4abaee9568c1ac96973b007eb6324c0c1356.incomplete'
+Downloading 'M_DENSE/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/M_DENSE/H/B-DLGau7qji7FOiLDm71jNznmcU=.79aa817a0b74f770e1bc830bd41d6d407c251a7d.incomplete'
+Downloading 'SZ_TAXI/15T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/SZ_TAXI/15T/ph-PwKzEizU51qoBvN-kh8yvA-U=.e7a1a1e04611e58299b678ce29f381481108462b02d05024d1f66778854f7f26.incomplete'
+Downloading 'README.md' to 'datasets/train_test/.cache/huggingface/download/Xn7B-BWUGOee2Y6hCZtEhtFu4BE=.c55e0a25cf2ac61ce409bc278fc50f4f444e851f.incomplete'
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/H/state.json
+Download complete. Moving file to datasets/train_test/M_DENSE/H/dataset_info.json
+Downloading 'SZ_TAXI/15T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/SZ_TAXI/15T/B-DLGau7qji7FOiLDm71jNznmcU=.a1fab06af31b776330a504f083def52079e5ea1d.incomplete'
+Downloading 'M_DENSE/H/state.json' to 'datasets/train_test/.cache/huggingface/download/M_DENSE/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.6374b2b0963c93e25430ab0427d3313b991f4cb2.incomplete'
+Download complete. Moving file to datasets/train_test/README.md
+Downloading 'SZ_TAXI/15T/state.json' to 'datasets/train_test/.cache/huggingface/download/SZ_TAXI/15T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.1b7cdd521b9b9decb1fda50f53f1fb26e50d38da.incomplete'
+Download complete. Moving file to datasets/train_test/SZ_TAXI/15T/dataset_info.json
+Download complete. Moving file to datasets/train_test/SZ_TAXI/15T/data-00000-of-00001.arrow
+Downloading 'SZ_TAXI/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/SZ_TAXI/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.6b01d19f81f062849e93e6a42b6c10d7c4d3f344cd229fb14ac77e4d1defaec9.incomplete'
+Download complete. Moving file to datasets/train_test/M_DENSE/H/state.json
+Download complete. Moving file to datasets/train_test/SZ_TAXI/15T/state.json
+Downloading 'SZ_TAXI/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/SZ_TAXI/H/B-DLGau7qji7FOiLDm71jNznmcU=.78cbed9984f3983f7988aab912bffbf6343ee20d.incomplete'
+Downloading 'SZ_TAXI/H/state.json' to 'datasets/train_test/.cache/huggingface/download/SZ_TAXI/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.53989f67548b43f66c5bc86853b7cce9e5e2a1d6.incomplete'
+Downloading 'bitbrains_fast_storage/5T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bitbrains_fast_storage/5T/ph-PwKzEizU51qoBvN-kh8yvA-U=.6100880c2d57ecbfa8bcfc4aa2578c2c98cc68dbe8249c4cbff4e3e291064ff6.incomplete'
+Download complete. Moving file to datasets/train_test/SZ_TAXI/H/data-00000-of-00001.arrow
+Downloading 'bitbrains_fast_storage/5T/state.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_fast_storage/5T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.fdf7b8dbae42bc2b2268309211f544e9dfcb5185.incomplete'
+Download complete. Moving file to datasets/train_test/SZ_TAXI/H/dataset_info.json
+Download complete. Moving file to datasets/train_test/SZ_TAXI/H/state.json
+Downloading 'bitbrains_fast_storage/5T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_fast_storage/5T/B-DLGau7qji7FOiLDm71jNznmcU=.9615ff56b0421a624489171e8d60ae4c512318c6.incomplete'
+Downloading 'bitbrains_fast_storage/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bitbrains_fast_storage/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.e8dfb7ba774a767e6b5d97ac4a1522d5367de6601f584adabf4877dca395b75e.incomplete'
+Download complete. Moving file to datasets/train_test/bitbrains_fast_storage/5T/state.json
+Downloading 'bitbrains_fast_storage/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_fast_storage/H/B-DLGau7qji7FOiLDm71jNznmcU=.85c66be95141b68f1024ed485041b2408376e17c.incomplete'
+Downloading 'bitbrains_fast_storage/H/state.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_fast_storage/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.0d99649c57270f2af15f5f827577143093f337cd.incomplete'
+Download complete. Moving file to datasets/train_test/bitbrains_fast_storage/5T/dataset_info.json
+Download complete. Moving file to datasets/train_test/M_DENSE/H/data-00000-of-00001.arrow
+Downloading 'bitbrains_rnd/5T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bitbrains_rnd/5T/ph-PwKzEizU51qoBvN-kh8yvA-U=.7aa85eeb0be4086161e88ca3bcf0b2e3f66728bbb30fff203f21db945de96cb3.incomplete'
+Download complete. Moving file to datasets/train_test/bitbrains_fast_storage/H/dataset_info.json
+Download complete. Moving file to datasets/train_test/bitbrains_fast_storage/H/state.json
+Downloading 'bitbrains_rnd/5T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_rnd/5T/B-DLGau7qji7FOiLDm71jNznmcU=.e9a42696da3019e6fbe5e992e854351900cdc877.incomplete'
+Downloading 'bitbrains_rnd/5T/state.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_rnd/5T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.de2625343a560c76212831c5afed87db48f6f68a.incomplete'
+Downloading 'bitbrains_rnd/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bitbrains_rnd/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.e03df8db162068b011735209f57eb328499094056a98747290c5048e3ec6e220.incomplete'
+Downloading 'bitbrains_rnd/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_rnd/H/B-DLGau7qji7FOiLDm71jNznmcU=.511c2fa56610bdf589308a753b25fc26c7631377.incomplete'
+Download complete. Moving file to datasets/train_test/bitbrains_rnd/5T/dataset_info.json
+Download complete. Moving file to datasets/train_test/bitbrains_rnd/5T/state.json
+Download complete. Moving file to datasets/train_test/bitbrains_rnd/H/dataset_info.json
+Downloading 'bitbrains_rnd/H/state.json' to 'datasets/train_test/.cache/huggingface/download/bitbrains_rnd/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.92940f35b4a6575b415e70cbf9a48ac3872a61ad.incomplete'
+Downloading 'bizitobs_application/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bizitobs_application/ph-PwKzEizU51qoBvN-kh8yvA-U=.25da2b297f985e7b05351e78916b0094920414deecb48046aa8aa1434ef384f6.incomplete'
+Downloading 'bizitobs_application/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_application/B-DLGau7qji7FOiLDm71jNznmcU=.197cad33c8d41580f43c0e2a87cd33589a0d3df4.incomplete'
+Download complete. Moving file to datasets/train_test/bitbrains_rnd/H/state.json
+Download complete. Moving file to datasets/train_test/bizitobs_application/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/bizitobs_application/dataset_info.json
+Downloading 'bizitobs_application/state.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_application/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.ab72b6cf0b6aa6cd2a0f4d3f4eb468d06663b87d.incomplete'
+Downloading 'bizitobs_l2c/5T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bizitobs_l2c/5T/ph-PwKzEizU51qoBvN-kh8yvA-U=.c828c1935de30d897a9bd4ee38aff7853360d3243d2b368e5aab862e68c0e218.incomplete'
+Downloading 'bizitobs_l2c/5T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_l2c/5T/B-DLGau7qji7FOiLDm71jNznmcU=.af7867c8164dd3b42dec2d6c1c37c8a3b6972a0c.incomplete'
+Download complete. Moving file to datasets/train_test/bizitobs_application/state.json
+Download complete. Moving file to datasets/train_test/bizitobs_l2c/5T/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/bizitobs_l2c/5T/dataset_info.json
+Downloading 'bizitobs_l2c/5T/state.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_l2c/5T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.16d705735d26c08764776c58232416e7b4668d32.incomplete'
+Download complete. Moving file to datasets/train_test/bitbrains_fast_storage/H/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/bizitobs_l2c/5T/state.json
+Downloading 'bizitobs_l2c/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_l2c/H/B-DLGau7qji7FOiLDm71jNznmcU=.20d3ecce720b204014a8d98a0837f5717d4dd2da.incomplete'
+Download complete. Moving file to datasets/train_test/bitbrains_rnd/H/data-00000-of-00001.arrow
+Downloading 'bizitobs_l2c/H/state.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_l2c/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.7677530fdc8c09099b62b807af934cebd4ea18aa.incomplete'
+Downloading 'bizitobs_service/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bizitobs_service/ph-PwKzEizU51qoBvN-kh8yvA-U=.efae4ed71ef351b9fa6a966ade7adbbdbe12b0e16f500e59bce9afe107ddadd4.incomplete'
+Downloading 'bizitobs_l2c/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/bizitobs_l2c/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.0fbdf78cd13228941dd873f3cf0443c8beb70bd40104c1de01582f4e401db2be.incomplete'
+Download complete. Moving file to datasets/train_test/bizitobs_l2c/H/dataset_info.json
+Downloading 'bizitobs_service/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_service/B-DLGau7qji7FOiLDm71jNznmcU=.4724ecb99f3a5639ae53dab0fbc3ce474dba2cdf.incomplete'
+Download complete. Moving file to datasets/train_test/bizitobs_l2c/H/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/bizitobs_l2c/H/state.json
+Download complete. Moving file to datasets/train_test/bizitobs_service/dataset_info.json
+Downloading 'bizitobs_service/state.json' to 'datasets/train_test/.cache/huggingface/download/bizitobs_service/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.1103eb2faae9db899be73358ac258b6006ca4258.incomplete'
+Downloading 'car_parts_with_missing/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/car_parts_with_missing/ph-PwKzEizU51qoBvN-kh8yvA-U=.78ea2e9ed786061c2c2c723f265bd61dcba8b316a0a6b9d39366ccf1ca26245a.incomplete'
+Download complete. Moving file to datasets/train_test/bizitobs_service/state.json
+Downloading 'car_parts_with_missing/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/car_parts_with_missing/B-DLGau7qji7FOiLDm71jNznmcU=.6dde1ac483a78db1adcc029f84b1743aaa0819fa.incomplete'
+Download complete. Moving file to datasets/train_test/car_parts_with_missing/dataset_info.json
+Downloading 'covid_deaths/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/covid_deaths/ph-PwKzEizU51qoBvN-kh8yvA-U=.867d9fda8f2bead714a4a4878d80c7383164243c5be5c93bb8061cd2e60cfbd1.incomplete'
+Downloading 'covid_deaths/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/covid_deaths/B-DLGau7qji7FOiLDm71jNznmcU=.f48492f889a3cb23e7b4b2f1c79661b7afe49a88.incomplete'
+Downloading 'car_parts_with_missing/state.json' to 'datasets/train_test/.cache/huggingface/download/car_parts_with_missing/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.cd763fa25a6a076942b79c000185a91f71aaa1cd.incomplete'
+Download complete. Moving file to datasets/train_test/covid_deaths/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/car_parts_with_missing/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/car_parts_with_missing/state.json
+Download complete. Moving file to datasets/train_test/covid_deaths/dataset_info.json
+Downloading 'covid_deaths/state.json' to 'datasets/train_test/.cache/huggingface/download/covid_deaths/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.4391353ff2692aca5116b5a19deff0caafcb9659.incomplete'
+Downloading 'electricity/15T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/electricity/15T/ph-PwKzEizU51qoBvN-kh8yvA-U=.0ccc5977e36618e1c7c50824892ec25a2f35320609e5783e3b695e7a5c805bc5.incomplete'
+Downloading 'electricity/15T/cache-178ededf6d74e118.arrow' to 'datasets/train_test/.cache/huggingface/download/electricity/15T/XOG9AMIdvpNHpLTXF7nF8BY_VZ4=.04f557ca35a2c25318456c0c9a64c5370cbebeeda7517bfb257d7da8baa9f971.incomplete'
+Downloading 'electricity/15T/cache-1318815c7ce7bc45.arrow' to 'datasets/train_test/.cache/huggingface/download/electricity/15T/qIE4O640nO3UasIN1lM-LOL0Kd4=.d5074a4bbd2a1588bbbd29707f331b81e5602b34704634f0d8a8b1ed62025ec5.incomplete'
+Download complete. Moving file to datasets/train_test/covid_deaths/state.json
+Downloading 'electricity/15T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/electricity/15T/B-DLGau7qji7FOiLDm71jNznmcU=.cc36c906118c965752791a3ff7e26d4d0dc5edc3.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/15T/dataset_info.json
+Downloading 'electricity/15T/state.json' to 'datasets/train_test/.cache/huggingface/download/electricity/15T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.676dde0e0e8f6c3c15560fd7f468bf58a13d19e2.incomplete'
+Download complete. Moving file to datasets/train_test/bizitobs_service/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/electricity/15T/state.json
+Downloading 'electricity/15T/tmpyzhgd9y7' to 'datasets/train_test/.cache/huggingface/download/electricity/15T/-SL8pAUUKxjkvH7ltAhBlvJKWEk=.e69de29bb2d1d6434b8b29ae775ad8c2e48c5391.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/15T/tmpyzhgd9y7
+Downloading 'electricity/15T/tmpzmt1e6xh' to 'datasets/train_test/.cache/huggingface/download/electricity/15T/elik5cJGY1JTjok61Q6W0zhpIIQ=.e69de29bb2d1d6434b8b29ae775ad8c2e48c5391.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/15T/tmpzmt1e6xh
+Downloading 'electricity/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/electricity/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.0777d34b46e892157ff46ee0f0d9f3166b7ccd4579f20a55346a81430e942e43.incomplete'
+Downloading 'electricity/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/electricity/D/B-DLGau7qji7FOiLDm71jNznmcU=.46c489091f2bc1e4bd2705be7f7ea60bb8babd0c.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/D/dataset_info.json
+Download complete. Moving file to datasets/train_test/electricity/D/data-00000-of-00001.arrow
+Downloading 'electricity/D/state.json' to 'datasets/train_test/.cache/huggingface/download/electricity/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.880609bcac10b8a217c53b228653b8a85a2e0bbe.incomplete'
+Downloading 'electricity/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/electricity/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.0d3146c6291665126efdf87d0fe92356027d911017afaf956c17627d109b628b.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/D/state.json
+Downloading 'electricity/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/electricity/H/B-DLGau7qji7FOiLDm71jNznmcU=.f2a48f758c9d51e9e670e9490a02a6306bdcab93.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/H/dataset_info.json
+Downloading 'electricity/H/state.json' to 'datasets/train_test/.cache/huggingface/download/electricity/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.a61e943bdd121a6d726b3968a562efb1d5432d8d.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/H/state.json
+Downloading 'electricity/W/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/electricity/W/ph-PwKzEizU51qoBvN-kh8yvA-U=.e8158126a2d15fc985d69290c68ca04940684c02bacb70bff421dd2bd947a2f8.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/W/data-00000-of-00001.arrow
+Downloading 'electricity/W/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/electricity/W/B-DLGau7qji7FOiLDm71jNznmcU=.7e7bb270947739b3a2b6ce965194bab96204d8d1.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/W/dataset_info.json
+Downloading 'electricity/W/state.json' to 'datasets/train_test/.cache/huggingface/download/electricity/W/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.70b91754b99a09091b4496ae497373d0116a0239.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/W/state.json
+Downloading 'ett1/15T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett1/15T/ph-PwKzEizU51qoBvN-kh8yvA-U=.f9ef6b8777c61fe2efddc99ae54d7af6bf46a89147fe32aff7d3c44adbe30559.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/15T/data-00000-of-00001.arrow
+Downloading 'ett1/15T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett1/15T/B-DLGau7qji7FOiLDm71jNznmcU=.b0b58c2ca0861da4e8fab61447c6cbf6430f51d0.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/15T/dataset_info.json
+Downloading 'ett1/15T/state.json' to 'datasets/train_test/.cache/huggingface/download/ett1/15T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.c01cb27026ed793a8d1024a3b3b51ad5a3d9b1d8.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/15T/state.json
+Downloading 'ett1/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett1/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.0c16c8197b5a7c343724be7a8e06f97f37538f42167a83e22ca9c9168a4872d0.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/D/data-00000-of-00001.arrow
+Downloading 'ett1/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett1/D/B-DLGau7qji7FOiLDm71jNznmcU=.e5340e0f1684f2ea3b9daf1476ef47d09d268a90.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/D/dataset_info.json
+Downloading 'ett1/D/state.json' to 'datasets/train_test/.cache/huggingface/download/ett1/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.985bf2e7fa7dd4b3e1f449ca615dea925e0bf21e.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/15T/cache-1318815c7ce7bc45.arrow
+Download complete. Moving file to datasets/train_test/ett1/D/state.json
+Downloading 'ett1/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett1/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.e4f9484726edb0c28581df4d03b255239bab9b2c0ea14acfdb1fea69d79dd325.incomplete'
+Downloading 'ett1/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett1/H/B-DLGau7qji7FOiLDm71jNznmcU=.14f58b804e065804d36ade1a3c099193f83b056b.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/H/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/LOOP_SEATTLE/5T/data-00000-of-00001.arrow
+Downloading 'ett1/H/state.json' to 'datasets/train_test/.cache/huggingface/download/ett1/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.b0fdcf85d6a4394c93a1f576201d8a9bbd3c44fd.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/H/dataset_info.json
+Fetching 175 files:   1%|          | 2/175 [00:06<11:02,  3.83s/it]Downloading 'ett1/W/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett1/W/ph-PwKzEizU51qoBvN-kh8yvA-U=.709b1006a163a518e191961998328f145fd94de1d8beb13cee75985f67152d67.incomplete'
+Downloading 'ett1/W/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett1/W/B-DLGau7qji7FOiLDm71jNznmcU=.62a7a42b40a704a7cc2e334f717060db8cdf3067.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/W/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/ett1/H/state.json
+Download complete. Moving file to datasets/train_test/ett1/W/dataset_info.json
+Downloading 'ett1/W/state.json' to 'datasets/train_test/.cache/huggingface/download/ett1/W/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.5f989015f4e1a0d68caf7de63da4775f93f2151c.incomplete'
+Downloading 'ett2/15T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett2/15T/ph-PwKzEizU51qoBvN-kh8yvA-U=.f4855128c18f5b4b41056ac28d922cca8fafb1078e44358f73dee79797ec0d7b.incomplete'
+Downloading 'ett2/15T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett2/15T/B-DLGau7qji7FOiLDm71jNznmcU=.02d4dfb98077c93c463e0e48d2e89d1abaeca375.incomplete'
+Download complete. Moving file to datasets/train_test/ett1/W/state.json
+Download complete. Moving file to datasets/train_test/ett2/15T/dataset_info.json
+Download complete. Moving file to datasets/train_test/ett2/15T/data-00000-of-00001.arrow
+Downloading 'ett2/15T/state.json' to 'datasets/train_test/.cache/huggingface/download/ett2/15T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.1dbdb238633d1a9e9e0a3207e639d666d052cf4e.incomplete'
+Download complete. Moving file to datasets/train_test/ett2/15T/state.json
+Downloading 'ett2/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett2/D/B-DLGau7qji7FOiLDm71jNznmcU=.7b712e66e0a0fea5a7e72d8adc0d7f15d62466a7.incomplete'
+Download complete. Moving file to datasets/train_test/electricity/H/data-00000-of-00001.arrow
+Downloading 'ett2/D/state.json' to 'datasets/train_test/.cache/huggingface/download/ett2/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.acb3bffbd42042999b77b0a9bf8f9856536ea9cd.incomplete'
+Download complete. Moving file to datasets/train_test/ett2/D/dataset_info.json
+Downloading 'ett2/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett2/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.b299fc59b69787345a161c6e643e8c86b6c5b9f0e43afc51632a046e4cc6a3d1.incomplete'
+Downloading 'ett2/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett2/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.f390b9a99fea9d89ad8dfd716af215617e887d709648eaf706c2b30de800a10b.incomplete'
+Download complete. Moving file to datasets/train_test/ett2/D/state.json
+Downloading 'ett2/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett2/H/B-DLGau7qji7FOiLDm71jNznmcU=.120399899cdd88cfffbc2be174a3b0b81897d6f2.incomplete'
+Download complete. Moving file to datasets/train_test/ett2/D/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/bitbrains_rnd/5T/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/ett2/H/data-00000-of-00001.arrow
+Downloading 'ett2/H/state.json' to 'datasets/train_test/.cache/huggingface/download/ett2/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.000c0ccbee921927131924bf5470831c28d3f35a.incomplete'
+Download complete. Moving file to datasets/train_test/ett2/H/dataset_info.json
+Downloading 'ett2/W/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/ett2/W/ph-PwKzEizU51qoBvN-kh8yvA-U=.969d5900e89f8d1bb6ec44782454c42b49db868171bc4906acb0e60c1df7fce1.incomplete'
+Downloading 'ett2/W/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/ett2/W/B-DLGau7qji7FOiLDm71jNznmcU=.7954e334c3948844ec4b66190559dad112a7acbe.incomplete'
+Downloading 'ett2/W/state.json' to 'datasets/train_test/.cache/huggingface/download/ett2/W/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.c8596c117203d54b525d5f39511afa475027ceef.incomplete'
+Download complete. Moving file to datasets/train_test/ett2/W/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/ett2/H/state.json
+Download complete. Moving file to datasets/train_test/ett2/W/dataset_info.json
+Downloading 'gifteval.png' to 'datasets/train_test/.cache/huggingface/download/K7xDlHNriIfZYpEwq_oGr3v64sE=.fbcab4f54e0802301b51f1b2bae9c83a4236c286901302f37c329972a1def70a.incomplete'
+Download complete. Moving file to datasets/train_test/ett2/W/state.json
+Downloading 'hierarchical_sales/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/hierarchical_sales/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.62312a9c3a21f52682081a79ae702950f7f6ec984df4f385336329b9238ca156.incomplete'
+Download complete. Moving file to datasets/train_test/gifteval.png
+Downloading 'hierarchical_sales/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/hierarchical_sales/D/B-DLGau7qji7FOiLDm71jNznmcU=.cc2a9a775ba74ddd5da92857a759e999f84be285.incomplete'
+Downloading 'hierarchical_sales/D/state.json' to 'datasets/train_test/.cache/huggingface/download/hierarchical_sales/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.b715ba73e684652399eeae2168be09504c1515a9.incomplete'
+Downloading 'hierarchical_sales/W/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/hierarchical_sales/W/ph-PwKzEizU51qoBvN-kh8yvA-U=.6a47cc27c6051ae83b0007d7439557032ecbf2840f4341c348e8e2c3bc78b564.incomplete'
+Download complete. Moving file to datasets/train_test/hierarchical_sales/D/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/hierarchical_sales/W/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/hierarchical_sales/D/dataset_info.json
+Downloading 'hierarchical_sales/W/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/hierarchical_sales/W/B-DLGau7qji7FOiLDm71jNznmcU=.a099445b81c3337e4825207e08a3042e421e2bd2.incomplete'
+Download complete. Moving file to datasets/train_test/hierarchical_sales/D/state.json
+Downloading 'hospital/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/hospital/B-DLGau7qji7FOiLDm71jNznmcU=.193b3aa6ceee94ecfffaa2ed125fa943dbfcf97a.incomplete'
+Download complete. Moving file to datasets/train_test/hierarchical_sales/W/dataset_info.json
+Downloading 'hospital/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/hospital/ph-PwKzEizU51qoBvN-kh8yvA-U=.761494d348761856659fc901d9c509b6564af87fc9e1b165c703cec6086e332e.incomplete'
+Downloading 'hospital/state.json' to 'datasets/train_test/.cache/huggingface/download/hospital/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.8b12efe4f53ccc30e0f9f45ab1cb71cd70f14d34.incomplete'
+Download complete. Moving file to datasets/train_test/hospital/data-00000-of-00001.arrow
+Downloading 'hierarchical_sales/W/state.json' to 'datasets/train_test/.cache/huggingface/download/hierarchical_sales/W/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.167127afc6c1298facc9922297f69a23842e0d86.incomplete'
+Download complete. Moving file to datasets/train_test/hospital/dataset_info.json
+Downloading 'jena_weather/10T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/jena_weather/10T/ph-PwKzEizU51qoBvN-kh8yvA-U=.b2cc351f93268eea352a08cdd76d836711535c6cb157a7f3cf338d9b4db9c700.incomplete'
+Download complete. Moving file to datasets/train_test/hospital/state.json
+Downloading 'jena_weather/10T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/10T/B-DLGau7qji7FOiLDm71jNznmcU=.abdc888abb0da9ad8b264b4d72b933f4a7b0beaf.incomplete'
+Download complete. Moving file to datasets/train_test/hierarchical_sales/W/state.json
+Downloading 'jena_weather/10T/state.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/10T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.661bf5f9c8e6ef22b428cdf40424aff64649c222.incomplete'
+Downloading 'jena_weather/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/jena_weather/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.ffe8711480217b1d5133fa5dbfbd4a3184443d4c9a034efe0b9d7ff3a5bbb64e.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/10T/dataset_info.json
+Download complete. Moving file to datasets/train_test/jena_weather/D/data-00000-of-00001.arrow
+Downloading 'jena_weather/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/D/B-DLGau7qji7FOiLDm71jNznmcU=.8db23075b3e1bfb6b088c67632a9637bf4328859.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/10T/state.json
+Download complete. Moving file to datasets/train_test/jena_weather/10T/data-00000-of-00001.arrow
+Downloading 'jena_weather/D/state.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.de8ba996fcbc772eb3408946495215ddab8f25b8.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/D/dataset_info.json
+Downloading 'jena_weather/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/H/B-DLGau7qji7FOiLDm71jNznmcU=.0370e1ce0cd960f6c7d38b9bb9dcc4479c1a6739.incomplete'
+Downloading 'jena_weather/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/jena_weather/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.e05536806d1e723c9481c7a37d3897ed9561f92cfc7fb4b26e32657c3627ded7.incomplete'
+Downloading 'jena_weather/H/state.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.c9a298b56afc30a203f1d1f74216f3c6f576d4c7.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/D/state.json
+Download complete. Moving file to datasets/train_test/jena_weather/H/dataset_info.json
+Downloading 'jena_weather/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/jena_weather/ph-PwKzEizU51qoBvN-kh8yvA-U=.b2cc351f93268eea352a08cdd76d836711535c6cb157a7f3cf338d9b4db9c700.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/H/state.json
+Downloading 'jena_weather/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/B-DLGau7qji7FOiLDm71jNznmcU=.f390d8fb91c1e155f72b6a868446eee0d22bc220.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/H/data-00000-of-00001.arrow
+Downloading 'jena_weather/state.json' to 'datasets/train_test/.cache/huggingface/download/jena_weather/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.940c5b7ff69f16883ad07e279e7f3674335e17ed.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/dataset_info.json
+Downloading 'kdd_cup_2018_with_missing/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/kdd_cup_2018_with_missing/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.62b886fc133acadb6c0691c2fd2fad13f43597b6d052bdc57a5a36193305fc43.incomplete'
+Downloading 'kdd_cup_2018_with_missing/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/kdd_cup_2018_with_missing/D/B-DLGau7qji7FOiLDm71jNznmcU=.b5e52d6531bfbb98c860c0a18b1b3ef25f1e1797.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/state.json
+Downloading 'kdd_cup_2018_with_missing/D/state.json' to 'datasets/train_test/.cache/huggingface/download/kdd_cup_2018_with_missing/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.623aabafaeb7f0ecc5eca36e8ea9efe02b1b2b57.incomplete'
+Download complete. Moving file to datasets/train_test/kdd_cup_2018_with_missing/D/dataset_info.json
+Download complete. Moving file to datasets/train_test/kdd_cup_2018_with_missing/D/data-00000-of-00001.arrow
+Downloading 'kdd_cup_2018_with_missing/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/kdd_cup_2018_with_missing/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.31f66356ac72cf3cc9e9c018689c3f5a0859f71de2daa889e8d7da3a4344f4dd.incomplete'
+Downloading 'kdd_cup_2018_with_missing/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/kdd_cup_2018_with_missing/H/B-DLGau7qji7FOiLDm71jNznmcU=.ee5a49e19fbb4cd4b2dbeef3de14fbd68faa0510.incomplete'
+Downloading 'kdd_cup_2018_with_missing/H/state.json' to 'datasets/train_test/.cache/huggingface/download/kdd_cup_2018_with_missing/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.ec8bf1e7508770244e2a9a333bcaf0dc71e21190.incomplete'
+Download complete. Moving file to datasets/train_test/kdd_cup_2018_with_missing/D/state.json
+Download complete. Moving file to datasets/train_test/kdd_cup_2018_with_missing/H/dataset_info.json
+Download complete. Moving file to datasets/train_test/kdd_cup_2018_with_missing/H/state.json
+Downloading 'm4_daily/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/m4_daily/ph-PwKzEizU51qoBvN-kh8yvA-U=.bb82fc356772441f3354ba9d74aaa7288db2d7e589d5e62b43b8a87736bc47e2.incomplete'
+Download complete. Moving file to datasets/train_test/jena_weather/data-00000-of-00001.arrow
+Downloading 'm4_daily/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/m4_daily/B-DLGau7qji7FOiLDm71jNznmcU=.35b7c7fe856b47598b0969bc35bfa996f04a917e.incomplete'
+Downloading 'm4_daily/state.json' to 'datasets/train_test/.cache/huggingface/download/m4_daily/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.61a3e749819deb927409a01f2f5b11536ff5bcba.incomplete'
+Downloading 'm4_hourly/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/m4_hourly/ph-PwKzEizU51qoBvN-kh8yvA-U=.44f0f708d4ab5f8008fb7d656c02b6990752cf8009ea2655f97cb01fadde5bb2.incomplete'
+Download complete. Moving file to datasets/train_test/m4_daily/dataset_info.json
+Download complete. Moving file to datasets/train_test/m4_daily/state.json
+Downloading 'm4_hourly/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/m4_hourly/B-DLGau7qji7FOiLDm71jNznmcU=.e34f255318559281c5feb2bfcd5620fc5574ceb9.incomplete'
+Downloading 'm4_hourly/state.json' to 'datasets/train_test/.cache/huggingface/download/m4_hourly/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.5052b051c4152c45028ac275b1f3d51c744169f1.incomplete'
+Download complete. Moving file to datasets/train_test/m4_hourly/state.json
+Download complete. Moving file to datasets/train_test/m4_hourly/dataset_info.json
+Downloading 'm4_monthly/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/m4_monthly/ph-PwKzEizU51qoBvN-kh8yvA-U=.cc6e94232aa23146a89c5cf3e43d71f9e69c7040febeb9017d4d6a1dacb19b63.incomplete'
+Downloading 'm4_monthly/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/m4_monthly/B-DLGau7qji7FOiLDm71jNznmcU=.76245d365ffa72f71d11d9b88e33afba828a7fb2.incomplete'
+Download complete. Moving file to datasets/train_test/m4_hourly/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/m4_monthly/dataset_info.json
+Downloading 'm4_monthly/state.json' to 'datasets/train_test/.cache/huggingface/download/m4_monthly/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.f6e06ec562d6c1168eb75b0503c5df088b549853.incomplete'
+Downloading 'm4_quarterly/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/m4_quarterly/ph-PwKzEizU51qoBvN-kh8yvA-U=.e0daa4b4440478a1e127c5f5e4b9b9b411de60c272fb4123e95a0793ab5926f0.incomplete'
+Download complete. Moving file to datasets/train_test/m4_monthly/state.json
+Download complete. Moving file to datasets/train_test/kdd_cup_2018_with_missing/H/data-00000-of-00001.arrow
+Downloading 'm4_quarterly/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/m4_quarterly/B-DLGau7qji7FOiLDm71jNznmcU=.b136b0d7d24a92ed945dd7788f8010dec3417eb4.incomplete'
+Downloading 'm4_quarterly/state.json' to 'datasets/train_test/.cache/huggingface/download/m4_quarterly/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.b03d7d5adae1892bbeab026462d14ca319bafc0f.incomplete'
+Download complete. Moving file to datasets/train_test/m4_quarterly/dataset_info.json
+Download complete. Moving file to datasets/train_test/m4_quarterly/state.json
+Download complete. Moving file to datasets/train_test/m4_daily/data-00000-of-00001.arrow
+Downloading 'm4_weekly/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/m4_weekly/B-DLGau7qji7FOiLDm71jNznmcU=.edc189a18785ffe194fa96a609cee2afecb3888f.incomplete'
+Downloading 'm4_weekly/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/m4_weekly/ph-PwKzEizU51qoBvN-kh8yvA-U=.eebf2b0a90f853dd487480b0a2af453e9948afbd9d55e6ff7f1eee95ff5f8c90.incomplete'
+Downloading 'm4_weekly/state.json' to 'datasets/train_test/.cache/huggingface/download/m4_weekly/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.92e8f586bfc6e86afe4065150521309eaf88e57b.incomplete'
+Download complete. Moving file to datasets/train_test/m4_weekly/dataset_info.json
+Download complete. Moving file to datasets/train_test/m4_weekly/state.json
+Downloading 'm4_yearly/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/m4_yearly/ph-PwKzEizU51qoBvN-kh8yvA-U=.8eeb5cb0ea6ab47ee442f57c74d31fcba2c2060afd7af3f15e89a5cf2931f1fe.incomplete'
+Downloading 'm4_yearly/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/m4_yearly/B-DLGau7qji7FOiLDm71jNznmcU=.ce37553d6670d2ce8fb5cbafd488115cf7a2d61e.incomplete'
+Download complete. Moving file to datasets/train_test/m4_quarterly/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/m4_yearly/dataset_info.json
+Downloading 'm4_yearly/state.json' to 'datasets/train_test/.cache/huggingface/download/m4_yearly/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.f85a057aa1bd69bdc2dacc071048a341e075d9ab.incomplete'
+Download complete. Moving file to datasets/train_test/m4_weekly/data-00000-of-00001.arrow
+Downloading 'restaurant/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/restaurant/ph-PwKzEizU51qoBvN-kh8yvA-U=.b53da5e2af5dc2ec61a3ddd9b828eb392b60f8068bd94961d206477f4409ac6d.incomplete'
+Download complete. Moving file to datasets/train_test/m4_yearly/state.json
+Download complete. Moving file to datasets/train_test/restaurant/data-00000-of-00001.arrow
+Downloading 'restaurant/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/restaurant/B-DLGau7qji7FOiLDm71jNznmcU=.e8fe5aa72d5a84d7fd6db844303ec16b9a93c291.incomplete'
+Downloading 'restaurant/state.json' to 'datasets/train_test/.cache/huggingface/download/restaurant/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.19bd9251727ee7674cd12dd690752fab8882e213.incomplete'
+Downloading 'saugeenday/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/saugeenday/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.94d1adf6571e606c8d22784253335b38cb23854983b9c374d04285a233f8d0e7.incomplete'
+Download complete. Moving file to datasets/train_test/restaurant/dataset_info.json
+Download complete. Moving file to datasets/train_test/restaurant/state.json
+Download complete. Moving file to datasets/train_test/saugeenday/D/data-00000-of-00001.arrow
+Downloading 'saugeenday/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/saugeenday/D/B-DLGau7qji7FOiLDm71jNznmcU=.c59cfe2c62af9520a43b6e6611022eecc5551a5c.incomplete'
+Downloading 'saugeenday/D/state.json' to 'datasets/train_test/.cache/huggingface/download/saugeenday/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.bad4809c55e107f4bec824b657ce9bfbd07ae363.incomplete'
+Downloading 'saugeenday/M/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/saugeenday/M/ph-PwKzEizU51qoBvN-kh8yvA-U=.a25eb381ac7e638947899d436fc493939d107e990517b6fa99a026bacd3f9007.incomplete'
+Download complete. Moving file to datasets/train_test/m4_yearly/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/saugeenday/M/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/saugeenday/D/dataset_info.json
+Download complete. Moving file to datasets/train_test/saugeenday/D/state.json
+Downloading 'saugeenday/M/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/saugeenday/M/B-DLGau7qji7FOiLDm71jNznmcU=.491de71043732ef4434a092c014cf76ea210489c.incomplete'
+Downloading 'saugeenday/W/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/saugeenday/W/ph-PwKzEizU51qoBvN-kh8yvA-U=.7dda283290f8788321a2142ac1642ddb7b75520f8f11a891e2d338e19889ef62.incomplete'
+Downloading 'saugeenday/M/state.json' to 'datasets/train_test/.cache/huggingface/download/saugeenday/M/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.141249acd43e3103fd11d497b68436ef05544658.incomplete'
+Download complete. Moving file to datasets/train_test/saugeenday/W/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/saugeenday/M/dataset_info.json
+Download complete. Moving file to datasets/train_test/saugeenday/M/state.json
+Downloading 'saugeenday/W/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/saugeenday/W/B-DLGau7qji7FOiLDm71jNznmcU=.24dd7750792a81a69065810010ca91ff361275fd.incomplete'
+Downloading 'saugeenday/W/state.json' to 'datasets/train_test/.cache/huggingface/download/saugeenday/W/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.178c788e89f080e12845b4cf84f3a9788b5f02ee.incomplete'
+Downloading 'solar/10T/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/solar/10T/ph-PwKzEizU51qoBvN-kh8yvA-U=.0cc57e755664a1a2684907b1734e93961dc0ebc3d4a7ebc39fe75187d8a0ac5c.incomplete'
+Downloading 'solar/10T/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/solar/10T/B-DLGau7qji7FOiLDm71jNznmcU=.c89834a76f15697ec1746090874aeeccf3eab136.incomplete'
+Download complete. Moving file to datasets/train_test/saugeenday/W/dataset_info.json
+Download complete. Moving file to datasets/train_test/saugeenday/W/state.json
+Download complete. Moving file to datasets/train_test/solar/10T/dataset_info.json
+Downloading 'solar/10T/state.json' to 'datasets/train_test/.cache/huggingface/download/solar/10T/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.1aea8004af5bad853a2667fd1120b9ad3872ed28.incomplete'
+Downloading 'solar/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/solar/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.783d4671a159fb4150a0cc3105e192846dc759f3be204d8bad95aa13d428b578.incomplete'
+Download complete. Moving file to datasets/train_test/solar/D/data-00000-of-00001.arrow
+Downloading 'solar/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/solar/D/B-DLGau7qji7FOiLDm71jNznmcU=.784df595c5fa18672fe47505000bbf9d01404848.incomplete'
+Download complete. Moving file to datasets/train_test/solar/10T/state.json
+Download complete. Moving file to datasets/train_test/solar/D/dataset_info.json
+Downloading 'solar/D/state.json' to 'datasets/train_test/.cache/huggingface/download/solar/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.e895f436191af30698ca6605b902c09cd0484eb9.incomplete'
+Downloading 'solar/H/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/solar/H/ph-PwKzEizU51qoBvN-kh8yvA-U=.16d10540595200124ac0d8d3f46e6d27951ce53ca3d0782cb2453e1afbba86f8.incomplete'
+Download complete. Moving file to datasets/train_test/solar/D/state.json
+Downloading 'solar/H/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/solar/H/B-DLGau7qji7FOiLDm71jNznmcU=.a4160c346169f6ef6b0a999c45615ff68002b5ef.incomplete'
+Download complete. Moving file to datasets/train_test/m4_monthly/data-00000-of-00001.arrow
+Downloading 'solar/H/state.json' to 'datasets/train_test/.cache/huggingface/download/solar/H/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.db05be9c69b38a2d2bec7589c051171a785ecb85.incomplete'
+Download complete. Moving file to datasets/train_test/solar/H/dataset_info.json
+Downloading 'solar/W/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/solar/W/ph-PwKzEizU51qoBvN-kh8yvA-U=.66880fe5f2cbb0bc3af42cf96ba2a68faa631a45f41cf739f42908bfe84e90e8.incomplete'
+Download complete. Moving file to datasets/train_test/solar/H/state.json
+Downloading 'solar/W/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/solar/W/B-DLGau7qji7FOiLDm71jNznmcU=.4f7014d64facae9a2b5940315f2404f41ebf5510.incomplete'
+Download complete. Moving file to datasets/train_test/solar/W/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/solar/W/dataset_info.json
+Downloading 'solar/W/state.json' to 'datasets/train_test/.cache/huggingface/download/solar/W/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.d9504d701b858ce4180c56bfc87de01dcbf1d39a.incomplete'
+Download complete. Moving file to datasets/train_test/solar/H/data-00000-of-00001.arrow
+Downloading 'temperature_rain_with_missing/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/temperature_rain_with_missing/ph-PwKzEizU51qoBvN-kh8yvA-U=.334ad5eb89f1995ca243bf00ef438d6edbef62ea9de5d2618e5ffecd9bf92dd0.incomplete'
+Download complete. Moving file to datasets/train_test/solar/W/state.json
+Downloading 'temperature_rain_with_missing/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/temperature_rain_with_missing/B-DLGau7qji7FOiLDm71jNznmcU=.d253d951b32a83e591201621ec0bc31aaaeadbf9.incomplete'
+Downloading 'temperature_rain_with_missing/state.json' to 'datasets/train_test/.cache/huggingface/download/temperature_rain_with_missing/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.4e84feecd0ac1c1e80d6b6564b9fe51e31d6fcb4.incomplete'
+Download complete. Moving file to datasets/train_test/temperature_rain_with_missing/dataset_info.json
+Downloading 'us_births/D/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/us_births/D/ph-PwKzEizU51qoBvN-kh8yvA-U=.c72c9ec4a8840eb79d876aaec0dd4ca0ea57fd53d264039bd9cd4b0e5c667b13.incomplete'
+Download complete. Moving file to datasets/train_test/temperature_rain_with_missing/state.json
+Download complete. Moving file to datasets/train_test/us_births/D/data-00000-of-00001.arrow
+Downloading 'us_births/D/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/us_births/D/B-DLGau7qji7FOiLDm71jNznmcU=.9e4addbf0d58d970f8359712aaf400019f2b34f0.incomplete'
+Downloading 'us_births/D/state.json' to 'datasets/train_test/.cache/huggingface/download/us_births/D/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.7763345e61058e09bb70df87e493aeaba510e09b.incomplete'
+Downloading 'us_births/M/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/us_births/M/ph-PwKzEizU51qoBvN-kh8yvA-U=.5943dd99dc5140d75544236c21cccf775b38a3f9e9ce7bdc16a0bf1286231110.incomplete'
+Download complete. Moving file to datasets/train_test/us_births/M/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/us_births/D/dataset_info.json
+Download complete. Moving file to datasets/train_test/us_births/D/state.json
+Downloading 'us_births/M/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/us_births/M/B-DLGau7qji7FOiLDm71jNznmcU=.84adf89b4a0fb389c0af84155e96340835b31e5e.incomplete'
+Downloading 'us_births/W/data-00000-of-00001.arrow' to 'datasets/train_test/.cache/huggingface/download/us_births/W/ph-PwKzEizU51qoBvN-kh8yvA-U=.26fba0a8a5afe8773c9a749671859306d6ba5f2dfd922e98b645226a600884e2.incomplete'
+Download complete. Moving file to datasets/train_test/us_births/W/data-00000-of-00001.arrow
+Downloading 'us_births/M/state.json' to 'datasets/train_test/.cache/huggingface/download/us_births/M/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.3ce10c735730e980a0f3e9d7d4e842819746a3e0.incomplete'
+Download complete. Moving file to datasets/train_test/us_births/M/dataset_info.json
+Downloading 'us_births/W/dataset_info.json' to 'datasets/train_test/.cache/huggingface/download/us_births/W/B-DLGau7qji7FOiLDm71jNznmcU=.27863659e0c403edcfe6161833e06d9628ddbd4a.incomplete'
+Download complete. Moving file to datasets/train_test/us_births/M/state.json
+Downloading 'us_births/W/state.json' to 'datasets/train_test/.cache/huggingface/download/us_births/W/Fr-4uW6N04ehjcnrEpZWl7X4n0Y=.57eb3ddabd8b18d0993181472f911cfd60614646.incomplete'
+Download complete. Moving file to datasets/train_test/us_births/W/dataset_info.json
+Download complete. Moving file to datasets/train_test/us_births/W/state.json
+Download complete. Moving file to datasets/train_test/bitbrains_fast_storage/5T/data-00000-of-00001.arrow
+Fetching 175 files:  14%|█▎        | 24/175 [00:13<01:11,  2.13it/s]Download complete. Moving file to datasets/train_test/electricity/15T/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/solar/10T/data-00000-of-00001.arrow
+Download complete. Moving file to datasets/train_test/electricity/15T/cache-178ededf6d74e118.arrow
+Fetching 175 files:  31%|███▏      | 55/175 [00:13<00:21,  5.65it/s]Download complete. Moving file to datasets/train_test/temperature_rain_with_missing/data-00000-of-00001.arrow
+Fetching 175 files:  94%|█████████▎| 164/175 [00:14<00:00, 22.05it/s]Fetching 175 files: 100%|██████████| 175/175 [00:14<00:00, 12.17it/s]
+[Jun 15, 2025 02:26:14PM] No errors for downloading train_test split!
