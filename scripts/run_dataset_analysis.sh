@@ -4,7 +4,7 @@
 #SBATCH --array=0-97
 #SBATCH --partition=main
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=16
 #SBATCH --mem=64G
 #SBATCH --time=1-00:00:00
 #SBATCH --ntasks=1  
@@ -22,11 +22,7 @@ conda activate gift
 
 split="train_test"
 
-# TODO: Uncomment this when running on SLURM
-# index=$SLURM_ARRAY_TASK_ID
-
-# TODO: Remove this line when running on SLURM
-index=38
+index=$SLURM_ARRAY_TASK_ID
 
 export RAY_TMPDIR=/scratch1/mpgee/ray_tmpdir
 mkdir -p "$RAY_TMPDIR"
