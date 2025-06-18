@@ -292,7 +292,7 @@ datasets:
   - _target_: gift_eval.data.Dataset
     name: solar/H
     term: long
-index: 97
+index: ''
 analyzer:
   _target_: gift_eval.analysis.Analyzer
   datasets: ${datasets.datasets}

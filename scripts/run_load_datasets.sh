@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=load_datasets
-#SBATCH --array=0-455
+#SBATCH --array=0-458
 #SBATCH --partition=main
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
@@ -20,11 +20,11 @@ source ./scripts/utils.sh
 source ~/.bashrc
 conda activate gift
 
-dataset_dir="./datasets/pretrain"
+dataset_dir="/project/jessetho_1390/gift_eval/pretrain"
 mapfile -t names < <(find "$dataset_dir" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
 
 num_names=${#names[@]}
-echo "Number of dataset names: $num_names"
+log_info "Number of dataset names: $num_names"
 
 term_index=$((SLURM_ARRAY_TASK_ID / num_names))
 name_index=$((SLURM_ARRAY_TASK_ID % num_names))
@@ -34,16 +34,17 @@ term=${terms[$term_index]}
 name=${names[$name_index]}
 
 log_job_info
-log_info "Dataset $((SLURM_ARRAY_TASK_ID + 1)): $name (${term})"
+message="pretraining dataset $((SLURM_ARRAY_TASK_ID + 1)): $name (${term})"
+log_info "Loading $message"
 
 if python load_dataset.py --name "$name" --term "$term"; then
-    log_info "Successfully loaded dataset $((SLURM_ARRAY_TASK_ID + 1)): $name (${term})!"
+    log_info "Successfully loaded $message!"
     log_error "No errors!"
 
     done_file=$(get_done_file)
     end_time=$(get_timestamp)
-    echo "[${end_time}] Finished loading dataset $((SLURM_ARRAY_TASK_ID + 1)): $name (${term})!" >"$done_file"
+    echo "[${end_time}] Finished loading $message!" >"$done_file"
 else
-    log_error "ERROR: Failed to load dataset $((SLURM_ARRAY_TASK_ID + 1)): $name (${term})!"
+    log_error "ERROR: Failed to load $message!"
     exit 1
 fi

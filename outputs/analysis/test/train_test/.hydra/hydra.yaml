@@ -113,11 +113,11 @@ hydra:
     - hydra.mode=RUN
     task:
     - datasets=train_test
-    - index=97
+    - index=
   job:
     name: analysis
     chdir: null
-    override_dirname: datasets=train_test,index=97
+    override_dirname: datasets=train_test,index=
     id: ???
     num: ???
     config_name: default
