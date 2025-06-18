@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=dataset_analysis
-#SBATCH --array=0-97
+#SBATCH --array=0-96
 #SBATCH --partition=main
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
