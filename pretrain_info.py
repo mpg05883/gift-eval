@@ -16,7 +16,7 @@ def main(args):
     
     kwargs = {
         "desc": "Reading datasets",
-        "total": len(names) * len(terms),
+        "total": len(names),
         "unit": "dataset",
     }
     
