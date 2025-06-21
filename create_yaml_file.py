@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 
 import pandas as pd
@@ -5,9 +6,8 @@ import yaml
 from tqdm import tqdm
 
 
-def main():
-    csv_path = Path("resources") / "train_test_datasets.csv"
-    df = pd.read_csv(csv_path)
+def main(args):
+    df = pd.read_csv(Path("resources") / args.split / "info.csv")
 
     kwargs = {
         "desc": "Writing datasets to yaml file",
@@ -29,8 +29,9 @@ def main():
         "datasets": datasets,
     }
 
-    yaml_path = Path("cli") / "conf" / "analysis" / "datasets" / "train_test.yaml"
-    yaml_path.parent.mkdir(parents=True, exist_ok=True)
+    yaml_dirpath = Path("cli") / "conf" / "analysis" / "datasets"
+    yaml_dirpath.mkdir(parents=True, exist_ok=True)
+    yaml_path = yaml_dirpath / f"{args.split}.csv"
 
     with open(yaml_path, "w") as f:
         yaml.dump(data, f, sort_keys=False)
@@ -39,4 +40,13 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="Generates a yaml file for computing time series features"
+    )
+    parser.add_argument(
+        name="split",
+        choices=["train_test", "pretrain"],
+        help="Name of the GIFT-Eval split to create a yaml file for",
+    )
+    args = parser.parse_args()
+    main(args)
