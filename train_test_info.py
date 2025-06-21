@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pandas as pd
 from tqdm import tqdm
@@ -26,7 +27,8 @@ def get_key(name) -> str:
 
 
 def main():
-    df = pd.read_csv("train_test_datasets.csv")
+    input_path = Path("resources") / "train_test" / "info.csv"
+    df = pd.read_csv(input_path)
     dataset_properties = json.load(open("notebooks/dataset_properties.json"))
 
     kwargs = {
@@ -36,7 +38,7 @@ def main():
     }
 
     rows = []
-    for i, row in tqdm(df.iterrows(), **kwargs):
+    for _, row in tqdm(df.iterrows(), **kwargs):
         name, term = row["name"], row["term"]
         dataset = Dataset(name, term)
         key = get_key(name)
@@ -51,7 +53,7 @@ def main():
             "sum_series_length": dataset.sum_series_length,
             "domain": dataset_properties[key]["domain"],
             "num_variates": dataset_properties[key]["num_variates"],
-            "num_entries": dataset.num_entries
+            "num_entries": dataset.num_entries,
         }
         rows.append(row)
 
