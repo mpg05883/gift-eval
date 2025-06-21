@@ -32,7 +32,7 @@ def main(args):
                 dataset = Dataset(name, term, verbose=False)
             except Exception as e:
                 continue
-            
+                        
             row = {
                 "name": name,
                 "term": term,
@@ -42,6 +42,7 @@ def main(args):
                 "windows": dataset.windows,
                 "_min_series_length": dataset._min_series_length,
                 "sum_series_length": dataset.sum_series_length,
+                "": dataset
             }
             rows.append(row)
             
