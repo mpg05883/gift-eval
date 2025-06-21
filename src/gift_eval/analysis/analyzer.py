@@ -1,18 +1,17 @@
 import gc
 import os
+import time
 from collections import defaultdict
 from functools import cached_property
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import ray
 from dotenv import load_dotenv
 from gluonts.time_feature import norm_freq_str
 from pandas.tseries.frequencies import to_offset
-from ray.experimental import tqdm_ray
 from tqdm import tqdm
-import time 
+
 from gift_eval.data import Dataset
 
 from .features import get_ts_features
@@ -21,7 +20,13 @@ from .utils import persist_analysis
 load_dotenv()
 
 MAX_CONTEXT_LEN = 500
-runtime_env = {"env_vars": {"RAY_memory_usage_threshold": "0.85",}}
+
+# Ray configs
+runtime_env = {
+    "env_vars": {
+        "RAY_memory_usage_threshold": "0.85",
+    }
+}
 
 if not os.getenv("NUM_CPUS"):
     print(
@@ -30,7 +35,7 @@ if not os.getenv("NUM_CPUS"):
 NUM_CPUS = int(os.getenv("NUM_CPUS", "1"))
 
 
-def process_instance(self, test_input, test_label, dataset_freq):
+def process_instance(self, test_input, test_label, dataset_freq, verbose=False):
     """
     Process a single time series instance to compute features.
 
@@ -44,7 +49,7 @@ def process_instance(self, test_input, test_label, dataset_freq):
     - DataFrame containing the computed features for the time series instance.
     """
     start_time = time.time()
-    
+
     np_inp = np.array(test_input["target"])
     np_label = np.array(test_label["target"])
 
@@ -62,10 +67,10 @@ def process_instance(self, test_input, test_label, dataset_freq):
     window_features_df = get_ts_features(
         np_instance, norm_freq_str(to_offset(dataset_freq).name)
     )
-    
-    seconds = time.time() - start_time
-    # print(f'Task completed in {seconds:.2f} seconds')
-    
+
+    if verbose:
+        print(f"Task completed in {time.time() - start_time:.2f} seconds")
+
     return window_features_df
 
 
@@ -80,23 +85,19 @@ def process_dataset(self, dataset, output_dir):
 
     Returns:
     - None, but updates the progress bar and persists the analysis results.
-    """    
+    """
     # Determine the directory for the dataset based on its term and name
     name = dataset.name
     term = dataset.term.value
-    
+
     print(output_dir)
-    
+
     if str(dataset.term) == "Term.SHORT":
-        dataset_dir = Path(
-            os.path.join(output_dir, name, term)
-        )
+        dataset_dir = Path(os.path.join(output_dir, name, term))
     else:
         if "/" in dataset.name:
             name, freq = dataset.name.split("/")
-            dataset_dir = Path(
-                os.path.join(output_dir, name, freq, term)
-            )
+            dataset_dir = Path(os.path.join(output_dir, name, freq, term))
         else:
             dataset_dir = Path(
                 os.path.join(
@@ -117,7 +118,7 @@ def process_dataset(self, dataset, output_dir):
 
     all_features_list = []
     test_data = dataset.test_data
-    
+
     kwargs = {
         "desc": "Processing entries",
         "total": len(test_data),
@@ -130,6 +131,7 @@ def process_dataset(self, dataset, output_dir):
         for test_input, test_label in tqdm(test_data, **kwargs)
     ]
 
+    # * Old Ray code
     # for feature in features:
     #     try:
     #         # Retrieve the result with a timeout
@@ -141,7 +143,7 @@ def process_dataset(self, dataset, output_dir):
     #     except Exception as e:
     #         print(f"An error occurred while processing: {e}")
     #         continue
-    
+
     all_features_list = features
 
     gc.collect()
@@ -153,7 +155,8 @@ def process_dataset(self, dataset, output_dir):
 
 class Analyzer:
     """
-    Analyzer class to manage the analysis of multiple datasets, including feature computation and frequency distribution analysis.
+    Analyzer class to manage the analysis of multiple datasets, including
+    feature computation and frequency distribution analysis.
     """
 
     def __init__(self, datasets: list[Dataset], index: int = 0):
@@ -171,7 +174,9 @@ class Analyzer:
         """Print the names of all datasets."""
         print("-" * 80)
         for i, dataset in enumerate(self.datasets):
-            print(f"Dataset | name: {dataset.name}, term: {dataset.term.value}, freq: {dataset.freq}")
+            print(
+                f"Dataset | name: {dataset.name}, term: {dataset.term.value}, freq: {dataset.freq}"
+            )
         print("-" * 80)
 
     @cached_property
@@ -228,7 +233,7 @@ class Analyzer:
                 dataset.hf_dataset.num_rows * dataset.windows
             )
         return freq_window_counts
-    
+
     def features_by_dataset(self, output_dir):
         """
         Creates and persists features for each dataset.
@@ -238,7 +243,8 @@ class Analyzer:
         """
         for dataset in self.datasets:
             process_dataset(self, dataset, output_dir)
-        
+
+        # * Old Ray code
         # ray.get(
         #     [
         #         process_dataset(self, dataset, output_dir)

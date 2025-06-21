@@ -5,7 +5,7 @@ from omegaconf import DictConfig
 
 
 @hydra.main(version_base="1.3", config_path="conf/analysis", config_name="default")
-def main(cfg: DictConfig):    
+def main(cfg: DictConfig):
     output_dir = HydraConfig.get().runtime.output_dir
     analyzer = instantiate(cfg.analyzer, _convert_="all")
     analyzer.print_datasets()
