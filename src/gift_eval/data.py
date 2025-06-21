@@ -161,7 +161,7 @@ class Dataset:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
-            
+
     @cached_property
     def num_entries(self) -> str:
         """
