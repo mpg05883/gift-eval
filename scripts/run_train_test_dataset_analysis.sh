@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=dataset_analysis
+#SBATCH --job-name=train_test_dataset_analysis
 #SBATCH --array=0-96
 #SBATCH --partition=main
 #SBATCH --nodes=1

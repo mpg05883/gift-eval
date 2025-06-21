@@ -51,6 +51,7 @@ def main():
             "sum_series_length": dataset.sum_series_length,
             "domain": dataset_properties[key]["domain"],
             "num_variates": dataset_properties[key]["num_variates"],
+            "num_entries": dataset.num_entries
         }
         rows.append(row)
 

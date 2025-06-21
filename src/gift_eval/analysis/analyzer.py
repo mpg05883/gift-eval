@@ -5,6 +5,9 @@ from collections import defaultdict
 from functools import cached_property
 from pathlib import Path
 
+import ray
+from ray.experimental import tqdm_ray
+import random
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
@@ -34,7 +37,7 @@ if not os.getenv("NUM_CPUS"):
     )
 NUM_CPUS = int(os.getenv("NUM_CPUS", "1"))
 
-
+@ray.remote(num_cpus=NUM_CPUS)
 def process_instance(self, test_input, test_label, dataset_freq, verbose=False):
     """
     Process a single time series instance to compute features.
@@ -67,14 +70,16 @@ def process_instance(self, test_input, test_label, dataset_freq, verbose=False):
     window_features_df = get_ts_features(
         np_instance, norm_freq_str(to_offset(dataset_freq).name)
     )
+    
+    self.pbar.update.remote(1)
 
     if verbose:
         print(f"Task completed in {time.time() - start_time:.2f} seconds")
 
     return window_features_df
 
-
-def process_dataset(self, dataset, output_dir):
+@ray.remote(num_cpus=NUM_CPUS)
+def process_dataset(self, dataset, output_dir, max_entries=500_000):
     """
     Process an entire dataset to compute features for each time series instance.
 
@@ -117,34 +122,42 @@ def process_dataset(self, dataset, output_dir):
         return None
 
     all_features_list = []
-    test_data = dataset.test_data
+    test_data = dataset.test_data 
+    
+    if len(test_data) < max_entries:
+        entries = list(test_data.items())
+        sampled_entries =  random.sample(entries, max_entries)
+        test_data = dict(sampled_entries)
+        
 
-    kwargs = {
-        "desc": "Processing entries",
-        "total": len(test_data),
-        "unit": "entry",
-    }
+    # * Non-Ray code
+    # kwargs = {
+    #     "desc": "Processing entries",
+    #     "total": len(test_data),
+    #     "unit": "entry",
+    # }
 
     # Process each instance in the dataset
     features = [
-        process_instance(self, test_input, test_label, dataset.freq)
-        for test_input, test_label in tqdm(test_data, **kwargs)
+        process_instance.remote(self, test_input, test_label, dataset.freq)
+        for test_input, test_label in test_data
     ]
 
-    # * Old Ray code
-    # for feature in features:
-    #     try:
-    #         # Retrieve the result with a timeout
-    #         result = ray.get(feature, timeout=300)  # 300 seconds timeout
-    #         all_features_list.append(result)
-    #     except ray.exceptions.GetTimeoutError:
-    #         print("A task timed out and will be skipped.")
-    #         continue  # Skip this particular instance
-    #     except Exception as e:
-    #         print(f"An error occurred while processing: {e}")
-    #         continue
-
-    all_features_list = features
+    # * Ray code
+    for feature in features:
+        try:
+            # Retrieve the result with a timeout
+            result = ray.get(feature, timeout=300)  # 300 seconds timeout
+            all_features_list.append(result)
+        except ray.exceptions.GetTimeoutError:
+            print("A task timed out and will be skipped.")
+            continue  # Skip this particular instance
+        except Exception as e:
+            print(f"An error occurred while processing: {e}")
+            continue
+    
+    # * Non-Ray code
+    # all_features_list = features
 
     gc.collect()
 
@@ -168,7 +181,9 @@ class Analyzer:
         """
         self.index = index
         self.datasets = [datasets[index]]
-        # ray.init(runtime_env=runtime_env)
+        ray.init(runtime_env=runtime_env)
+        remote_tqdm = ray.remote(tqdm_ray.tqdm)
+        self.pbar = remote_tqdm.remote(total=self._sum_windows_count)
 
     def print_datasets(self):
         """Print the names of all datasets."""
@@ -241,16 +256,17 @@ class Analyzer:
         Parameters:
         - output_dir: Directory where the features will be saved.
         """
-        for dataset in self.datasets:
-            process_dataset(self, dataset, output_dir)
+        # * Non-Ray code
+        # for dataset in self.datasets:
+        #     process_dataset(self, dataset, output_dir)
 
-        # * Old Ray code
-        # ray.get(
-        #     [
-        #         process_dataset(self, dataset, output_dir)
-        #         for dataset in self.datasets
-        #     ]
-        # )
+        # * Ray code
+        ray.get(
+            [
+                process_dataset.remote(self, dataset, output_dir)
+                for dataset in self.datasets
+            ]
+        )
 
     def features_by_window(self, output_dir):
         """

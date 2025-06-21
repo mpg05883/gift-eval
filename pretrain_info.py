@@ -42,7 +42,7 @@ def main(args):
                 "windows": dataset.windows,
                 "_min_series_length": dataset._min_series_length,
                 "sum_series_length": dataset.sum_series_length,
-                "": dataset
+                "num_entries": dataset.num_entries
             }
             rows.append(row)
             

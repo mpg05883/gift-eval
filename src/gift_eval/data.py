@@ -161,15 +161,19 @@ class Dataset:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
+            
+    @cached_property
+    def num_entries(self) -> str:
+        """
+        Returns the number of time series entires in the dataset.
+        """
+        return len(self.training_dataset)
 
     @cached_property
     def key(self) -> str:
         """
         Returns the dataset's key for accessing dataset infomation in
-        dataset_properties.json (e.g. domain and number of variates)
-
-        Args:
-            name (str): Name of the dataset.
+        dataset_properties.json (e.g. domain and number of variates).
         """
         pretty_names = {
             "saugeenday": "saugeen",

@@ -25,7 +25,7 @@ def main(args):
         datasets.append(mapping)
 
     data = {
-        "name": "train_test",
+        "name": args.split,
         "datasets": datasets,
     }
 

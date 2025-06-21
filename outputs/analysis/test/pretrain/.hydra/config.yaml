@@ -1,5 +1,5 @@
 datasets:
-  name: train_test
+  name: pretrain
   datasets:
   - _target_: gift_eval.data.Dataset
     name: bull

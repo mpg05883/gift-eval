@@ -142,7 +142,7 @@ hydra:
     - path: ''
       schema: structured
       provider: schema
-    output_dir: /home1/mpgee/gift-eval/outputs/analysis/test/train_test
+    output_dir: /home1/mpgee/gift-eval/outputs/analysis/test/pretrain
     choices:
       datasets: pretrain
       hydra/env: default
