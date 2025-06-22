@@ -16,12 +16,15 @@
 import json
 import math
 import os
+import random
+import re
 from enum import Enum
 from functools import cached_property
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, Optional
 
 import numpy as np
+import pandas as pd
 import pyarrow.compute as pc
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
@@ -81,15 +84,15 @@ PRED_LENGTH_MAP = {
 
 # Prediction lengths from TFB: https://arxiv.org/abs/2403.20150
 TFB_PRED_LENGTH_MAP = {
-    "A": 6,
-    "H": 48,
-    "Q": 8,
-    "D": 14,
-    "M": 18,
-    "W": 13,
     "U": 8,
-    "T": 8,
+    "T": 8,  # Minutely
+    "H": 48,  # Hourly
     "h": 48,
+    "D": 14,  # Daily
+    "W": 13,  # Weekly
+    "M": 18,  # Monthly
+    "Q": 8,  # Quarterly
+    "A": 6,  # Annualy/yearly
 }
 
 
@@ -115,8 +118,8 @@ def itemize_start(data_entry: DataEntry) -> DataEntry:
 
 def fix_1d_array(data_entry: DataEntry) -> DataEntry:
     """
-    Converts 1D arrays in a DataEntry into 2D arrays by adding an extra leading
-    dimension (1, `time_steps`). Excludes the "target" field.
+    Converts 1D arrays of shape (`time_steps`,) in a DataEntry into 2D arrays
+    by reshaping them into (1, `time_steps`). Excludes the "target" field.
 
     Use this to avoid "bad shape - expected 2 dimensions, got 1" errors.
 
@@ -162,12 +165,14 @@ class Dataset:
         name: str,
         term: Term | str = Term.SHORT,
         storage_env_var: str = "GIFT_EVAL",
-        verbose: bool = True,
+        verbose: bool = False,
+        limit: Optional[int] = None,
     ):
         self.name = name
         self.term = Term(term)
         self.storage_env_var = storage_env_var
         self.verbose = verbose
+        self.limit = limit
 
         if not self.verbose:
             disable_progress_bar()
@@ -175,6 +180,14 @@ class Dataset:
         self.hf_dataset = datasets.load_from_disk(self.storage_path).with_format(
             "numpy"
         )
+
+        # Randomy sample the dataset if a limit is set
+        if self.limit and self.limit < self.num_entries:
+            random.seed(42)
+            self.num_entries = self.limit
+            indices = random.sample(range(self.num_entries), self.limit)
+            self.hf_dataset = self.hf_dataset.select(indices)
+
         process = ProcessDataEntry(
             self.freq,
             one_dim_target=self.target_dim == 1,
@@ -190,39 +203,6 @@ class Dataset:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
-
-    @cached_property
-    def storage_path(self) -> str:
-        """
-        Returns the storage path to the dataset based on whether or not its
-        in the pretraining or train-test split.
-        """
-        load_dotenv()
-        directory = os.getenv(self.storage_env_var)
-        return str(Path(directory) / self.subdirectory / self.name)
-
-    @cached_property
-    def num_entries(self) -> str:
-        """
-        Returns the number of time series entires in the dataset.
-        """
-        return len(self.gluonts_dataset)
-
-    @cached_property
-    def key(self) -> str:
-        """
-        Returns the dataset's key for accessing dataset infomation in
-        dataset_properties.json (e.g. domain and number of variates).
-        """
-        pretty_names = {
-            "saugeenday": "saugeen",
-            "temperature_rain_with_missing": "temperature_rain",
-            "kdd_cup_2018_with_missing": "kdd_cup_2018",
-            "car_parts_with_missing": "car_parts",
-        }
-        key = self.name.split("/")[0] if "/" in self.name else self.name
-        key = key.lower()
-        return pretty_names.get(key, key)
 
     @cached_property
     def subdirectory(
@@ -249,6 +229,68 @@ class Dataset:
         """
         dataset_properties = json.load(open(Path(directory) / file_name))
         return "train_test" if self.key in dataset_properties else "pretrain"
+
+    @cached_property
+    def storage_path(self) -> str:
+        """
+        Returns the storage path to the dataset based on whether or not its
+        in the pretraining or train-test split.
+        """
+        load_dotenv()
+        directory = os.getenv(self.storage_env_var)
+        return str(Path(directory) / self.subdirectory / self.name)
+
+    @cached_property
+    def info_path(self) -> Path:
+        """
+        Returns the path to the info.csv file in the resources directory based
+        on which split the dataset is in.
+        """
+        return Path("resources") / self.subdirectory / "info.csv"
+
+    @property
+    def num_entries(self) -> str:
+        """
+        Returns the number of time series entires in the dataset.
+        """
+        if self.limit:
+            return self.limit
+
+        df = pd.read_csv(self.info_path)
+        return (
+            df.loc[df["name"] == self.name, "num_entries"].values[0]
+            if not df.empty
+            else len(self.gluonts_dataset)
+        )
+
+    @cached_property
+    def domain(self) -> str:
+        """
+        Returns the dataset's domain by reading it from the info.csv file in
+        the resources directory.
+        """
+        df = pd.read_csv(self.info_path)
+        return (
+            df.loc[df["name"] == self.name, "domain"].values[0]
+            if not df.empty
+            else None
+        )
+
+    @cached_property
+    def key(self) -> str:
+        """
+        Returns the dataset's key for accessing dataset infomation in
+        dataset_properties.json (e.g. domain and number of variates).
+        """
+        pretty_names = {
+            "saugeenday": "saugeen",
+            "temperature_rain_with_missing": "temperature_rain",
+            "kdd_cup_2018_with_missing": "kdd_cup_2018",
+            "car_parts_with_missing": "car_parts",
+        }
+        key = self.name.split("/")[0] if "/" in self.name else self.name
+        key = key.lower()
+        return pretty_names.get(key, key)
 
     @property
     def config(self) -> str:
@@ -284,7 +326,21 @@ class Dataset:
 
     @cached_property
     def freq(self) -> str:
-        return norm_freq_str(self.hf_dataset[0]["freq"])
+        """
+        Returns the dataset's frequency as a string.
+
+        If frequency is second-level (e.g. "4S"), it's returned as-is. This's
+        because `norm_freq_str` removes the trailing "S" from second-level.
+        -  E.g. "4S" becomes "4" after normalization.
+
+        Else, the frequency is normalized using `norm_freq_str`.
+        - Pandas uses start and end frequencies e.g `AS` and `A` for yearly
+        start and yearly end frequencies
+        - GluonTS doesn't make that difference, so `norm_freq_str`
+        normalizes pandas frequencies so they're compatible with GluonTS
+        """
+        freq = self.hf_dataset[0]["freq"]
+        return freq if re.fullmatch(r"\d*S", freq) else norm_freq_str(freq)
 
     @cached_property
     def target_dim(self) -> int:
