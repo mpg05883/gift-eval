@@ -248,14 +248,13 @@ class Dataset:
         """
         return Path("resources") / self.subdirectory / "info.csv"
 
-    @property
+    @cached_property
     def num_entries(self) -> str:
         """
         Returns the number of time series entires in the dataset.
         """
         if self.limit:
             return self.limit
-
         df = pd.read_csv(self.info_path)
         return (
             df.loc[df["name"] == self.name, "num_entries"].values[0]

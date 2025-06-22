@@ -1,3 +1,4 @@
+import argparse
 import json
 from pathlib import Path
 
@@ -26,22 +27,22 @@ def get_key(name) -> str:
     return pretty_names.get(key, key)
 
 
-def main():
-    csv_path = Path("resources") / "train_test" / "info.csv"
-    df = pd.read_csv(csv_path)
-    dataset_properties = json.load(open("notebooks/dataset_properties.json"))
+def main(args):
+    input_df = pd.read_csv(args.csv_path)
+    dataset_properties = json.load(open(args.json_path))
 
     kwargs = {
         "desc": "Reading datasets",
-        "total": len(df),
+        "total": len(input_df),
         "unit": "dataset",
     }
 
     rows = []
-    for _, row in tqdm(df.iterrows(), **kwargs):
+    for _, row in tqdm(input_df.iterrows(), **kwargs):
         name, term = row["name"], row["term"]
         dataset = Dataset(name, term)
         key = get_key(name)
+
         row = {
             "name": name,
             "term": term,
@@ -55,11 +56,33 @@ def main():
             "num_variates": dataset_properties[key]["num_variates"],
             "num_entries": dataset.num_entries,
         }
+
+        # TODO: Remove this after debugging
+        print(row)
+        break
+
         rows.append(row)
 
-    new_df = pd.DataFrame(rows)
-    new_df.to_csv(csv_path, index=False)
+    output_df = pd.DataFrame(rows)
+    output_df.to_csv(args.csv_path, index=False)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="""
+        Saves information on all train-test datasets to a CSV file."""
+    )
+    parser.add_argument(
+        "--csv_path",
+        type=Path,
+        default=Path("resources") / "train_test" / "info.csv",
+        help="Path to the CSV file where dataset information will be saved.",
+    )
+    parser.add_argument(
+        "--json_path",
+        type=Path,
+        default=Path("notebooks") / "dataset_properties.json",
+        help="Path to the JSON file containing dataset information.",
+    )
+    args = parser.parse_args()
+    main(args)
