@@ -27,8 +27,8 @@ def get_key(name) -> str:
 
 
 def main():
-    input_path = Path("resources") / "train_test" / "info.csv"
-    df = pd.read_csv(input_path)
+    csv_path = Path("resources") / "train_test" / "info.csv"
+    df = pd.read_csv(csv_path)
     dataset_properties = json.load(open("notebooks/dataset_properties.json"))
 
     kwargs = {
@@ -58,7 +58,7 @@ def main():
         rows.append(row)
 
     new_df = pd.DataFrame(rows)
-    new_df.to_csv("train_test_datasets.csv", index=False)
+    new_df.to_csv(csv_path, index=False)
 
 
 if __name__ == "__main__":

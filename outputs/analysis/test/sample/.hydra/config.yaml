@@ -1,0 +1,15 @@
+datasets:
+  name: sample
+  datasets:
+  - _target_: gift_eval.data.Dataset
+    name: m4_weekly
+    term: short
+    to_univariate: false
+  - _target_: gift_eval.data.Dataset
+    name: m4_hourly
+    term: short
+    to_univariate: false
+analyzer:
+  _target_: gift_eval.analysis.Analyzer
+  datasets: ${datasets.datasets}
+name: test
