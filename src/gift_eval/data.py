@@ -21,6 +21,7 @@ from functools import cached_property
 from pathlib import Path
 from typing import Iterable, Iterator
 
+import numpy as np
 import pyarrow.compute as pc
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
@@ -78,6 +79,8 @@ PRED_LENGTH_MAP = {
     "ME": 12,
 }
 
+# Prediction lengths from TFB: https://arxiv.org/abs/2403.20150
+# ? Not sure why this is here?
 TFB_PRED_LENGTH_MAP = {
     "A": 6,
     "H": 48,
@@ -111,12 +114,38 @@ def itemize_start(data_entry: DataEntry) -> DataEntry:
     return data_entry
 
 
+def fix_1d_array(data_entry: DataEntry) -> DataEntry:
+    """
+    Converts 1D arrays in a DataEntry into 2D arrays by adding an extra leading
+    dimension (1, `time_steps`). Excludes the "target" field.
+
+    Use this to avoid "bad shape - expected 2 dimensions, got 1" errors.
+
+    Args:
+        data_entry (DataEntry): A dictionary representing a single time series.
+
+    Returns:
+        DataEntry: The modified dictionary with 1D arrays reshaped to 2D.
+    """
+    for key, value in data_entry.items():
+        if key == "target" or not isinstance(value, np.ndarray):
+            continue
+        data_entry[key] = value[None, :] if value.ndim == 1 else value
+    return data_entry
+
+
 class MultivariateToUnivariate(Transformation):
+    """
+    Converts a multivariate time series into a univariate time series.
+    """
+
     def __init__(self, field):
         self.field = field
 
     def __call__(
-        self, data_it: Iterable[DataEntry], is_train: bool = False
+        self,
+        data_it: Iterable[DataEntry],
+        is_train: bool = False,
     ) -> Iterator:
         for data_entry in data_it:
             item_id = data_entry["item_id"]
@@ -138,36 +167,47 @@ class Dataset:
     ):
         self.name = name
         self.term = Term(term)
+        self.storage_env_var = storage_env_var
+        self.verbose = verbose
 
-        if not verbose:
+        if not self.verbose:
             disable_progress_bar()
 
-        # Change storage path depending on whether dataset is in pretrain or
-        # train-test split
-        load_dotenv()
-        directory = os.getenv(storage_env_var)
-        storage_path = str(Path(directory) / self.subdirectory / self.name)
-
-        self.hf_dataset = datasets.load_from_disk(storage_path).with_format("numpy")
-
+        self.hf_dataset = datasets.load_from_disk(self.storage_path).with_format(
+            "numpy"
+        )
         process = ProcessDataEntry(
             self.freq,
             one_dim_target=self.target_dim == 1,
         )
 
-        self.gluonts_dataset = Map(compose(process, itemize_start), self.hf_dataset)
+        self.gluonts_dataset = Map(
+            compose(process, fix_1d_array, itemize_start),
+            self.hf_dataset,
+        )
 
+        # Automatically set multivariate datasets to univariate
         if self.target_dim > 1:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
 
     @cached_property
+    def storage_path(self) -> str:
+        """
+        Returns the storage path to the dataset based on whether or not its
+        in the pretraining or train-test split.
+        """
+        load_dotenv()
+        directory = os.getenv(self.storage_env_var)
+        return str(Path(directory) / self.subdirectory / self.name)
+
+    @cached_property
     def num_entries(self) -> str:
         """
         Returns the number of time series entires in the dataset.
         """
-        return len(self.training_dataset)
+        return len(self.gluonts_dataset)
 
     @cached_property
     def key(self) -> str:
@@ -237,7 +277,7 @@ class Dataset:
 
     @cached_property
     def prediction_length(self) -> int:
-        freq = norm_freq_str(to_offset(self.freq).name)
+        freq = to_offset(self.freq).name
         pred_len = (
             M4_PRED_LENGTH_MAP[freq] if "m4" in self.name else PRED_LENGTH_MAP[freq]
         )
@@ -245,7 +285,7 @@ class Dataset:
 
     @cached_property
     def freq(self) -> str:
-        return self.hf_dataset[0]["freq"]
+        return norm_freq_str(self.hf_dataset[0]["freq"])
 
     @cached_property
     def target_dim(self) -> int:
@@ -305,21 +345,24 @@ class Dataset:
     @property
     def training_dataset(self) -> TrainingDataset:
         training_dataset, _ = split(
-            self.gluonts_dataset, offset=-self.prediction_length * (self.windows + 1)
+            self.gluonts_dataset,
+            offset=-self.prediction_length * (self.windows + 1),
         )
         return training_dataset
 
     @property
     def validation_dataset(self) -> TrainingDataset:
         validation_dataset, _ = split(
-            self.gluonts_dataset, offset=-self.prediction_length * self.windows
+            self.gluonts_dataset,
+            offset=-self.prediction_length * self.windows,
         )
         return validation_dataset
 
     @property
     def test_data(self) -> TestData:
         _, test_template = split(
-            self.gluonts_dataset, offset=-self.prediction_length * self.windows
+            self.gluonts_dataset,
+            offset=-self.prediction_length * self.windows,
         )
         test_data = test_template.generate_instances(
             prediction_length=self.prediction_length,
