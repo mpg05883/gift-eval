@@ -161,12 +161,14 @@ class Dataset:
         self,
         name: str,
         term: Term | str = Term.SHORT,
+        to_univariate: bool = True,
         storage_env_var: str = "GIFT_EVAL",
         verbose: bool = False,
         limit: Optional[int] = None,
     ):
         self.name = name
         self.term = Term(term)
+        self.to_univariate = to_univariate
         self.storage_env_var = storage_env_var
         self.verbose = verbose
         self.limit = limit
@@ -178,7 +180,7 @@ class Dataset:
             "numpy"
         )
 
-        # Randomly sample a subset of the dataset if a limit is set
+        # Randomly sample a subset of the dataset if a limit is given
         if self.limit and self.limit < self.num_entries:
             random.seed(42)
             self.num_entries = self.limit
@@ -186,7 +188,7 @@ class Dataset:
             self.hf_dataset = self.hf_dataset.select(indices)
 
         process = ProcessDataEntry(
-            self.normalized_freq,
+            self.freq,
             one_dim_target=self.target_dim == 1,
         )
 
@@ -195,8 +197,8 @@ class Dataset:
             self.hf_dataset,
         )
 
-        # Automatically set multivariate datasets to univariate
-        if self.target_dim > 1:
+        # Only convert multivariate datasets to univariate if specified
+        if self.to_univariate and self.target_dim > 1:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
@@ -204,7 +206,7 @@ class Dataset:
     @cached_property
     def storage_path(self) -> str:
         """
-        Returns the dataset's storage path based on whether or not its in the
+        Returns the dataset's storage path based on whether or not it's in the
         pretraining or train-test split.
         """
         load_dotenv()
@@ -235,26 +237,6 @@ class Dataset:
         return "train_test" if self.key in dataset_properties else "pretrain"
 
     @cached_property
-    def num_entries(self) -> int:
-        """
-        Returns the number of time series entries in the dataset.
-        """
-        return len(self.gluonts_dataset) if not self.limit else self.limit
-
-    @property
-    def config(self) -> str:
-        """
-        Returns the dataset's configuration formatted as `key`/`freq`/`term`.
-
-        The dataset's configuration is used for formatting dataset names and
-        terms in results files.
-
-        Returns:
-            str: The dataset's configuration.
-        """
-        return f"{self.key}/{self.freq}/{self.term.value}"
-
-    @cached_property
     def key(self) -> str:
         """
         Returns the dataset's key for accessing dataset infomation in
@@ -271,6 +253,26 @@ class Dataset:
         return pretty_names.get(key, key)
 
     @cached_property
+    def config(self) -> str:
+        """
+        Returns the dataset's configuration formatted as `key`/`freq`/`term`.
+
+        The dataset's configuration is used for formatting dataset names and
+        terms in results files.
+
+        Returns:
+            str: The dataset's configuration.
+        """
+        return f"{self.key}/{self.freq}/{self.term.value}"
+
+    @cached_property
+    def num_entries(self) -> int:
+        """
+        Returns the number of time series entries in the dataset.
+        """
+        return len(self.gluonts_dataset) if not self.limit else self.limit
+
+    @cached_property
     def seasonality(self) -> int:
         """
         Returns the dataset's seasonality (number of time steps per seasonal
@@ -283,30 +285,18 @@ class Dataset:
 
     @cached_property
     def prediction_length(self) -> int:
+        base_freq = norm_freq_str(to_offset(self.freq).name)
         pred_len = (
-            M4_PRED_LENGTH_MAP[self.normalized_freq]
+            M4_PRED_LENGTH_MAP[base_freq]
             if "m4" in self.name
-            else PRED_LENGTH_MAP[self.normalized_freq]
+            else PRED_LENGTH_MAP[base_freq]
         )
         return self.term.multiplier * pred_len
 
     @cached_property
     def freq(self) -> str:
-        return self.hf_dataset[0]["freq"]
-
-    @cached_property
-    def normalized_freq(self) -> str:
-        """
-        Returns the normalized base frequency string.
-        - E.g. if `freq` is "4S", it returns "S".
-
-        **NOTE:** Use this instead of `norm_freq_str` because when given an
-        input like "4S", `norm_freq_str` returns "4" instead of "S".
-
-        Returns:
-            str: The normalized base frequency (e.g., "S", "T", etc.).
-        """
-        return norm_freq_str(to_offset(self.freq).name)
+        freq = self.hf_dataset[0]["freq"]
+        return freq if freq != "MS" else "M"  # Normalize "MS" to "M"
 
     @cached_property
     def target_dim(self) -> int:

@@ -8,8 +8,9 @@ from src.gift_eval.data import Dataset
 
 
 def main(args):
-    dataset_directory = Path("datasets") / "pretrain"
-    names = [dir.name for dir in dataset_directory.iterdir() if dir.is_dir()]
+    input_path = Path("resources") / "pretrain" / "info.csv"
+    df = pd.read_csv(input_path)
+    names = df["name"].unique()
 
     terms = ["short", "medium", "long"]
 
@@ -23,32 +24,32 @@ def main(args):
     print(f"Number of terms: {len(terms)}")
     print(f"Number of name-term combinations: {len(names) * len(terms)}")
 
-    rows = []
+    lengths = []
 
     for name in tqdm(names, **kwargs):
-        for term in terms:
-            try:
-                dataset = Dataset(name, term, verbose=False)
-            except Exception:
-                continue
+        dataset = Dataset(name)
+        num_entries = dataset.num_entries
+        for _ in terms:
+            lengths.append(num_entries)
 
-            row = {
-                "name": name,
-                "term": term,
-                "freq": dataset.freq,
-                "prediction_length": dataset.prediction_length,
-                "target_dim": dataset.target_dim,
-                "windows": dataset.windows,
-                "_min_series_length": dataset._min_series_length,
-                "sum_series_length": dataset.sum_series_length,
-                "num_entries": dataset.num_entries,
-            }
-            rows.append(row)
+    df["num_entries"] = lengths
 
-    df = pd.DataFrame(rows)
-
-    csv_path = Path("resources") / f"{args.split}_info.csv"
-    df.to_csv(csv_path, index=False)
+    # Reorder columns
+    df = df[
+        [
+            "name",
+            "term",
+            "freq",
+            "domain",
+            "num_entries",
+            "target_dim",
+            "windows",
+            "_min_series_length",
+            "sum_series_length",
+            "prediction_length",
+        ]
+    ]
+    df.to_csv(input_path, index=False)
 
 
 if __name__ == "__main__":

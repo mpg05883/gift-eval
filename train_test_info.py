@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--csv_path",
         type=Path,
-        default=Path("resources") / "train_test" / "info.csv",
+        default=Path("resources") / "train_test" / "metadata.csv",
         help="Path to the CSV file where dataset information will be saved.",
     )
     parser.add_argument(
