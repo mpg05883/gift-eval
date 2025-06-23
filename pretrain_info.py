@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 
 import pandas as pd
@@ -7,32 +6,50 @@ from tqdm import tqdm
 from src.gift_eval.data import Dataset
 
 
-def main(args):
-    input_path = Path("resources") / "pretrain" / "info.csv"
+def main():
+    input_path = Path("resources") / "pretrain" / "metadata.csv"
     df = pd.read_csv(input_path)
-    names = df["name"].unique()
-
-    terms = ["short", "medium", "long"]
 
     kwargs = {
         "desc": "Reading datasets",
-        "total": len(names),
+        "total": len(df) / 3,
         "unit": "dataset",
     }
 
-    print(f"Number of names: {len(names)}")
-    print(f"Number of terms: {len(terms)}")
-    print(f"Number of name-term combinations: {len(names) * len(terms)}")
+    errors = {}
 
-    lengths = []
+    for i, row in tqdm(df.iloc[::3].iterrows(), **kwargs):
+        try:
+            dataset = Dataset(row["name"])
+            freq = dataset.freq
+            num_entries = dataset.num_entries
+            target_dim = dataset.target_dim
+            _min_series_length = dataset._min_series_length
+            sum_series_length = dataset.sum_series_length
+            prediction_length = dataset.prediction_length
+            windows = dataset.windows
 
-    for name in tqdm(names, **kwargs):
-        dataset = Dataset(name)
-        num_entries = dataset.num_entries
-        for _ in terms:
-            lengths.append(num_entries)
+            df.at[i, "freq"] = freq
+            df.at[i, "num_entries"] = num_entries
+            df.at[i, "target_dim"] = target_dim
+            df.at[i, "_min_series_length"] = _min_series_length
+            df.at[i, "sum_series_length"] = sum_series_length
+            df.at[i, "prediction_length"] = prediction_length
+            df.at[i, "windows"] = windows
+        except Exception as e:
+            print(f"Error reading dataset {row['name']}: {e}")
+            errors[row["name"]] = str(e)
+            continue
 
-    df["num_entries"] = lengths
+        for j in range(1, 3):
+            df.at[i + j, "freq"] = freq
+            df.at[i + j, "num_entries"] = num_entries
+            df.at[i + j, "target_dim"] = target_dim
+            df.at[i + j, "_min_series_length"] = _min_series_length
+            df.at[i + j, "sum_series_length"] = sum_series_length
+            multiplier = 10 if j == 1 else 15
+            df.at[i + j, "prediction_length"] = prediction_length * multiplier
+            df.at[i + j, "windows"] = windows
 
     # Reorder columns
     df = df[
@@ -43,24 +60,15 @@ def main(args):
             "domain",
             "num_entries",
             "target_dim",
-            "windows",
             "_min_series_length",
             "sum_series_length",
             "prediction_length",
+            "windows",
         ]
     ]
     df.to_csv(input_path, index=False)
 
 
 if __name__ == "__main__":
-    argparser = argparse.ArgumentParser(
-        description="Gets dataset information and saves it to a CSV file"
-    )
-    argparser.add_argument(
-        "--split",
-        choices=["train_test", "pretrain"],
-        default="pretrain",
-        help="Split to use (train_test or pretrain)",
-    )
-    args = argparser.parse_args()
-    main(args)
+
+    main()
