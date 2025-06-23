@@ -47,14 +47,13 @@ def main(args):
             "name": name,
             "term": term,
             "freq": dataset.freq,
-            "prediction_length": dataset.prediction_length,
+            "domain": dataset_properties[key]["domain"],
+            "num_entries": dataset.num_entries,
             "target_dim": dataset.target_dim,
-            "windows": dataset.windows,
             "_min_series_length": dataset._min_series_length,
             "sum_series_length": dataset.sum_series_length,
-            "domain": dataset_properties[key]["domain"],
-            "num_variates": dataset_properties[key]["num_variates"],
-            "num_entries": dataset.num_entries,
+            "prediction_length": dataset.prediction_length,
+            "windows": dataset.windows,
         }
         rows.append(row)
 
