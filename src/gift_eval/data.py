@@ -291,6 +291,25 @@ class Dataset:
         key = key.lower()
         return pretty_names.get(key, key)
 
+    @cached_property
+    def freq(self) -> str:
+        """
+        Returns the dataset's frequency as a string.
+
+        If frequency is second-level (e.g. "4S"), it's returned as-is. This's
+        because `norm_freq_str` removes the trailing "S" from second-level.
+        -  E.g. "4S" becomes "4" after normalization.
+
+        Else, the frequency is normalized using `norm_freq_str`.
+        - Pandas uses start and end frequencies e.g `AS` and `A` for yearly
+        start and yearly end frequencies
+        - GluonTS doesn't make that difference, so `norm_freq_str`
+        normalizes pandas frequencies so they're compatible with GluonTS
+        """
+        freq_str = self.hf_dataset[0]["freq"]
+        freq_str = re.split(r"-", freq_str)[0]
+        return freq_str if re.fullmatch(r"\d*S", freq_str) else norm_freq_str(freq_str)
+
     @property
     def config(self) -> str:
         """
@@ -317,29 +336,16 @@ class Dataset:
 
     @cached_property
     def prediction_length(self) -> int:
-        freq = to_offset(self.freq).name
+        freq = to_offset(self.hf_dataset[0]["freq"]).name
+
+        print(f"Original freq: {self.hf_dataset[0]['freq']}")
+        print(f"Normalized freq: {self.freq}")
+        print(f"Freq from offset: {freq}:")
+
         pred_len = (
             M4_PRED_LENGTH_MAP[freq] if "m4" in self.name else PRED_LENGTH_MAP[freq]
         )
         return self.term.multiplier * pred_len
-
-    @cached_property
-    def freq(self) -> str:
-        """
-        Returns the dataset's frequency as a string.
-
-        If frequency is second-level (e.g. "4S"), it's returned as-is. This's
-        because `norm_freq_str` removes the trailing "S" from second-level.
-        -  E.g. "4S" becomes "4" after normalization.
-
-        Else, the frequency is normalized using `norm_freq_str`.
-        - Pandas uses start and end frequencies e.g `AS` and `A` for yearly
-        start and yearly end frequencies
-        - GluonTS doesn't make that difference, so `norm_freq_str`
-        normalizes pandas frequencies so they're compatible with GluonTS
-        """
-        freq = self.hf_dataset[0]["freq"]
-        return freq if re.fullmatch(r"\d*S", freq) else norm_freq_str(freq)
 
     @cached_property
     def target_dim(self) -> int:

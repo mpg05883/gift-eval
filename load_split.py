@@ -8,8 +8,7 @@ from src.gift_eval.data import Dataset
 
 
 def main(args):
-    csv_path = Path("resources") / args.split / "info.csv"
-    name_df = pd.read_csv(csv_path)
+    name_df = pd.read_csv(Path("resources") / args.split / "info.csv")
     names = name_df["name"].unique()
 
     kwargs = {
@@ -30,21 +29,25 @@ def main(args):
         except Exception as e:
             failed.append(name)
             errors.append(str(e))
-            
+
     if not failed:
         print(f"All {len(names)} datasets loaded successfully.")
         return
-    
+
     print(f"Successfully loaded {len(names) - len(failed)} datasets.")
     print(f"Failed to load {len(failed)} datasets:")
     for name, error in zip(failed, errors):
         print(f"  {name}: {error}")
-        
-    error_df = pd.DataFrame({
-        "name": failed,
-        "error": errors
-    })
-    output_path = Path("resources") / args.split / "load_errors.csv"
+
+    error_df = pd.DataFrame(
+        {
+            "name": failed,
+            "error": errors,
+        }
+    )
+    output_path = Path("outputs") / "load_split" / "load_errors.csv"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
     error_df.to_csv(output_path, index=False)
     print(f"Errors saved to {output_path}")
 

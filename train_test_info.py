@@ -56,11 +56,6 @@ def main(args):
             "num_variates": dataset_properties[key]["num_variates"],
             "num_entries": dataset.num_entries,
         }
-
-        # TODO: Remove this after debugging
-        print(row)
-        break
-
         rows.append(row)
 
     output_df = pd.DataFrame(rows)
