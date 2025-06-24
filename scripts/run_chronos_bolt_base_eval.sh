@@ -1,15 +1,15 @@
 #!/bin/bash
 
 #SBATCH --job-name=chronos_bolt_base_eval
-#SBATCH --array=100-199  # * Manually set this to 0-99, 100-199, ..., 400-455,
+#SBATCH --array=0-99  # * Manually set this to 0-99, 100-199, ..., 400-455,
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=32G
 #SBATCH --time=1-00:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=logs/%x/out/%A.out
-#SBATCH --error=logs/%x/err/%A.err
+#SBATCH --output=logs/%x/out/%A/%a.out
+#SBATCH --error=logs/%x/err/%A/%a.err
 #SBATCH --account=jessetho_1390
 #SBATCH --mail-user=mpgee@usc.edu
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -24,7 +24,7 @@ log_job_info
 
 index="${SLURM_ARRAY_TASK_ID}"
 
-if python chronos_bolt_eval.py --index="${index}"; then
+if python chronos_bolt_base_eval.py --index="${index}"; then
     log_info "Successfully finished ${SLURM_JOB_NAME}!"
     log_error "No errors!"
 
