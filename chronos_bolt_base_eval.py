@@ -3,7 +3,7 @@ import csv
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional
-
+import time
 import numpy as np
 import pandas as pd
 import torch
@@ -24,7 +24,8 @@ from gluonts.itertools import batcher
 from gluonts.model import Forecast, evaluate_model
 from gluonts.model.forecast import QuantileForecast, SampleForecast
 from tqdm.auto import tqdm
-
+from utils import get_timestamp, format_elapsed_time
+import sys
 from src.gift_eval.data import Dataset
 
 
@@ -68,6 +69,7 @@ class ChronosPredictor:
             *args,
             **kwargs,
         )
+        print(f"[{get_timestamp()}] Device: {self.pipeline.model.device}")
         self.prediction_length = prediction_length
         self.num_samples = num_samples
 
@@ -121,20 +123,31 @@ class ChronosPredictor:
 
 
 def main(args):
+    model = "chronos_bolt_base"
+    dirpath = Path("results") / model / args.split_name / dataset.config
+    dirpath.mkdir(parents=True, exist_ok=True)
+    file_name = "results.csv"
+    output_path = dirpath / file_name
+    
+    if output_path.exists():
+        print(f"[{get_timestamp()}] Results file {output_path} already exists! Exiting...")
+        sys.exit(0)
+    
     input_path = Path("resources") / args.split_name / "metadata.csv"
     df = pd.read_csv(input_path)
-
     name, term = df.iloc[args.index][["name", "term"]]
+    
+    print(f"[{get_timestamp()}] Loading dataset: {name} ({term})")
     dataset = Dataset(name, term)
 
-    # TODO: Install chronos forecasting on CARC and Melady4
+    print(f"[{get_timestamp()}] Loading model: {model}")
     predictor = ChronosPredictor(
-        model_path=f"amazon/{args.model}",
+        model_path=f"amazon/chronos-bolt-base",
         num_samples=20,
         prediction_length=dataset.prediction_length,
-        device_map="auto",  # TODO: See if "auto" works on CARC
+        device_map="auto",  
     )
-
+    
     metrics = [
         MSE(forecast_type="mean"),
         MSE(forecast_type=0.5),
@@ -151,6 +164,8 @@ def main(args):
         ),
     ]
 
+    print(f"[{get_timestamp()}] Starting evaluation...")
+    start_time = time.time()
     res = evaluate_model(
         predictor,
         test_data=dataset.test_data,
@@ -161,18 +176,41 @@ def main(args):
         allow_nan_forecast=False,
         seasonality=dataset.seasonality,
     )
+    
+    end_time = time.time()
+    elapsed_time = format_elapsed_time(start_time, end_time)
+    print(f"""\
+[{get_timestamp()}] Finished evaluation! Time taken: {elapsed_time}""")
 
-    dirpath = Path("results") / args.model / args.split_name / dataset.config
-    dirpath.mkdir(parents=True, exist_ok=True)
-    file_name = "results.csv"
-    output_path = dirpath / file_name
-
+    
+    
+    print(f"[{get_timestamp()}] Saving results to {output_path}")        
     with open(output_path, "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(
             [
+                "dataset",
+                "model",
+                "eval_metrics/MSE[mean]",
+                "eval_metrics/MSE[0.5]",
+                "eval_metrics/MAE[0.5]",
+                "eval_metrics/MASE[0.5]",
+                "eval_metrics/MAPE[0.5]",
+                "eval_metrics/sMAPE[0.5]",
+                "eval_metrics/MSIS",
+                "eval_metrics/RMSE[mean]",
+                "eval_metrics/NRMSE[mean]",
+                "eval_metrics/ND[0.5]",
+                "eval_metrics/mean_weighted_sum_quantile_loss",
+            ]
+        )
+    
+    with open(output_path, "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(
+            [
                 dataset.config,
-                args.model,
+                model,
                 res["MSE[mean]"][0],
                 res["MSE[0.5]"][0],
                 res["MAE[0.5]"][0],
@@ -197,13 +235,8 @@ if __name__ == "__main__":
         "--index",
         type=int,
         required=True,
-        help="Index of the dataset to load from the metadata CSV file.",
-    )
-    parser.add_argument(
-        "--model",
-        type=str,
-        default="chronos-bolt-base",
-        help="Name of the model to evaluate.",
+        help="""Index of the dataset (name and term) to load from the metadata
+        CSV file.""",
     )
     parser.add_argument(
         "--split_name",

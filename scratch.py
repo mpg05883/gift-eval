@@ -1,37 +1,21 @@
 import pandas as pd
 from pathlib import Path
-from src.gift_eval.data import Dataset
-from tqdm import tqdm
 
 def main():
-    file_path = Path("resources") / "pretrain" / "info.csv"
-    df = pd.read_csv(file_path)    
-    names = df["name"].unique()
+    directory = Path("results") / "chronos_bolt_base" / "pretrain"
+    csv_paths = list(directory.rglob("*.csv"))
     
-    kwargs = {
-        "desc": "Loading datasets",
-        "total": len(names),
-        "unit": "dataset",
-    }
+    empty_files = []
     
-    failed = []
+    for path in csv_paths:
+        df = pd.read_csv(path)
+        if df.empty:
+            print(f"Empty DataFrame found in {path}")
+            empty_files.append(path)
+            
+    print(f"Read {len(csv_paths)} CSV files.")
+    print(f"Found {len(empty_files)} empty DataFrames.")
     
-    for name in tqdm(names, **kwargs):
-        try:
-            Dataset(name, verbose=False).num_entries
-        except Exception as e:
-            failed.append(name)
-        
-    print(f"Finished loading all {len(names)} names")
-    print(f"Failed to load {len(failed)} datasets")
-    
-    if failed:
-        print(f"Failed to load the following datasets:")
-        for name in failed:
-            print(f"- {name}")
-        
-    
-
-
 if __name__ == "__main__":
     main()
+    from pathlib import Path

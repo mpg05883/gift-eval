@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MSE[mean],eval_metrics/MSE[0.5],eval_metrics/MAE[0.5],eval_metrics/MASE[0.5],eval_metrics/MAPE[0.5],eval_metrics/sMAPE[0.5],eval_metrics/MSIS,eval_metrics/RMSE[mean],eval_metrics/NRMSE[mean],eval_metrics/ND[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+shmetro/15T/medium,chronos_bolt_base,34114.74733637747,34114.74733637747,72.22743887937595,1.3453828399172179,0.6103658194098012,0.38435667087316877,21.71754136918548,184.70177946185973,0.8125201144119912,0.3177351462067216,0.27676063952876
