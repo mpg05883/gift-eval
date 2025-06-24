@@ -1,15 +1,12 @@
 #!/bin/bash
 
-#SBATCH --job-name=chronos_bolt_eval
+#SBATCH --job-name=chronos_bolt_base_eval
 #SBATCH --array=0-455
-
-# TODO: Configure job resources
-#SBATCH --partition=largemem
+#SBATCH --partition=gpu
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=64
-#SBATCH --mem=256G
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=32G
 #SBATCH --time=1-00:00:00
-
 #SBATCH --ntasks=1
 #SBATCH --output=logs/%x/out/%A.out
 #SBATCH --error=logs/%x/err/%A.err
@@ -25,7 +22,11 @@ conda activate gift
 
 log_job_info
 
-if python chronos_bolt_eval.py --index="${SLURM_ARRAY_TASK_ID}"; then
+index="${SLURM_ARRAY_TASK_ID}"
+
+index=0
+
+if python chronos_bolt_eval.py --index="${index}"; then
     log_info "Successfully finished ${SLURM_JOB_NAME}!"
     log_error "No errors!"
 
