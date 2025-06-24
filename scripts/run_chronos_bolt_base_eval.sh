@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=chronos_bolt_base_eval
-#SBATCH --array=0-455
+#SBATCH --array=100-199  # * Manually set this to 0-99, 100-199, ..., 400-455,
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
@@ -23,8 +23,6 @@ conda activate gift
 log_job_info
 
 index="${SLURM_ARRAY_TASK_ID}"
-
-index=0
 
 if python chronos_bolt_eval.py --index="${index}"; then
     log_info "Successfully finished ${SLURM_JOB_NAME}!"
