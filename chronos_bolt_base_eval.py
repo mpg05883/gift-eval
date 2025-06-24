@@ -25,7 +25,7 @@ from gluonts.model import Forecast, evaluate_model
 from gluonts.model.forecast import QuantileForecast, SampleForecast
 from tqdm.auto import tqdm
 from utils import get_timestamp, format_elapsed_time
-
+import sys
 from src.gift_eval.data import Dataset
 
 
@@ -123,6 +123,16 @@ class ChronosPredictor:
 
 
 def main(args):
+    model = "chronos_bolt_base"
+    dirpath = Path("results") / model / args.split_name / dataset.config
+    dirpath.mkdir(parents=True, exist_ok=True)
+    file_name = "results.csv"
+    output_path = dirpath / file_name
+    
+    if output_path.exists():
+        print(f"[{get_timestamp()}] Results file {output_path} already exists! Exiting...")
+        sys.exit(0)
+    
     input_path = Path("resources") / args.split_name / "metadata.csv"
     df = pd.read_csv(input_path)
     name, term = df.iloc[args.index][["name", "term"]]
@@ -130,7 +140,6 @@ def main(args):
     print(f"[{get_timestamp()}] Loading dataset: {name} ({term})")
     dataset = Dataset(name, term)
 
-    model = "chronos_bolt_base"
     print(f"[{get_timestamp()}] Loading model: {model}")
     predictor = ChronosPredictor(
         model_path=f"amazon/chronos-bolt-base",
@@ -173,10 +182,7 @@ def main(args):
     print(f"""\
 [{get_timestamp()}] Finished evaluation! Time taken: {elapsed_time}""")
 
-    dirpath = Path("results") / model / args.split_name / dataset.config
-    dirpath.mkdir(parents=True, exist_ok=True)
-    file_name = "results.csv"
-    output_path = dirpath / file_name
+    
     
     print(f"[{get_timestamp()}] Saving results to {output_path}")        
     with open(output_path, "w", newline="") as file:
