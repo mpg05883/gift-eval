@@ -2,14 +2,10 @@ import argparse
 import csv
 import logging
 import time
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional
 
-import numpy as np
 import pandas as pd
-import torch
-from chronos import BaseChronosPipeline, ForecastType
+import timesfm
 from gluonts.ev.metrics import (
     MAE,
     MAPE,
@@ -22,11 +18,9 @@ from gluonts.ev.metrics import (
     SMAPE,
     MeanWeightedSumQuantileLoss,
 )
-from gluonts.itertools import batcher
-from gluonts.model import Forecast, evaluate_model
-from gluonts.model.forecast import QuantileForecast, SampleForecast
-from tqdm.auto import tqdm
+from gluonts.model import evaluate_model
 
+from models import ChronosPredictor, TimesFmPredictor
 from src.gift_eval.data import Dataset
 from utils import format_elapsed_time
 
@@ -37,99 +31,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class ModelConfig:
-    quantile_levels: Optional[List[float]] = None
-    forecast_keys: List[str] = field(init=False)
-    statsforecast_keys: List[str] = field(init=False)
-    intervals: Optional[List[int]] = field(init=False)
-
-    def __post_init__(self):
-        self.forecast_keys = ["mean"]
-        self.statsforecast_keys = ["mean"]
-        if self.quantile_levels is None:
-            self.intervals = None
-            return
-
-        intervals = set()
-
-        for quantile_level in self.quantile_levels:
-            interval = round(200 * (max(quantile_level, 1 - quantile_level) - 0.5))
-            intervals.add(interval)
-            side = "hi" if quantile_level > 0.5 else "lo"
-            self.forecast_keys.append(str(quantile_level))
-            self.statsforecast_keys.append(f"{side}-{interval}")
-
-        self.intervals = sorted(intervals)
-
-
-class ChronosPredictor:
-    def __init__(
-        self,
-        model_path,
-        num_samples: int,
-        prediction_length: int,
-        *args,
-        **kwargs,
-    ):
-        self.pipeline = BaseChronosPipeline.from_pretrained(
-            model_path,
-            *args,
-            **kwargs,
-        )
-        logger.info(f"Device: {self.pipeline.model.device}")
-        self.prediction_length = prediction_length
-        self.num_samples = num_samples
-
-    def predict(self, test_data_input, batch_size: int = 1024) -> List[Forecast]:
-        pipeline = self.pipeline
-        predict_kwargs = (
-            {"num_samples": self.num_samples}
-            if pipeline.forecast_type == ForecastType.SAMPLES
-            else {}
-        )
-        while True:
-            try:
-                # Generate forecast samples
-                forecast_outputs = []
-                for batch in tqdm(batcher(test_data_input, batch_size=batch_size)):
-                    context = [torch.tensor(entry["target"]) for entry in batch]
-                    forecast_outputs.append(
-                        pipeline.predict(
-                            context,
-                            prediction_length=self.prediction_length,
-                            **predict_kwargs,
-                        ).numpy()
-                    )
-                forecast_outputs = np.concatenate(forecast_outputs)
-                break
-            except torch.cuda.OutOfMemoryError:
-                logger.info(
-                    f"OutOfMemoryError at batch_size {batch_size}, reducing to {batch_size // 2}"
-                )
-                batch_size //= 2
-
-        # Convert forecast samples into gluonts Forecast objects
-        forecasts = []
-        for item, ts in zip(forecast_outputs, test_data_input):
-            forecast_start_date = ts["start"] + len(ts["target"])
-
-            if pipeline.forecast_type == ForecastType.SAMPLES:
-                forecasts.append(
-                    SampleForecast(samples=item, start_date=forecast_start_date)
-                )
-            elif pipeline.forecast_type == ForecastType.QUANTILES:
-                forecasts.append(
-                    QuantileForecast(
-                        forecast_arrays=item,
-                        forecast_keys=list(map(str, pipeline.quantiles)),
-                        start_date=forecast_start_date,
-                    )
-                )
-
-        return forecasts
 
 
 def main(args):
@@ -143,13 +44,35 @@ def main(args):
     dataset = Dataset(name=name, term=term, fraction=args.fraction)
     logger.info(f"Loaded {dataset.num_entries} entries")
 
-    logger.info(f"Loading model: {args.model}")
-    predictor = ChronosPredictor(
-        model_path=f"amazon/{args.model.replace('_', '-')}",
-        num_samples=20,
-        prediction_length=dataset.prediction_length,
-        device_map="auto",
-    )
+    logger.info(f"Loading model: {args.model_name}")
+    if "chronos" in args.model_name:
+        predictor = ChronosPredictor(
+            model_path=f"amazon/{args.model_name.replace('_', '-')}",
+            num_samples=20,
+            prediction_length=dataset.prediction_length,
+            device_map="auto",
+        )
+    else:
+        tfm = timesfm.TimesFm(
+            hparams=timesfm.TimesFmHparams(
+                backend="gpu",
+                per_core_batch_size=32,
+                num_layers=50,
+                horizon_len=128,
+                context_len=2048,
+                use_positional_embedding=False,
+                output_patch_len=128,
+            ),
+            checkpoint=timesfm.TimesFmCheckpoint(
+                huggingface_repo_id="google/timesfm-2.0-500m-pytorch"
+            ),
+        )
+
+        predictor = TimesFmPredictor(
+            tfm=tfm,
+            prediction_length=dataset.prediction_length,
+            ds_freq=dataset.freq,
+        )
 
     metrics = [
         MSE(forecast_type="mean"),
@@ -167,7 +90,7 @@ def main(args):
         ),
     ]
 
-    dirpath = Path("results") / args.model / args.split_name / dataset.config
+    dirpath = Path("results") / args.model_name / args.split_name / dataset.config
     dirpath.mkdir(parents=True, exist_ok=True)
     file_name = "results.csv"
     output_path = dirpath / file_name
@@ -215,7 +138,7 @@ def main(args):
         writer.writerow(
             [
                 dataset.config,
-                args.model,
+                args.model_name,
                 res["MSE[mean]"][0],
                 res["MSE[0.5]"][0],
                 res["MAE[0.5]"][0],
