@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Iterable, Iterator, Optional
 
 import numpy as np
+import pandas as pd
 import pyarrow.compute as pc
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
@@ -163,15 +164,29 @@ class Dataset:
         term: Term | str = Term.SHORT,
         to_univariate: bool = True,
         storage_env_var: str = "GIFT_EVAL",
+        metadata_directory: str = "resources",
         verbose: bool = False,
         limit: Optional[int] = None,
+        fraction: Optional[float] = None,
+        seed: Optional[int] = 42,
     ):
         self.name = name
         self.term = Term(term)
         self.to_univariate = to_univariate
         self.storage_env_var = storage_env_var
+        self.metadata_directory = metadata_directory
         self.verbose = verbose
         self.limit = limit
+        self.fraction = fraction
+        self.seed = seed
+
+        if self.limit is not None and self.limit <= 0:
+            raise ValueError(f"Limit must be a positive integer, got {self.limit}.")
+
+        if self.fraction is not None and (self.fraction <= 0 or self.fraction > 1):
+            raise ValueError(
+                f"Fraction must be in the range (0, 1], got {self.fraction}."
+            )
 
         if not self.verbose:
             disable_progress_bar()
@@ -180,11 +195,22 @@ class Dataset:
             "numpy"
         )
 
-        # Randomly sample a subset of the dataset if a limit is given
-        if self.limit and self.limit < self.num_entries:
-            random.seed(42)
-            self.num_entries = self.limit
-            indices = random.sample(range(self.num_entries), self.limit)
+        total_entries = self.num_entries
+
+        if self.limit is not None:
+            num_to_use = min(self.limit, total_entries)
+        elif self.fraction is not None:
+            num_to_use = max(int(self.fraction * total_entries), 1)
+        else:
+            num_to_use = total_entries
+
+        if num_to_use < total_entries:
+            self.num_entries = num_to_use
+
+            if self.seed is not None:
+                random.seed(self.seed)
+
+            indices = random.sample(range(total_entries), num_to_use)
             self.hf_dataset = self.hf_dataset.select(indices)
 
         process = ProcessDataEntry(
@@ -265,12 +291,19 @@ class Dataset:
         """
         return f"{self.key}/{self.freq}/{self.term.value}"
 
-    @cached_property
+    @property
     def num_entries(self) -> int:
         """
         Returns the number of time series entries in the dataset.
         """
-        return len(self.gluonts_dataset) if not self.limit else self.limit
+        try:
+            dirpath = Path(self.metadata_directory) / self.subdirectory
+            df = pd.read_csv(dirpath / "metadata.csv")
+            name_mask = df["name"] == self.name
+            term_mask = df["term"] == self.term.value
+            return df[name_mask & term_mask].iloc[0]["num_entries"]
+        except Exception as _:
+            return len(self.gluonts_dataset)
 
     @cached_property
     def seasonality(self) -> int:

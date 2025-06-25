@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --job-name=chronos_bolt_base_eval
-#SBATCH --array=0-99  # * Manually set this to 0-99, 100-199, ..., 400-455,
+#SBATCH --job-name=zero_shot_eval
+#SBATCH --array=0-99  # * Manually set this to 0-99, and then  100-151
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
@@ -24,7 +24,7 @@ log_job_info
 
 index="${SLURM_ARRAY_TASK_ID}"
 
-if python chronos_bolt_base_eval.py --index="${index}"; then
+if python zero_shot_eval.py --index="${index}"; then
     log_info "Successfully finished ${SLURM_JOB_NAME}!"
     log_error "No errors!"
 

@@ -1,9 +1,11 @@
 import argparse
 import csv
+import logging
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional
-import time
+
 import numpy as np
 import pandas as pd
 import torch
@@ -24,9 +26,17 @@ from gluonts.itertools import batcher
 from gluonts.model import Forecast, evaluate_model
 from gluonts.model.forecast import QuantileForecast, SampleForecast
 from tqdm.auto import tqdm
-from utils import get_timestamp, format_elapsed_time
-import sys
+
 from src.gift_eval.data import Dataset
+from utils import format_elapsed_time
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(message)s",
+    datefmt="%b %d, %Y %I:%M:%S%p",
+)
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -69,7 +79,7 @@ class ChronosPredictor:
             *args,
             **kwargs,
         )
-        print(f"[{get_timestamp()}] Device: {self.pipeline.model.device}")
+        logger.info(f"Device: {self.pipeline.model.device}")
         self.prediction_length = prediction_length
         self.num_samples = num_samples
 
@@ -96,7 +106,7 @@ class ChronosPredictor:
                 forecast_outputs = np.concatenate(forecast_outputs)
                 break
             except torch.cuda.OutOfMemoryError:
-                print(
+                logger.info(
                     f"OutOfMemoryError at batch_size {batch_size}, reducing to {batch_size // 2}"
                 )
                 batch_size //= 2
@@ -123,31 +133,24 @@ class ChronosPredictor:
 
 
 def main(args):
-    model = "chronos_bolt_base"
-    dirpath = Path("results") / model / args.split_name / dataset.config
-    dirpath.mkdir(parents=True, exist_ok=True)
-    file_name = "results.csv"
-    output_path = dirpath / file_name
-    
-    if output_path.exists():
-        print(f"[{get_timestamp()}] Results file {output_path} already exists! Exiting...")
-        sys.exit(0)
-    
-    input_path = Path("resources") / args.split_name / "metadata.csv"
-    df = pd.read_csv(input_path)
+    df = pd.read_csv(Path("resources") / args.split_name / "metadata.csv")
+    if args.term:
+        df = df[df["term"] == args.term]
+    df = df.sort_values(by="num_entries", ascending=True)
     name, term = df.iloc[args.index][["name", "term"]]
-    
-    print(f"[{get_timestamp()}] Loading dataset: {name} ({term})")
-    dataset = Dataset(name, term)
 
-    print(f"[{get_timestamp()}] Loading model: {model}")
+    logger.info(f"Loading dataset: {name} ({term})")
+    dataset = Dataset(name=name, term=term, fraction=args.fraction)
+    logger.info(f"Loaded {dataset.num_entries} entries")
+
+    logger.info(f"Loading model: {args.model}")
     predictor = ChronosPredictor(
-        model_path=f"amazon/chronos-bolt-base",
+        model_path=f"amazon/{args.model.replace('_', '-')}",
         num_samples=20,
         prediction_length=dataset.prediction_length,
-        device_map="auto",  
+        device_map="auto",
     )
-    
+
     metrics = [
         MSE(forecast_type="mean"),
         MSE(forecast_type=0.5),
@@ -164,7 +167,33 @@ def main(args):
         ),
     ]
 
-    print(f"[{get_timestamp()}] Starting evaluation...")
+    dirpath = Path("results") / args.model / args.split_name / dataset.config
+    dirpath.mkdir(parents=True, exist_ok=True)
+    file_name = "results.csv"
+    output_path = dirpath / file_name
+
+    if not output_path.exists():
+        with open(output_path, "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(
+                [
+                    "dataset",
+                    "model",
+                    "eval_metrics/MSE[mean]",
+                    "eval_metrics/MSE[0.5]",
+                    "eval_metrics/MAE[0.5]",
+                    "eval_metrics/MASE[0.5]",
+                    "eval_metrics/MAPE[0.5]",
+                    "eval_metrics/sMAPE[0.5]",
+                    "eval_metrics/MSIS",
+                    "eval_metrics/RMSE[mean]",
+                    "eval_metrics/NRMSE[mean]",
+                    "eval_metrics/ND[0.5]",
+                    "eval_metrics/mean_weighted_sum_quantile_loss",
+                ]
+            )
+
+    logger.info("Starting evaluation...")
     start_time = time.time()
     res = evaluate_model(
         predictor,
@@ -176,41 +205,17 @@ def main(args):
         allow_nan_forecast=False,
         seasonality=dataset.seasonality,
     )
-    
     end_time = time.time()
     elapsed_time = format_elapsed_time(start_time, end_time)
-    print(f"""\
-[{get_timestamp()}] Finished evaluation! Time taken: {elapsed_time}""")
+    logger.info(f"Finished evaluation! Time taken: {elapsed_time}")
 
-    
-    
-    print(f"[{get_timestamp()}] Saving results to {output_path}")        
-    with open(output_path, "w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(
-            [
-                "dataset",
-                "model",
-                "eval_metrics/MSE[mean]",
-                "eval_metrics/MSE[0.5]",
-                "eval_metrics/MAE[0.5]",
-                "eval_metrics/MASE[0.5]",
-                "eval_metrics/MAPE[0.5]",
-                "eval_metrics/sMAPE[0.5]",
-                "eval_metrics/MSIS",
-                "eval_metrics/RMSE[mean]",
-                "eval_metrics/NRMSE[mean]",
-                "eval_metrics/ND[0.5]",
-                "eval_metrics/mean_weighted_sum_quantile_loss",
-            ]
-        )
-    
+    logger.info(f"Saving results to {output_path}")
     with open(output_path, "a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(
             [
                 dataset.config,
-                model,
+                args.model,
                 res["MSE[mean]"][0],
                 res["MSE[0.5]"][0],
                 res["MAE[0.5]"][0],
@@ -228,21 +233,39 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="""Uses Chronos-Bolt-Base to perform zero-shot inference on
-        a specified dataset."""
-    )
-    parser.add_argument(
-        "--index",
-        type=int,
-        required=True,
-        help="""Index of the dataset (name and term) to load from the metadata
-        CSV file.""",
+        description="Evaluates a Chronos model on a specified dataset."
     )
     parser.add_argument(
         "--split_name",
         choices=["pretrain", "train_test"],
         default="pretrain",
         help="Name of the split the dataset belongs to.",
+    )
+    parser.add_argument(
+        "--term",
+        choices=["short", "medium", "long"],
+        default="short",
+        help="""Use this to only evaluate the model on datasets of a specific
+        term.""",
+    )
+    parser.add_argument(
+        "--index",
+        type=int,
+        required=True,
+        help="""Index of the dataset to load from the metadata CSV file. This
+        specifies the name and term of the dataset to load.""",
+    )
+    parser.add_argument(
+        "--model",
+        choices=["chronos_base", "chronos_bolt_base", "chronos_bolt_small"],
+        default="chronos_bolt_base",
+        help="""Name of the model to evaluate.""",
+    )
+    parser.add_argument(
+        "--fraction",
+        type=float,
+        default=0.05,
+        help="Percent of the dataset to use expressed as a decmial.",
     )
     args = parser.parse_args()
     main(args)

@@ -204,8 +204,8 @@ borealis,short,H,Energy,15.0,1,3528,83269,48,8
 borealis,medium,H,Energy,15.0,1,3528,83269,480,1
 borealis,long,H,Energy,15.0,1,3528,83269,720,1
 godaddy,short,M,Econ/Fin,6270.0,2,41,257070,12,1
-godaddy,medium,MS,Econ/Fin,,2,41,257070,120,1
-godaddy,long,MS,Econ/Fin,,2,41,257070,180,1
+godaddy,medium,MS,Econ/Fin,6270.0,2,41,257070,120,1
+godaddy,long,MS,Econ/Fin,6270.0,2,41,257070,180,1
 cmip6_1995,short,6H,Climate,434176.0,53,7300,3169484800,48,16
 cmip6_1995,medium,6H,Climate,434176.0,53,7300,3169484800,480,2
 cmip6_1995,long,6H,Climate,434176.0,53,7300,3169484800,720,2
