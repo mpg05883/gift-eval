@@ -1,2 +1,2 @@
 dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
-wiki-rolling_nips/D/short,timesfm,0.1971821587808518,0.204948667981968
+favorita_sales/D/short,timesfm_2_0_500m,0.6699938561089328,0.346653049966358

@@ -1,1 +1,2 @@
 dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+q-traffic/15T/short,timesfm,0.0961988609082348,0.0635411134838729

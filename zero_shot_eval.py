@@ -185,14 +185,14 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--model_name",
-        choices=["chronos_base", "chronos_bolt_base", "chronos_bolt_small", "timesfm",],
-        default="timesfm",
+        choices=["chronos_base", "chronos_bolt_base", "chronos_bolt_small", "timesfm_2_0_500m",],
+        default="timesfm_2_0_500m",
         help="""Name of the model to evaluate.""",
     )
     parser.add_argument(
         "--fraction",
         type=float,
-        default=0.05,
+        default=0.2,
         help="Percent of the dataset to use expressed as a decmial.",
     )
     args = parser.parse_args()
