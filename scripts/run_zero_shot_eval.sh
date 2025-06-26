@@ -32,6 +32,6 @@ if python zero_shot_eval.py --index="${index}"; then
     end_time=$(get_timestamp)
     echo "[${end_time}] Done with ${SLURM_JOB_NAME}!" >"$done_file"
 else
-    log_error "ERROR: ${SLURM_JOB_NAME}!"
+    log_error "ERROR: ${SLURM_JOB_NAME} failed!"
     exit 1
 fi

@@ -1,0 +1,3 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+gfc14_load/H/short,timesfm,0.039804866887567236,0.03161040048069674
+gfc14_load/H/short,timesfm,0.039804866887567236,0.03161040048069674

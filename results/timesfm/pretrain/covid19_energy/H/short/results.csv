@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+covid19_energy/H/short,timesfm,0.017215696636420346,0.013391162965751813

@@ -19,7 +19,7 @@ from gluonts.ev.metrics import (
     MeanWeightedSumQuantileLoss,
 )
 from gluonts.model import evaluate_model
-
+import sys
 from pretrained_models.chronos_predictor import ChronosPredictor
 from pretrained_models.timesfm_predictor import TimesFmPredictor
 from src.gift_eval.data import Dataset
@@ -95,27 +95,31 @@ def main(args):
     dirpath.mkdir(parents=True, exist_ok=True)
     file_name = "results.csv"
     output_path = dirpath / file_name
+    
+    # Exit if the results file already exists
+    if output_path.exists():
+        logger.info(f"Results file already exists: {output_path}")
+        sys.exit()
 
-    if not output_path.exists():
-        with open(output_path, "w", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(
-                [
-                    "dataset",
-                    "model",
-                    # "eval_metrics/MSE[mean]",
-                    # "eval_metrics/MSE[0.5]",
-                    # "eval_metrics/MAE[0.5]",
-                    # "eval_metrics/MASE[0.5]",
-                    "eval_metrics/MAPE[0.5]",
-                    # "eval_metrics/sMAPE[0.5]",
-                    # "eval_metrics/MSIS",
-                    # "eval_metrics/RMSE[mean]",
-                    # "eval_metrics/NRMSE[mean]",
-                    # "eval_metrics/ND[0.5]",
-                    "eval_metrics/mean_weighted_sum_quantile_loss",
-                ]
-            )
+    with open(output_path, "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(
+            [
+                "dataset",
+                "model",
+                # "eval_metrics/MSE[mean]",
+                # "eval_metrics/MSE[0.5]",
+                # "eval_metrics/MAE[0.5]",
+                # "eval_metrics/MASE[0.5]",
+                "eval_metrics/MAPE[0.5]",
+                # "eval_metrics/sMAPE[0.5]",
+                # "eval_metrics/MSIS",
+                # "eval_metrics/RMSE[mean]",
+                # "eval_metrics/NRMSE[mean]",
+                # "eval_metrics/ND[0.5]",
+                "eval_metrics/mean_weighted_sum_quantile_loss",
+            ]
+        )
 
     logger.info("Starting evaluation...")
     start_time = time.time()

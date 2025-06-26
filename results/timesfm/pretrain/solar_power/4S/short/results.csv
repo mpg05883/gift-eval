@@ -1,0 +1,3 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+solar_power/4S/short,timesfm,nan,inf
+solar_power/4S/short,timesfm,nan,inf

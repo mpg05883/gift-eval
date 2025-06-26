@@ -195,8 +195,17 @@ class Dataset:
             "numpy"
         )
 
+        try:
+            dirpath = Path(self.metadata_directory) / self.subdirectory
+            df = pd.read_csv(dirpath / "metadata.csv")
+            name_mask = df["name"] == self.name
+            term_mask = df["term"] == self.term.value
+            self.num_entries = df[name_mask & term_mask].iloc[0]["num_entries"]
+        except Exception as _:
+            self.num_entries = len(self.hf_dataset)
+            
         total_entries = self.num_entries
-
+        
         if self.limit is not None:
             num_to_use = min(self.limit, total_entries)
         elif self.fraction is not None:
@@ -290,20 +299,6 @@ class Dataset:
             str: The dataset's configuration.
         """
         return f"{self.key}/{self.freq}/{self.term.value}"
-
-    @property
-    def num_entries(self) -> int:
-        """
-        Returns the number of time series entries in the dataset.
-        """
-        try:
-            dirpath = Path(self.metadata_directory) / self.subdirectory
-            df = pd.read_csv(dirpath / "metadata.csv")
-            name_mask = df["name"] == self.name
-            term_mask = df["term"] == self.term.value
-            return df[name_mask & term_mask].iloc[0]["num_entries"]
-        except Exception as _:
-            return len(self.gluonts_dataset)
 
     @cached_property
     def seasonality(self) -> int:
