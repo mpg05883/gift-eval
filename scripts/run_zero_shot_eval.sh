@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=zero_shot_eval
-#SBATCH --array=0-99  # * Manually set this to 0-99, and then  100-151
+#SBATCH --array=0-99  # * Manually set this to 0-99, and then 100-151
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16

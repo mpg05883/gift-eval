@@ -1,12 +1,10 @@
 from typing import List
-
 import numpy as np
-import models.timesfm_predictor as timesfm_predictor
+from tqdm.auto import tqdm
 from gluonts.itertools import batcher
 from gluonts.model import Forecast
 from gluonts.model.forecast import QuantileForecast
-from tqdm.auto import tqdm
-
+import timesfm
 
 class TimesFmPredictor:
 
@@ -26,7 +24,7 @@ class TimesFmPredictor:
                 // self.tfm.output_patch_len
             ) * self.tfm.output_patch_len
             print("Jitting for new prediction length.")
-        self.freq = timesfm_predictor.freq_map(ds_freq)
+        self.freq = timesfm.freq_map(ds_freq)
 
     def predict(self, test_data_input, batch_size: int = 1024) -> List[Forecast]:
         forecast_outputs = []

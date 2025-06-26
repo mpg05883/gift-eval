@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import numpy as np
 import torch
-from models.chronos_predictor import BaseChronosPipeline, ForecastType
+from chronos import BaseChronosPipeline, ForecastType
 from gluonts.itertools import batcher
 from gluonts.model import Forecast
 from gluonts.model.forecast import QuantileForecast, SampleForecast

@@ -20,7 +20,8 @@ from gluonts.ev.metrics import (
 )
 from gluonts.model import evaluate_model
 
-from models import ChronosPredictor, TimesFmPredictor
+from pretrained_models.chronos_predictor import ChronosPredictor
+from pretrained_models.timesfm_predictor import TimesFmPredictor
 from src.gift_eval.data import Dataset
 from utils import format_elapsed_time
 
@@ -42,7 +43,7 @@ def main(args):
 
     logger.info(f"Loading dataset: {name} ({term})")
     dataset = Dataset(name=name, term=term, fraction=args.fraction)
-    logger.info(f"Loaded {dataset.num_entries} entries")
+    logger.info(f"Number of entries: {dataset.num_entries} entries")
 
     logger.info(f"Loading model: {args.model_name}")
     if "chronos" in args.model_name:
@@ -75,16 +76,16 @@ def main(args):
         )
 
     metrics = [
-        MSE(forecast_type="mean"),
-        MSE(forecast_type=0.5),
-        MAE(),
-        MASE(),
+        # MSE(forecast_type="mean"),
+        # MSE(forecast_type=0.5),
+        # MAE(),
+        # MASE(),
         MAPE(),
-        SMAPE(),
-        MSIS(),
-        RMSE(),
-        NRMSE(),
-        ND(),
+        # SMAPE(),
+        # MSIS(),
+        # RMSE(),
+        # NRMSE(),
+        # ND(),
         MeanWeightedSumQuantileLoss(
             quantile_levels=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
         ),
@@ -102,16 +103,16 @@ def main(args):
                 [
                     "dataset",
                     "model",
-                    "eval_metrics/MSE[mean]",
-                    "eval_metrics/MSE[0.5]",
-                    "eval_metrics/MAE[0.5]",
-                    "eval_metrics/MASE[0.5]",
+                    # "eval_metrics/MSE[mean]",
+                    # "eval_metrics/MSE[0.5]",
+                    # "eval_metrics/MAE[0.5]",
+                    # "eval_metrics/MASE[0.5]",
                     "eval_metrics/MAPE[0.5]",
-                    "eval_metrics/sMAPE[0.5]",
-                    "eval_metrics/MSIS",
-                    "eval_metrics/RMSE[mean]",
-                    "eval_metrics/NRMSE[mean]",
-                    "eval_metrics/ND[0.5]",
+                    # "eval_metrics/sMAPE[0.5]",
+                    # "eval_metrics/MSIS",
+                    # "eval_metrics/RMSE[mean]",
+                    # "eval_metrics/NRMSE[mean]",
+                    # "eval_metrics/ND[0.5]",
                     "eval_metrics/mean_weighted_sum_quantile_loss",
                 ]
             )
@@ -139,16 +140,16 @@ def main(args):
             [
                 dataset.config,
                 args.model_name,
-                res["MSE[mean]"][0],
-                res["MSE[0.5]"][0],
-                res["MAE[0.5]"][0],
-                res["MASE[0.5]"][0],
+                # res["MSE[mean]"][0],
+                # res["MSE[0.5]"][0],
+                # res["MAE[0.5]"][0],
+                # res["MASE[0.5]"][0],
                 res["MAPE[0.5]"][0],
-                res["sMAPE[0.5]"][0],
-                res["MSIS"][0],
-                res["RMSE[mean]"][0],
-                res["NRMSE[mean]"][0],
-                res["ND[0.5]"][0],
+                # res["sMAPE[0.5]"][0],
+                # res["MSIS"][0],
+                # res["RMSE[mean]"][0],
+                # res["NRMSE[mean]"][0],
+                # res["ND[0.5]"][0],
                 res["mean_weighted_sum_quantile_loss"][0],
             ]
         )
@@ -179,9 +180,9 @@ if __name__ == "__main__":
         specifies the name and term of the dataset to load.""",
     )
     parser.add_argument(
-        "--model",
-        choices=["chronos_base", "chronos_bolt_base", "chronos_bolt_small"],
-        default="chronos_bolt_base",
+        "--model_name",
+        choices=["chronos_base", "chronos_bolt_base", "chronos_bolt_small", "timesfm",],
+        default="timesfm",
         help="""Name of the model to evaluate.""",
     )
     parser.add_argument(
