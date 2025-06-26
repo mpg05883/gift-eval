@@ -32,11 +32,13 @@ def main(args):
     if args.term:
         df = df[df["term"] == args.term]
     df = df.sort_values(by="num_series", ascending=True)
-    name, term = df.iloc[args.index][["name", "term"]]
+    name, term, num_series = df.iloc[args.index][["name", "term", 'num_series']]
+    
+    fraction = args.fraction if num_series > args.threshold else 1.0
 
     logger.info(f"Loading dataset: {name} ({term})")
-    dataset = Dataset(name=name, term=term, fraction=args.fraction)
-    logger.info(f"Number of entries: {dataset.num_series} entries")
+    dataset = Dataset(name=name, term=term, fraction=fraction)
+    logger.info(f"Number of series: {dataset.num_series} series")
 
     logger.info(f"Loading model: {args.model_name}")
     if "chronos" in args.model_name:
@@ -188,9 +190,16 @@ if __name__ == "__main__":
         help="""Name of the model to evaluate.""",
     )
     parser.add_argument(
+        "--threshold",
+        type=int,
+        default=10000,
+        help="""Sample a fraction of the dataset if it has more than this 
+        number of series.""",
+    )
+    parser.add_argument(
         "--fraction",
         type=float,
-        default=0.2,
+        default=0.05,
         help="Percent of the dataset to use expressed as a decmial.",
     )
     args = parser.parse_args()

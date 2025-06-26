@@ -166,27 +166,62 @@ class Dataset:
         storage_env_var: str = "GIFT_EVAL",
         metadata_directory: str = "resources",
         verbose: bool = False,
-        limit: Optional[int] = None,
         fraction: Optional[float] = None,
         seed: Optional[int] = 42,
     ):
+        """
+        Wrapper for loading and processing a GIFT-Eval dataset.
+        
+        This class supports:
+        - Loading datasets from disk using Hugging Face Datasets.
+        - Subsampling a fraction of the dataset.
+        - Automatically converting multivariate time series to univariate.
+        - Providing metadata (e.g., frequency, prediction length, etc.).
+        - Creating GluonTS-compatible training, validation, and test splits.
+        
+        **NOTE:**  Using `to_univariate=True` multiplies the original number of
+        time series in the dataset by the number of target dimensions 
+        `self.target_dim`.
+        
+        Here, `self.num_series` refers to the number of time series *after*
+        conversion to univariate format. 
+
+        Args:
+            name (str): Name of the dataset to load.
+            term (Term | str): Forecast horizon term, which scales the base
+                prediction length. Must be one of: "short", "medium", "long".
+            to_univariate (bool): Whether to convert multivariate time series
+                into multiple univariate ones. Defaults to True.
+            storage_env_var (str): Environment variable pointing to the root
+                directory of stored datasets.
+            metadata_directory (str): Directory where metadata files are
+                stored.
+            verbose (bool): Whether to enable verbose output.
+            fraction (float, optional): Fraction (0, 1] of the dataset to
+                sample. If None, uses the entire dataset.
+            seed (int, optional): Random seed used when sampling a subset of
+                the dataset.
+        """
         self.name = name
         self.term = Term(term)
         self.to_univariate = to_univariate
         self.storage_env_var = storage_env_var
         self.metadata_directory = metadata_directory
         self.verbose = verbose
-        self.limit = limit
         self.fraction = fraction
         self.seed = seed
-
-        if self.limit is not None and self.limit <= 0:
-            raise ValueError(f"Limit must be a positive integer, got {self.limit}.")
-
-        if self.fraction is not None and (self.fraction <= 0.0 or self.fraction > 1.0):
+        
+        # TODO: Make it so you can specify the number of series to load 
+        
+        if self.fraction is not None and not (0 < self.fraction <= 1):
             raise ValueError(
                 f"Fraction must be in the range (0, 1], got {self.fraction}."
             )
+        
+        df = pd.read_csv(self.metadata_path)
+        name_mask = df["name"] == self.name
+        term_mask = df["term"] == self.term.value
+        self.num_series = df[name_mask & term_mask].iloc[0]["num_series"]
 
         if not self.verbose:
             disable_progress_bar()
@@ -194,6 +229,18 @@ class Dataset:
         self.hf_dataset = datasets.load_from_disk(self.storage_path).with_format(
             "numpy"
         )
+            
+        # Select a random subset of series if `fraction` is specified.
+        if self.fraction is not None and self.fraction < 1:
+            total_num_series = len(self.hf_dataset)
+            reduced_num_series = max(int(self.fraction * total_num_series), 1)
+            self.num_series = reduced_num_series
+            
+            if self.seed is not None:
+                random.seed(self.seed)
+            
+            indices = random.sample(range(total_num_series), reduced_num_series)
+            self.hf_dataset = self.hf_dataset.select(indices)
 
         process = ProcessDataEntry(
             self.freq,
@@ -211,40 +258,23 @@ class Dataset:
                 self.gluonts_dataset
             )
 
-        try:
-            dirpath = Path(self.metadata_directory) / self.subdirectory
-            df = pd.read_csv(dirpath / "metadata.csv")
-            name_mask = df["name"] == self.name
-            term_mask = df["term"] == self.term.value
-            self.num_series = int(df[name_mask & term_mask].iloc[0]["num_series"])
-        except Exception as _:
-            self.num_series = len(self.gluonts_dataset)
-
-        if self.limit or self.fraction:
-            self._get_subset()
-
-    def _get_subset(self) -> Map:
-        if self.limit == self.num_series or self.fraction == 1.0:
-            return
-
-        total_series = self.num_series
-        reduced_num_series = (
-            min(self.limit, total_series)
-            if self.limit
-            else max(int(self.fraction * total_series), 1)
+    
+    @cached_property
+    def metadata_path(self) -> Path:
+        """
+        Returns the path to the dataset's metadata file based on whether the 
+        dataset's in the pretraining or train-test split.
+        """
+        return (
+            Path(self.metadata_directory) 
+            / self.subdirectory
+            / "metadata.csv"
         )
-        self.num_series = reduced_num_series
-
-        if self.seed is not None:
-            random.seed(self.seed)
-
-        indices = random.sample(range(total_series), reduced_num_series)
-        return self.gluonts_dataset.select(indices)
 
     @cached_property
     def storage_path(self) -> str:
         """
-        Returns the dataset's storage path based on whether or not it's in the
+        Returns the dataset's storage path based on whether it's in the 
         pretraining or train-test split.
         """
         load_dotenv()

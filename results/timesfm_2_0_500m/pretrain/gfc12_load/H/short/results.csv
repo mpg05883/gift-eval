@@ -1,2 +1,2 @@
 dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
-taxi_30min/30T/short,timesfm_2_0_500m,0.47770187947005105,0.26423552672837775
+gfc12_load/H/short,timesfm_2_0_500m,0.16443832378579876,0.08789312335628391
