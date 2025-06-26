@@ -48,7 +48,7 @@ def main(args):
             "term": term,
             "freq": dataset.freq,
             "domain": dataset_properties[key]["domain"],
-            "num_entries": dataset.num_entries,
+            "num_series": dataset.num_series,
             "target_dim": dataset.target_dim,
             "_min_series_length": dataset._min_series_length,
             "sum_series_length": dataset.sum_series_length,

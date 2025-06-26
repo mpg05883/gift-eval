@@ -22,7 +22,7 @@ def main():
         try:
             dataset = Dataset(row["name"])
             freq = dataset.freq
-            num_entries = dataset.num_entries
+            num_series = dataset.num_series
             target_dim = dataset.target_dim
             _min_series_length = dataset._min_series_length
             sum_series_length = dataset.sum_series_length
@@ -30,7 +30,7 @@ def main():
             windows = dataset.windows
 
             df.at[i, "freq"] = freq
-            df.at[i, "num_entries"] = num_entries
+            df.at[i, "num_series"] = num_series
             df.at[i, "target_dim"] = target_dim
             df.at[i, "_min_series_length"] = _min_series_length
             df.at[i, "sum_series_length"] = sum_series_length
@@ -43,7 +43,7 @@ def main():
 
         for j in range(1, 3):
             df.at[i + j, "freq"] = freq
-            df.at[i + j, "num_entries"] = num_entries
+            df.at[i + j, "num_series"] = num_series
             df.at[i + j, "target_dim"] = target_dim
             df.at[i + j, "_min_series_length"] = _min_series_length
             df.at[i + j, "sum_series_length"] = sum_series_length
@@ -58,7 +58,7 @@ def main():
             "term",
             "freq",
             "domain",
-            "num_entries",
+            "num_series",
             "target_dim",
             "_min_series_length",
             "sum_series_length",

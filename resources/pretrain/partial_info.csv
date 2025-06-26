@@ -1,4 +1,4 @@
-name,source,domain,freq,num_entries,num_targets,num_covariates,num_observations,category
+name,source,domain,freq,num_series,num_targets,num_covariates,num_observations,category
 bdg-2_panther,BuildingsBench(Emamietal.2023),Energy,H,105,1,0,919800,small_clean
 bdg-2_fox,BuildingsBench(Emamietal.2023),Energy,H,135,1,0,2324568,small_clean
 bdg-2_rat,BuildingsBench(Emamietal.2023),Energy,H,280,1,0,4728288,small_clean

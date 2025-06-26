@@ -1,4 +1,4 @@
-name,term,freq,domain,num_entries,target_dim,_min_series_length,sum_series_length,prediction_length,windows
+name,term,freq,domain,num_series,target_dim,_min_series_length,sum_series_length,prediction_length,windows
 LOOP_SEATTLE/5T,short,5T,Transport,323,1,105120,33953760,48,20
 LOOP_SEATTLE/D,short,D,Transport,323,1,365,117895,30,2
 LOOP_SEATTLE/H,short,H,Transport,323,1,8760,2829480,48,19

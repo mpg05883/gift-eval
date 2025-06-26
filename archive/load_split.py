@@ -32,20 +32,20 @@ def main(args):
             training_dataset = dataset.training_dataset
             validation_dataset = dataset.validation_dataset
             test_data = dataset.test_data
-            num_entries = dataset.num_entries
+            num_series = dataset.num_series
         except Exception as e:
             failed.append(name)
             errors.append(str(e))
-            num_entries = np.nan
+            num_series = np.nan
 
         for _ in terms:
-            lengths.append(num_entries)
+            lengths.append(num_series)
 
     if not failed:
         print(f"All {len(names)} datasets loaded successfully.")
         return
 
-    df["num_entries"] = lengths
+    df["num_series"] = lengths
 
     # Reorder columns
     df = df[
@@ -54,7 +54,7 @@ def main(args):
             "term",
             "freq",
             "domain",
-            "num_entries",
+            "num_series",
             "target_dim",
             "windows",
             "_min_series_length",

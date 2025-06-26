@@ -1,25 +1,18 @@
 import argparse
 import csv
 import logging
+import sys
 import time
 from pathlib import Path
 
 import pandas as pd
 import timesfm
 from gluonts.ev.metrics import (
-    MAE,
     MAPE,
-    MASE,
-    MSE,
-    MSIS,
-    ND,
-    NRMSE,
-    RMSE,
-    SMAPE,
     MeanWeightedSumQuantileLoss,
 )
 from gluonts.model import evaluate_model
-import sys
+
 from pretrained_models.chronos_predictor import ChronosPredictor
 from pretrained_models.timesfm_predictor import TimesFmPredictor
 from src.gift_eval.data import Dataset
@@ -38,12 +31,12 @@ def main(args):
     df = pd.read_csv(Path("resources") / args.split_name / "metadata.csv")
     if args.term:
         df = df[df["term"] == args.term]
-    df = df.sort_values(by="num_entries", ascending=True)
+    df = df.sort_values(by="num_series", ascending=True)
     name, term = df.iloc[args.index][["name", "term"]]
 
     logger.info(f"Loading dataset: {name} ({term})")
     dataset = Dataset(name=name, term=term, fraction=args.fraction)
-    logger.info(f"Number of entries: {dataset.num_entries} entries")
+    logger.info(f"Number of entries: {dataset.num_series} entries")
 
     logger.info(f"Loading model: {args.model_name}")
     if "chronos" in args.model_name:
@@ -95,7 +88,7 @@ def main(args):
     dirpath.mkdir(parents=True, exist_ok=True)
     file_name = "results.csv"
     output_path = dirpath / file_name
-    
+
     # Exit if the results file already exists
     if output_path.exists():
         logger.info(f"Results file already exists: {output_path}")
@@ -185,7 +178,12 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--model_name",
-        choices=["chronos_base", "chronos_bolt_base", "chronos_bolt_small", "timesfm_2_0_500m",],
+        choices=[
+            "chronos_base",
+            "chronos_bolt_base",
+            "chronos_bolt_small",
+            "timesfm_2_0_500m",
+        ],
         default="timesfm_2_0_500m",
         help="""Name of the model to evaluate.""",
     )

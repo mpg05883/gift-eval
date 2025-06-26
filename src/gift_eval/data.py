@@ -183,7 +183,7 @@ class Dataset:
         if self.limit is not None and self.limit <= 0:
             raise ValueError(f"Limit must be a positive integer, got {self.limit}.")
 
-        if self.fraction is not None and (self.fraction <= 0 or self.fraction > 1):
+        if self.fraction is not None and (self.fraction <= 0.0 or self.fraction > 1.0):
             raise ValueError(
                 f"Fraction must be in the range (0, 1], got {self.fraction}."
             )
@@ -195,33 +195,6 @@ class Dataset:
             "numpy"
         )
 
-        try:
-            dirpath = Path(self.metadata_directory) / self.subdirectory
-            df = pd.read_csv(dirpath / "metadata.csv")
-            name_mask = df["name"] == self.name
-            term_mask = df["term"] == self.term.value
-            self.num_entries = int(df[name_mask & term_mask].iloc[0]["num_entries"])
-        except Exception as _:
-            self.num_entries = len(self.hf_dataset)
-            
-        total_entries = self.num_entries
-        
-        if self.limit is not None:
-            num_to_use = min(self.limit, total_entries)
-        elif self.fraction is not None:
-            num_to_use = max(int(self.fraction * total_entries), 1)
-        else:
-            num_to_use = total_entries
-
-        if num_to_use < total_entries:
-            self.num_entries = num_to_use
-
-            if self.seed is not None:
-                random.seed(self.seed)
-
-            indices = random.sample(range(total_entries), num_to_use)
-            self.hf_dataset = self.hf_dataset.select(indices)
-
         process = ProcessDataEntry(
             self.freq,
             one_dim_target=self.target_dim == 1,
@@ -232,11 +205,41 @@ class Dataset:
             self.hf_dataset,
         )
 
-        # Only convert multivariate datasets to univariate if specified
+        # For TEMPO, prefer converting multivariate datasets to univariate
         if self.to_univariate and self.target_dim > 1:
             self.gluonts_dataset = MultivariateToUnivariate("target").apply(
                 self.gluonts_dataset
             )
+
+        try:
+            dirpath = Path(self.metadata_directory) / self.subdirectory
+            df = pd.read_csv(dirpath / "metadata.csv")
+            name_mask = df["name"] == self.name
+            term_mask = df["term"] == self.term.value
+            self.num_series = int(df[name_mask & term_mask].iloc[0]["num_series"])
+        except Exception as _:
+            self.num_series = len(self.gluonts_dataset)
+
+        if self.limit or self.fraction:
+            self._get_subset()
+
+    def _get_subset(self) -> Map:
+        if self.limit == self.num_series or self.fraction == 1.0:
+            return
+
+        total_series = self.num_series
+        reduced_num_series = (
+            min(self.limit, total_series)
+            if self.limit
+            else max(int(self.fraction * total_series), 1)
+        )
+        self.num_series = reduced_num_series
+
+        if self.seed is not None:
+            random.seed(self.seed)
+
+        indices = random.sample(range(total_series), reduced_num_series)
+        return self.gluonts_dataset.select(indices)
 
     @cached_property
     def storage_path(self) -> str:

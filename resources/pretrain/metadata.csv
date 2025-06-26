@@ -1,4 +1,4 @@
-name,term,freq,domain,num_entries,target_dim,_min_series_length,sum_series_length,prediction_length,windows
+name,term,freq,domain,num_series,target_dim,_min_series_length,sum_series_length,prediction_length,windows
 bull,short,H,Energy,41,1,17544,719304,48,20
 bull,medium,H,Energy,41,1,17544,719304,480,4
 bull,long,H,Energy,41,1,17544,719304,720,3
