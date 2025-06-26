@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+bitcoin_with_missing/D/short,timesfm,0.11737030864167955,0.10671675135036082

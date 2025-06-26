@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+kdd2022/10T/short,timesfm,49.733354322349626,0.4448281468776342

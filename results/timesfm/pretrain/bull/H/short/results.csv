@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+bull/H/short,timesfm,0.39669272763026825,0.3133726964839916
