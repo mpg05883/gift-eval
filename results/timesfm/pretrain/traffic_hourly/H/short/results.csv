@@ -1,2 +1,2 @@
 dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
-bdg-2_fox/H/short,timesfm,0.15370096019159474,0.08951218007797988
+traffic_hourly/H/short,timesfm,0.2212291026357349,0.12149844820547218

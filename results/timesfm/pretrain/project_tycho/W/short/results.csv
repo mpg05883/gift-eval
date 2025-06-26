@@ -1,2 +1,2 @@
 dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
-bdg-2_fox/H/short,timesfm,0.15370096019159474,0.08951218007797988
+project_tycho/W/short,timesfm,1.1584485189696876,0.32991057733617063
