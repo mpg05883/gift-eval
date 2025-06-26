@@ -25,6 +25,7 @@ from typing import Iterable, Iterator, Optional
 import numpy as np
 import pandas as pd
 import pyarrow.compute as pc
+from datasets.utils.logging import disable_progress_bar
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
 from gluonts.dataset.common import ProcessDataEntry
@@ -37,7 +38,6 @@ from toolz import compose
 
 import datasets
 from datasets import Dataset as HF_Dataset
-from datasets.utils.logging import disable_progress_bar
 
 TEST_SPLIT = 0.1
 MAX_WINDOW = 20
@@ -215,10 +215,13 @@ class Dataset:
                 dataset, it'll randomly sample approximately
                 `limit // target_dim` multivariate series before applying the
                 univariate transformation.
-                - **Note:** The actual number of resulting univariate time
-                    series may be slightly less than `limit` due to rounding
-                    down during division by the number of target dimensions.
-
+                - **Note:** If `limit` is less than the number of target 
+                dimensions `target_dim`, it will be set to `target_dim`.
+                - **Note:** If `limit` is greater than or equal to
+                `target_dim`, the actual number of resulting univariate time
+                series may be slightly less than `limit` due to rounding
+                down during division by the number of target dimensions.
+                    
             fraction (float, optional): Fraction (0, 1] of the dataset to
                 sample. If None, uses the entire dataset.
 
@@ -249,6 +252,9 @@ class Dataset:
         self.hf_dataset = datasets.load_from_disk(self.storage_path).with_format(
             "numpy"
         )
+        
+        # * Assumes multivariate datasets will be converted to univariate
+        self.num_series = self._total_univariate_series
 
         # Select a random subset of series if `limit` or `fraction` are given.
         if self.limit is not None and self.limit < self._total_univariate_series:
@@ -257,9 +263,6 @@ class Dataset:
         elif self.fraction is not None and self.fraction < 1:
             # Also assigns `self.num_series`
             self.hf_dataset = self._apply_fraction()
-        else:
-            # * Assumes multivariate datasets will be converted to univariate
-            self.num_series = self._total_univariate_series
 
         process = ProcessDataEntry(
             self.freq,
