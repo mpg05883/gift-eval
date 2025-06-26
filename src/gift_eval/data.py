@@ -200,7 +200,7 @@ class Dataset:
             df = pd.read_csv(dirpath / "metadata.csv")
             name_mask = df["name"] == self.name
             term_mask = df["term"] == self.term.value
-            self.num_entries = df[name_mask & term_mask].iloc[0]["num_entries"]
+            self.num_entries = int(df[name_mask & term_mask].iloc[0]["num_entries"])
         except Exception as _:
             self.num_entries = len(self.hf_dataset)
             
