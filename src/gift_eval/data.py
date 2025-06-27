@@ -17,7 +17,6 @@ import json
 import math
 import os
 import random
-from enum import Enum
 from functools import cached_property
 from pathlib import Path
 from typing import Iterable, Iterator, Optional
@@ -25,7 +24,6 @@ from typing import Iterable, Iterator, Optional
 import numpy as np
 import pandas as pd
 import pyarrow.compute as pc
-from datasets.utils.logging import disable_progress_bar
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
 from gluonts.dataset.common import ProcessDataEntry
@@ -38,6 +36,8 @@ from toolz import compose
 
 import datasets
 from datasets import Dataset as HF_Dataset
+from datasets.utils.logging import disable_progress_bar
+from utils import Term
 
 TEST_SPLIT = 0.1
 MAX_WINDOW = 20
@@ -93,21 +93,6 @@ TFB_PRED_LENGTH_MAP = {
     "Q": 8,  # Quarterly
     "A": 6,  # Annualy/yearly
 }
-
-
-class Term(Enum):
-    SHORT = "short"
-    MEDIUM = "medium"
-    LONG = "long"
-
-    @property
-    def multiplier(self) -> int:
-        if self == Term.SHORT:
-            return 1
-        elif self == Term.MEDIUM:
-            return 10
-        elif self == Term.LONG:
-            return 15
 
 
 def itemize_start(data_entry: DataEntry) -> DataEntry:
@@ -215,13 +200,13 @@ class Dataset:
                 dataset, it'll randomly sample approximately
                 `limit // target_dim` multivariate series before applying the
                 univariate transformation.
-                - **Note:** If `limit` is less than the number of target 
+                - **Note:** If `limit` is less than the number of target
                 dimensions `target_dim`, it will be set to `target_dim`.
                 - **Note:** If `limit` is greater than or equal to
                 `target_dim`, the actual number of resulting univariate time
                 series may be slightly less than `limit` due to rounding
                 down during division by the number of target dimensions.
-                    
+
             fraction (float, optional): Fraction (0, 1] of the dataset to
                 sample. If None, uses the entire dataset.
 
@@ -252,7 +237,7 @@ class Dataset:
         self.hf_dataset = datasets.load_from_disk(self.storage_path).with_format(
             "numpy"
         )
-        
+
         # * Assumes multivariate datasets will be converted to univariate
         self.num_series = self._total_univariate_series
 
@@ -349,7 +334,7 @@ class Dataset:
         """
         df = pd.read_csv(self.metadata_path)
         name_mask = df["name"] == self.name
-        term_mask = df["term"] == self.term.value
+        term_mask = df["term"] == self.term
         return df[name_mask & term_mask].iloc[0]["num_series"]
 
     @cached_property
@@ -420,7 +405,7 @@ class Dataset:
         Returns:
             str: The dataset's configuration.
         """
-        return f"{self.key}/{self.freq}/{self.term.value}"
+        return f"{self.key}/{self.freq}/{self.term}"
 
     @cached_property
     def seasonality(self) -> int:
