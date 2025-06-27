@@ -1,4 +1,4 @@
-from .enums import Domain, ModelType, SplitType, Term
+from .enums import Domain, ForecasterType, SplitType, Term
 from .utils import format_elapsed_time, get_timestamp, is_rank_zero
 
 __all__ = [
@@ -6,7 +6,7 @@ __all__ = [
     "get_timestamp",
     "format_elapsed_time",
     "Term",
-    "ModelType",
+    "ForecasterType",
     "Domain",
     "SplitType",
 ]
