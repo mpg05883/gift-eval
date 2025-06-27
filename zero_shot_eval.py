@@ -13,8 +13,8 @@ from gluonts.ev.metrics import (
 )
 from gluonts.model import evaluate_model
 
-from pretrained_models.chronos_predictor import ChronosPredictor
-from pretrained_models.timesfm_predictor import TimesFmPredictor
+from models.chronos_predictor import ChronosPredictor
+from models.timesfm_predictor import TimesFmPredictor
 from src.gift_eval.data import Dataset
 from utils import format_elapsed_time
 

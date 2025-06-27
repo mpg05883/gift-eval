@@ -374,7 +374,7 @@ class Dataset:
     def subdirectory(
         self,
         file_name: str = "dataset_properties.json",
-        directory: str = "notebooks",
+        directory: str = "resources",
     ) -> str:
         """
         Returns "pretrain" if the dataset is part of the pretraining split.
@@ -384,7 +384,7 @@ class Dataset:
             file_name (str, optional): Name of the JSON file containing dataset
                 properties. Defaults to "dataset_properties.json".
             directory (str, optional): Parent directory of
-                dataset_properties.json. Defaults to "notebooks".
+                dataset_properties.json. Defaults to "resources".
 
         Returns:
             str: "pretrain" if the dataset belongs to the pretraining split,
