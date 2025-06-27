@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+beijing_subway_30min/30T/short,timesfm_2_0_500m,0.49971303098790437,0.194260613001545

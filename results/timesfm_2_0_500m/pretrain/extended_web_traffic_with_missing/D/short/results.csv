@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+extended_web_traffic_with_missing/D/short,timesfm_2_0_500m,0.4358602757219574,0.20289845462572578

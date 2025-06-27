@@ -24,9 +24,6 @@ log_job_info
 
 index="${SLURM_ARRAY_TASK_ID}"
 
-# TODO: Remove after debugging
-index=77
-
 if python zero_shot_eval.py --index="${index}"; then
     log_info "Successfully finished ${SLURM_JOB_NAME}!"
     log_error "No errors!"

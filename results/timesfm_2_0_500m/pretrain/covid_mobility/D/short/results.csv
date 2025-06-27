@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+covid_mobility/D/short,timesfm_2_0_500m,0.8481246910156783,0.2835883424522423

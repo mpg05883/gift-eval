@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+shmetro/15T/short,timesfm_2_0_500m,0.3208103898172236,0.17099746411017258

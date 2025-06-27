@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+bdg-2_panther/H/short,timesfm_2_0_500m,0.25136441147038124,0.07147714037605306

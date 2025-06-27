@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+wind_power/4S/short,timesfm_2_0_500m,0.07011876606216344,0.04506077746770867

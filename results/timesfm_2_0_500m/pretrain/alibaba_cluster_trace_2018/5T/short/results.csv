@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+alibaba_cluster_trace_2018/5T/short,timesfm_2_0_500m,0.06564494300818781,0.02544022361454767
