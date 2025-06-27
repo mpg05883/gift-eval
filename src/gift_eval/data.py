@@ -25,6 +25,7 @@ from typing import Iterable, Iterator, Optional
 import numpy as np
 import pandas as pd
 import pyarrow.compute as pc
+from datasets.utils.logging import disable_progress_bar
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
 from gluonts.dataset.common import ProcessDataEntry
@@ -36,7 +37,7 @@ from pandas.tseries.frequencies import to_offset
 from toolz import compose
 
 import datasets
-from datasets.utils.logging import disable_progress_bar
+from datasets import Dataset as HF_Dataset
 
 TEST_SPLIT = 0.1
 MAX_WINDOW = 20
@@ -166,39 +167,64 @@ class Dataset:
         storage_env_var: str = "GIFT_EVAL",
         metadata_directory: str = "resources",
         verbose: bool = False,
+        limit: Optional[int] = None,
         fraction: Optional[float] = None,
         seed: Optional[int] = 42,
     ):
         """
         Wrapper for loading and processing a GIFT-Eval dataset.
-        
+
         This class supports:
         - Loading datasets from disk using Hugging Face Datasets.
+        - Setting a limit on the number of series used.
         - Subsampling a fraction of the dataset.
         - Automatically converting multivariate time series to univariate.
         - Providing metadata (e.g., frequency, prediction length, etc.).
         - Creating GluonTS-compatible training, validation, and test splits.
-        
-        **NOTE:**  Using `to_univariate=True` multiplies the original number of
-        time series in the dataset by the number of target dimensions 
-        `self.target_dim`.
-        
-        Here, `self.num_series` refers to the number of time series *after*
-        conversion to univariate format. 
+
+        **NOTE:**  Using `to_univariate=True` converts each multivariate time
+        series of shape `(T, D)` (where `T` is the number of time steps and `D`
+        is the number of dimensions) into `D` separate univariate time series
+        of shape `(T,)`.
+        - This increases the total number of time series in the dataset to
+            by a factor of `self.target_dim`.
+            - If `self.target_dim` is 1, the dataset remains unchanged.
+        - `self.num_series` refers to the number of time series *after*
+            conversion to univariate format.
 
         Args:
             name (str): Name of the dataset to load.
+
             term (Term | str): Forecast horizon term, which scales the base
                 prediction length. Must be one of: "short", "medium", "long".
+
             to_univariate (bool): Whether to convert multivariate time series
                 into multiple univariate ones. Defaults to True.
+
             storage_env_var (str): Environment variable pointing to the root
                 directory of stored datasets.
+
             metadata_directory (str): Directory where metadata files are
                 stored.
+
             verbose (bool): Whether to enable verbose output.
+
+            limit (int, optional): Desired number of time series to use
+                *after* converting the dataset to univariate format
+                (if `to_univariate=True`). If specified for a multivariate
+                dataset, it'll randomly sample approximately
+                `limit // target_dim` multivariate series before applying the
+                univariate transformation.
+                - **Note:** If `limit` is less than the number of target 
+                dimensions `target_dim`, it will be set to `target_dim`.
+                - **Note:** If `limit` is greater than or equal to
+                `target_dim`, the actual number of resulting univariate time
+                series may be slightly less than `limit` due to rounding
+                down during division by the number of target dimensions.
+                    
             fraction (float, optional): Fraction (0, 1] of the dataset to
                 sample. If None, uses the entire dataset.
+
             seed (int, optional): Random seed used when sampling a subset of
                 the dataset.
         """
@@ -208,20 +234,17 @@ class Dataset:
         self.storage_env_var = storage_env_var
         self.metadata_directory = metadata_directory
         self.verbose = verbose
+        self.limit = limit
         self.fraction = fraction
         self.seed = seed
-        
-        # TODO: Make it so you can specify the number of series to load 
-        
+
+        if self.limit is not None and self.limit <= 0:
+            raise ValueError(f"Limit must be a positive integer, got {self.limit}.")
+
         if self.fraction is not None and not (0 < self.fraction <= 1):
             raise ValueError(
                 f"Fraction must be in the range (0, 1], got {self.fraction}."
             )
-        
-        df = pd.read_csv(self.metadata_path)
-        name_mask = df["name"] == self.name
-        term_mask = df["term"] == self.term.value
-        self.num_series = df[name_mask & term_mask].iloc[0]["num_series"]
 
         if not self.verbose:
             disable_progress_bar()
@@ -229,18 +252,17 @@ class Dataset:
         self.hf_dataset = datasets.load_from_disk(self.storage_path).with_format(
             "numpy"
         )
-            
-        # Select a random subset of series if `fraction` is specified.
-        if self.fraction is not None and self.fraction < 1:
-            total_num_series = len(self.hf_dataset)
-            reduced_num_series = max(int(self.fraction * total_num_series), 1)
-            self.num_series = reduced_num_series
-            
-            if self.seed is not None:
-                random.seed(self.seed)
-            
-            indices = random.sample(range(total_num_series), reduced_num_series)
-            self.hf_dataset = self.hf_dataset.select(indices)
+        
+        # * Assumes multivariate datasets will be converted to univariate
+        self.num_series = self._total_univariate_series
+
+        # Select a random subset of series if `limit` or `fraction` are given.
+        if self.limit is not None and self.limit < self._total_univariate_series:
+            # Also assigns `self.num_series`
+            self.hf_dataset = self._apply_limit()
+        elif self.fraction is not None and self.fraction < 1:
+            # Also assigns `self.num_series`
+            self.hf_dataset = self._apply_fraction()
 
         process = ProcessDataEntry(
             self.freq,
@@ -258,23 +280,90 @@ class Dataset:
                 self.gluonts_dataset
             )
 
-    
+    def _apply_limit(self) -> HF_Dataset:
+        """
+        Applies the `limit` constraint to the Hugging Face dataset before
+        `MultivariateToUnivariate` transformation.
+
+        - This method computes the number of multivariate time series to sample
+        based on the desired number of univariate series (`self.limit`) and the
+        number of target dimensions (`self.target_dim`).
+        - Then, it randomly samples that many series from the original dataset.
+        - After converting to univariate, the resulting dataset will yield
+        approximately `self.limit` univariate series.
+
+        Returns:
+            HF_Dataset: A Hugging Face dataset containing a subset of
+            multivariate series that will yield approximately `self.limit`
+            univariate series after transformation.
+        """
+        scaled_limit = max(self.limit // self.target_dim, 1)
+
+        if scaled_limit >= len(self.hf_dataset):
+            return self.hf_dataset
+
+        if self.seed is not None:
+            random.seed(self.seed)
+
+        # ? Is this a safe assumption?
+        self.num_series = scaled_limit * self.target_dim
+
+        indices = random.sample(range(len(self.hf_dataset)), scaled_limit)
+        return self.hf_dataset.select(indices)
+
+    def _apply_fraction(self) -> HF_Dataset:
+        """
+        Apply the `fraction` constraint to the Hugging Face dataset.
+
+        - This method samples a specified fraction of the multivariate time
+        series in the original dataset, before applying the
+        `MultivariateToUnivariate` transformation.
+        - After the transformation, the number of univariate series will be
+        approximately `fraction * total_univariate_series`.
+
+        Returns:
+            HF_Dataset: A subset of the Hugging Face dataset containing
+            multivariate series that will yield the desired fraction of
+            univariate series after transformation.
+        """
+        reduced_num_series = max(
+            int(self.fraction * len(self.hf_dataset)),
+            1,
+        )
+
+        if self.seed is not None:
+            random.seed(self.seed)
+
+        # ? Is this a safe assumption?
+        self.num_series = reduced_num_series * self.target_dim
+
+        indices = random.sample(range(len(self.hf_dataset)), reduced_num_series)
+        return self.hf_dataset.select(indices)
+
+    @cached_property
+    def _total_univariate_series(self) -> int:
+        """
+        Returns the number of univariate time series in the dataset.If the
+        dataset is multivariate, this is the number of dimensions multiplied by
+        the number of multivariate series.
+        """
+        df = pd.read_csv(self.metadata_path)
+        name_mask = df["name"] == self.name
+        term_mask = df["term"] == self.term.value
+        return df[name_mask & term_mask].iloc[0]["num_series"]
+
     @cached_property
     def metadata_path(self) -> Path:
         """
-        Returns the path to the dataset's metadata file based on whether the 
+        Returns the path to the dataset's metadata file based on whether the
         dataset's in the pretraining or train-test split.
         """
-        return (
-            Path(self.metadata_directory) 
-            / self.subdirectory
-            / "metadata.csv"
-        )
+        return Path(self.metadata_directory) / self.subdirectory / "metadata.csv"
 
     @cached_property
     def storage_path(self) -> str:
         """
-        Returns the dataset's storage path based on whether it's in the 
+        Returns the dataset's storage path based on whether it's in the
         pretraining or train-test split.
         """
         load_dotenv()

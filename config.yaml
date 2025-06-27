@@ -1,0 +1,8 @@
+configs:
+  - term: short
+  - term: medium
+  - term: long
+  - domain: Energy
+    term: short
+  - domain: [Climate, Nature]
+    term: long
