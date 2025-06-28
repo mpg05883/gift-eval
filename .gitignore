@@ -253,3 +253,5 @@ datasets/
 nohup.out
 
 logs/
+
+.vscode/
