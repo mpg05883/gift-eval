@@ -122,7 +122,7 @@ Submit your results to the leaderboard by creating a pull request that adds your
 ```json
 {
     "model": "YOUR_MODEL_NAME",
-    "model_type": "one of statistical, deep-learning, or pretrained",
+    "model_type": "one of statistical, deep-learning, agentic or pretrained",
     "model_dtype": "float32, etc."
     "model_link": "To your HF model link, e.g., https://huggingface.co/amazon/chronos-t5-small",
     "org": "YOUR_ORG_NAME",
