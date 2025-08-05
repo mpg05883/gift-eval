@@ -1,6 +1,9 @@
 # GIFT-EVAL: A Benchmark for General Time Series Forecasting Model Evaluation
 
-[Paper](https://arxiv.org/abs/2410.10393) | [Blog Post]() | [Train-Test Dataset](https://huggingface.co/datasets/Salesforce/GiftEval) | [Pretrain Dataset](https://huggingface.co/datasets/Salesforce/GiftEvalPretrain) | [Leaderboard](https://huggingface.co/spaces/Salesforce/GIFT-Eval)
+[![arXiv](https://img.shields.io/badge/GiftEval-2402.02592-b31b1b.svg)](https://arxiv.org/abs/2410.10393)
+[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-TrainTestDataset-FFD21E)](https://huggingface.co/datasets/Salesforce/GiftEval) 
+[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-PretrainDataset-FFD21E)](https://huggingface.co/datasets/Salesforce/GiftEvalPretrain)
+[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-LeaderBoard-FFD21E)](https://huggingface.co/spaces/Salesforce/GIFT-Eval)
 
 ![gift eval main figure](artefacts/gifteval.png)
 
