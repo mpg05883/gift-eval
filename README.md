@@ -15,6 +15,18 @@
 GIFT-Eval is a comprehensive benchmark designed to evaluate general time series forecasting models across diverse datasets, promoting the advancement of zero-shot forecasting capabilities in foundation models.
 
 To facilitate the effective pretraining and evaluation of foundation models, we also provide a non-leaking pretraining dataset --> [GiftEvalPretrain](https://huggingface.co/datasets/Salesforce/GiftEvalPretrain).
+
+## Update Log
+
+### 2025‑07‑24
+
+- Corrected the Naive and Seasonal Naive scores to match the latest GIFT‑Eval notebooks. Most model rankings remain unchanged; only a few near the bottom shifted slightly (AutoETS and Timer each dropped two places now at 35th and 36th places respectively, while NBEATS moved up one now at 27th place).
+### 2025-08-05
+
+- Added new columns to the leaderboard: Organization, TestData Leakage, and MASE_Rank. TestData Leakage is a binary indicator specifying whether any test data was present in the training set. MASE_Rank reflects the model's ranking based on the MASE metric, aligned with the ranking scheme used for CRPS_Rank. These additions were made in response to multiple requests from independent groups seeking fairer comparisons. With these updates, the leaderboard now supports sorting by models that do not leak test data, and viewers can choose to rank models based on either MASE_Rank or CRPS_Rank, depending on their use case.
+
+- Added new model type: Agentic to indicate submissions that use agentic system to generate the forecasts.
+
 ## Installation
 1. Clone the repository and change the working directory to `GIFT_Eval`.
 2. Create a conda environment:
