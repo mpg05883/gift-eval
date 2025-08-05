@@ -12,7 +12,6 @@
 | BasicTS+ (Shao et al., 2023)   | Minutely ~ Daily  | 3              | No               | Multi        | Short/Long | Stat./DL          | No                |
 | GIFT-Eval (our work)           | Secondly ~ Yearly | 7              | Yes              | Uni/Multi    | Short/Long | Stat./DL/FM       | Yes               |
 
-
 GIFT-Eval is a comprehensive benchmark designed to evaluate general time series forecasting models across diverse datasets, promoting the advancement of zero-shot forecasting capabilities in foundation models.
 
 To facilitate the effective pretraining and evaluation of foundation models, we also provide a non-leaking pretraining dataset --> [GiftEvalPretrain](https://huggingface.co/datasets/Salesforce/GiftEvalPretrain).
@@ -113,7 +112,9 @@ Submit your results to the leaderboard by creating a pull request that adds your
     "model": "YOUR_MODEL_NAME",
     "model_type": "one of statistical, deep-learning, or pretrained",
     "model_dtype": "float32, etc."
-    "model_link": "To your HF model link, e.g., https://huggingface.co/amazon/chronos-t5-small"
+    "model_link": "To your HF model link, e.g., https://huggingface.co/amazon/chronos-t5-small",
+    "org": "YOUR_ORG_NAME",
+    "testdata_leakage": "one of Yes or No" 
 }
 ```
 
