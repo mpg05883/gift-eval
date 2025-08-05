@@ -1,6 +1,7 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
 
 def normalize_data(mean, std):
@@ -48,12 +49,12 @@ def plot_radar_chart(df, output_dir):
 
     # Draw the plot
     fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-    ax.fill(angles, mean_normalized, color='red', alpha=0.25)
-    ax.plot(angles, mean_normalized, color='red', label='Mean')
+    ax.fill(angles, mean_normalized, color="red", alpha=0.25)
+    ax.plot(angles, mean_normalized, color="red", label="Mean")
 
     # Draw error bars
     for angle, mean, error in zip(angles, mean_normalized, std_normalized):
-        ax.errorbar(angle, mean, yerr=error, color='black', capsize=3)
+        ax.errorbar(angle, mean, yerr=error, color="black", capsize=3)
 
     ax.set_ylim(0, 1)
 
@@ -63,12 +64,13 @@ def plot_radar_chart(df, output_dir):
     ax.set_xticklabels(labels, size=12)
 
     # Title and legend
-    plt.title('Time Series Benchmark Features (Normalized)',
-              size=15, color='red', y=1.1)
-    ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
+    plt.title(
+        "Time Series Benchmark Features (Normalized)", size=15, color="red", y=1.1
+    )
+    ax.legend(loc="upper right", bbox_to_anchor=(1.1, 1.1))
 
     # Save the figure
-    plt.savefig(os.path.join(output_dir, 'character_radar.png'))
+    plt.savefig(os.path.join(output_dir, "character_radar.png"))
     plt.close()
 
 
@@ -119,21 +121,19 @@ def plot_feature_histogram(dataframe, column_name, output_directory):
     """
     # Check if the column exists in the dataframe
     if column_name not in dataframe.columns:
-        raise ValueError(
-            f"Column '{column_name}' does not exist in the dataframe.")
+        raise ValueError(f"Column '{column_name}' does not exist in the dataframe.")
 
     # Drop rows with NA values in the specified column
     clean_data = dataframe[column_name].dropna()
 
     # Plot the histogram
     plt.figure(figsize=(10, 6))
-    plt.hist(clean_data, bins=10, edgecolor='black')
-    plt.title(f'Histogram of {column_name}')
+    plt.hist(clean_data, bins=10, edgecolor="black")
+    plt.title(f"Histogram of {column_name}")
     plt.xlabel(column_name)
-    plt.ylabel('Frequency')
+    plt.ylabel("Frequency")
 
     # Save the plot
-    plot_filename = os.path.join(
-        output_directory, f"{column_name}_histogram.png")
+    plot_filename = os.path.join(output_directory, f"{column_name}_histogram.png")
     plt.savefig(plot_filename)
     plt.close()

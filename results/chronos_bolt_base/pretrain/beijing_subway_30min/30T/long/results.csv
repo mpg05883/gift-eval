@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MSE[mean],eval_metrics/MSE[0.5],eval_metrics/MAE[0.5],eval_metrics/MASE[0.5],eval_metrics/MAPE[0.5],eval_metrics/sMAPE[0.5],eval_metrics/MSIS,eval_metrics/RMSE[mean],eval_metrics/NRMSE[mean],eval_metrics/ND[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+beijing_subway_30min/30T/long,chronos_bolt_base,19885.767823159127,19885.767823159127,54.85389218269653,0.2578852648384425,0.6114439538573123,0.3336974177348668,3.647509550459042,141.01690616078318,0.5444968641655061,0.21180277665925176,0.1815478995338545

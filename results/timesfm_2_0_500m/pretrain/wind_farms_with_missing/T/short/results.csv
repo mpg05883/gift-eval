@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+wind_farms_with_missing/T/short,timesfm_2_0_500m,1.2449276106096032,0.05359285504331787

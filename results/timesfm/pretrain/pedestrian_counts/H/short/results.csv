@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+pedestrian_counts/H/short,timesfm,0.4579200263838786,0.1319873047491735

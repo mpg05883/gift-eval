@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+residential_load_power/T/short,timesfm_2_0_500m,3821722363856.919,0.3872345288279581

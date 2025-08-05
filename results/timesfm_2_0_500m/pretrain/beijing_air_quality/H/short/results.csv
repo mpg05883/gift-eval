@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+beijing_air_quality/H/short,timesfm_2_0_500m,9258982776063.924,0.2557095896649744

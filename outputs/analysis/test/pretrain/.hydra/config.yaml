@@ -1,0 +1,1377 @@
+datasets:
+  name: pretrain
+  datasets:
+  - _target_: gift_eval.data.Dataset
+    name: bull
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: bull
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: bull
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1885
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1885
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1885
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1991
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1991
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1991
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: SHMETRO
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: SHMETRO
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: SHMETRO
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2006
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2006
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2006
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: BEIJING_SUBWAY_30MIN
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: BEIJING_SUBWAY_30MIN
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: BEIJING_SUBWAY_30MIN
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: gfc12_load
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: gfc12_load
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: gfc12_load
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: buildings_900k
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: buildings_900k
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: buildings_900k
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: london_smart_meters_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: london_smart_meters_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: london_smart_meters_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: residential_pv_power
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: residential_pv_power
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: residential_pv_power
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: PEMS_BAY
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: PEMS_BAY
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: PEMS_BAY
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: wind_power
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: wind_power
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: wind_power
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1975
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1975
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1975
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: elecdemand
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: elecdemand
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: elecdemand
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: wiki-rolling_nips
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: wiki-rolling_nips
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: wiki-rolling_nips
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: spain
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: spain
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: spain
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cdc_fluview_who_nrevss
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cdc_fluview_who_nrevss
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cdc_fluview_who_nrevss
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: covid_mobility
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: covid_mobility
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: covid_mobility
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_quarterly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_quarterly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_quarterly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2015
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2015
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2015
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: alibaba_cluster_trace_2018
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: alibaba_cluster_trace_2018
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: alibaba_cluster_trace_2018
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1930
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1930
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1930
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: uber_tlc_hourly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: uber_tlc_hourly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: uber_tlc_hourly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2012
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2012
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2012
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1940
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1940
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1940
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_rat
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_rat
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_rat
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2018
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2018
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2018
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: largest_2020
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: largest_2020
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: largest_2020
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1875
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1875
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1875
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1905
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1905
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1905
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: borg_cluster_data_2011
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: borg_cluster_data_2011
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: borg_cluster_data_2011
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: tourism_yearly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: tourism_yearly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: tourism_yearly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: traffic_weekly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: traffic_weekly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: traffic_weekly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: largest_2018
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: largest_2018
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: largest_2018
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: PEMS07
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: PEMS07
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: PEMS07
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2001
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2001
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2001
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cif_2016_6
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cif_2016_6
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cif_2016_6
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1996
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1996
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1996
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_panther
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_panther
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_panther
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1985
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1985
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1985
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_yearly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_yearly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_yearly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: bitcoin_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: bitcoin_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: bitcoin_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1998
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1998
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1998
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1992
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1992
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1992
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: favorita_sales
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: favorita_sales
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: favorita_sales
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1965
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1965
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1965
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: hog
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: hog
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: hog
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2005
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2005
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2005
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1850
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1850
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1850
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: PEMS03
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: PEMS03
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: PEMS03
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1920
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1920
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1920
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: covid19_energy
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: covid19_energy
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: covid19_energy
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: LOS_LOOP
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: LOS_LOOP
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: LOS_LOOP
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1895
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1895
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1895
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: tourism_quarterly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: tourism_quarterly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: tourism_quarterly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: extended_web_traffic_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: extended_web_traffic_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: extended_web_traffic_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: subseasonal_precip
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: subseasonal_precip
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: subseasonal_precip
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2005
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2005
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2005
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2016
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2016
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2016
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: azure_vm_traces_2017
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: azure_vm_traces_2017
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: azure_vm_traces_2017
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: taxi_30min
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: taxi_30min
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: taxi_30min
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: favorita_transactions
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: favorita_transactions
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: favorita_transactions
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: smart
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: smart
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: smart
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: kdd2022
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: kdd2022
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: kdd2022
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: gfc17_load
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: gfc17_load
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: gfc17_load
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cif_2016_12
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cif_2016_12
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cif_2016_12
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2011
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2011
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2011
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: borealis
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: borealis
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: borealis
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: godaddy
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: godaddy
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: godaddy
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1995
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1995
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1995
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: vehicle_trips_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: vehicle_trips_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: vehicle_trips_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: nn5_weekly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: nn5_weekly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: nn5_weekly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2002
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2002
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2002
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: pedestrian_counts
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: pedestrian_counts
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: pedestrian_counts
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2008
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2008
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2008
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: PEMS04
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: PEMS04
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: PEMS04
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1950
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1950
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1950
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: ideal
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: ideal
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: ideal
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1865
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1865
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1865
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: residential_load_power
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: residential_load_power
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: residential_load_power
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1995
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1995
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1995
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1915
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1915
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1915
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1855
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1855
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1855
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: beijing_air_quality
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: beijing_air_quality
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: beijing_air_quality
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2000
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2000
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2000
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1925
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1925
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1925
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: china_air_quality
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: china_air_quality
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: china_air_quality
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: kaggle_web_traffic_weekly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: kaggle_web_traffic_weekly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: kaggle_web_traffic_weekly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cdc_fluview_ilinet
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cdc_fluview_ilinet
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cdc_fluview_ilinet
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1997
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1997
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1997
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1960
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1960
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1960
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2000
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2000
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2000
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2013
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2013
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2013
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: nn5_daily_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: nn5_daily_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: nn5_daily_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: largest_2021
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: largest_2021
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: largest_2021
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1890
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1890
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1890
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: largest_2019
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: largest_2019
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: largest_2019
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: sunspot_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: sunspot_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: sunspot_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: m5
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: m5
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: m5
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: elf
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: elf
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: elf
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1989
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1989
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1989
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1990
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1990
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1990
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cockatoo
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cockatoo
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cockatoo
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2014
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2014
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2014
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1860
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1860
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1860
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1990
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1990
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1990
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: fred_md
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: fred_md
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: fred_md
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1910
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1910
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1910
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_other
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_other
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_other
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2007
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2007
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2007
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1955
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1955
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1955
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: subseasonal
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: subseasonal
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: subseasonal
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: traffic_hourly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: traffic_hourly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: traffic_hourly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_monthly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_monthly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: monash_m3_monthly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2010
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2010
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_2010
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2009
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2009
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2009
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: wind_farms_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: wind_farms_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: wind_farms_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2003
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2003
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2003
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: gfc14_load
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: gfc14_load
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: gfc14_load
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: project_tycho
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: project_tycho
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: project_tycho
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_bear
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_bear
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_bear
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: m1_monthly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: m1_monthly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: m1_monthly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1880
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1880
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1880
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1994
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1994
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1994
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2010
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2010
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2010
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1935
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1935
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1935
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: australian_electricity_demand
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: australian_electricity_demand
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: australian_electricity_demand
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: m1_quarterly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: m1_quarterly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: m1_quarterly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: pdb
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: pdb
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: pdb
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: lcl
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: lcl
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: lcl
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1970
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1970
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1970
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: oikolab_weather
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: oikolab_weather
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: oikolab_weather
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1870
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1870
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1870
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1900
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1900
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1900
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: largest_2017
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: largest_2017
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: largest_2017
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: tourism_monthly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: tourism_monthly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: tourism_monthly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: HZMETRO
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: HZMETRO
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: HZMETRO
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2017
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2017
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2017
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1945
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1945
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1945
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: uber_tlc_daily
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: uber_tlc_daily
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: uber_tlc_daily
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1993
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1993
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1993
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_1999
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_1999
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_1999
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1980
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1980
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: cmip6_1980
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: weather
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: weather
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: weather
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: rideshare_with_missing
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: rideshare_with_missing
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: rideshare_with_missing
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: PEMS08
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: PEMS08
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: PEMS08
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: era5_2004
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: era5_2004
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: era5_2004
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: sceaux
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: sceaux
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: sceaux
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: solar_power
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: solar_power
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: solar_power
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: m1_yearly
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: m1_yearly
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: m1_yearly
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_fox
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_fox
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: bdg-2_fox
+    term: long
+  - _target_: gift_eval.data.Dataset
+    name: Q-TRAFFIC
+    term: short
+  - _target_: gift_eval.data.Dataset
+    name: Q-TRAFFIC
+    term: medium
+  - _target_: gift_eval.data.Dataset
+    name: Q-TRAFFIC
+    term: long
+index: 22
+analyzer:
+  _target_: gift_eval.analysis.Analyzer
+  datasets: ${datasets.datasets}
+  index: ${index}
+name: test

@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+bdg-2_rat/H/short,timesfm_2_0_500m,0.15843927215339645,0.07713821343886983

@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+nn5_daily_with_missing/D/short,timesfm,0.4893851349763408,0.18392849763525332

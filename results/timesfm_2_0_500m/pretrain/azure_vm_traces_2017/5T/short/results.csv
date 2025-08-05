@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+azure_vm_traces_2017/5T/short,timesfm_2_0_500m,0.23557829629843607,0.17180108916238523

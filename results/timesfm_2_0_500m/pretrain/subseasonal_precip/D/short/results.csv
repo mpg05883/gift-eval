@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+subseasonal_precip/D/short,timesfm_2_0_500m,12.11726457268082,0.44029729219746594

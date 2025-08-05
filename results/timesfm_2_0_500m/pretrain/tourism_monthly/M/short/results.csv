@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+tourism_monthly/M/short,timesfm_2_0_500m,0.24328280614520553,0.09870960912740251

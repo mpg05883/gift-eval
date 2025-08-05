@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+favorita_transactions/D/short,timesfm,0.04172198503111633,0.03333139718064829

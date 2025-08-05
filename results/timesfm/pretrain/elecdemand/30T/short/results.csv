@@ -1,0 +1,3 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+elecdemand/30T/short,timesfm,0.08286782160090289,0.06366945937356802
+elecdemand/30T/short,timesfm,0.08286782160090289,0.06366945937356802

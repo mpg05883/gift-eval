@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+uber_tlc_daily/D/short,timesfm,0.23326645800767526,0.09215333391603894

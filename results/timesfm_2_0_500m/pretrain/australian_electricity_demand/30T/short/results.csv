@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+australian_electricity_demand/30T/short,timesfm_2_0_500m,0.0827919357444492,0.059791577545306035

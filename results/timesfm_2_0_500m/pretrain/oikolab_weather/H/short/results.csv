@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+oikolab_weather/H/short,timesfm_2_0_500m,0.5728879832878337,0.0029353092795104435

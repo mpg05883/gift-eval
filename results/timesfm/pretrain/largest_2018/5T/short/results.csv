@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+largest_2018/5T/short,timesfm,0.13671962497146142,0.06849337694502086

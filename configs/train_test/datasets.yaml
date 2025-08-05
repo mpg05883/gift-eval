@@ -1,0 +1,536 @@
+- term: short
+  names:
+  - LOOP_SEATTLE/5T
+  - LOOP_SEATTLE/D
+  - LOOP_SEATTLE/H
+  - M_DENSE/D
+  - M_DENSE/H
+  - SZ_TAXI/15T
+  - SZ_TAXI/H
+  - bitbrains_fast_storage/5T
+  - bitbrains_fast_storage/H
+  - bitbrains_rnd/5T
+  - bitbrains_rnd/H
+  - bizitobs_application
+  - bizitobs_l2c/5T
+  - bizitobs_l2c/H
+  - bizitobs_service
+  - car_parts_with_missing
+  - covid_deaths
+  - electricity/15T
+  - electricity/D
+  - electricity/H
+  - electricity/W
+  - ett1/15T
+  - ett1/D
+  - ett1/H
+  - ett1/W
+  - ett2/15T
+  - ett2/D
+  - ett2/H
+  - ett2/W
+  - hierarchical_sales/D
+  - hierarchical_sales/W
+  - hospital
+  - jena_weather/10T
+  - jena_weather/D
+  - jena_weather/H
+  - kdd_cup_2018_with_missing/D
+  - kdd_cup_2018_with_missing/H
+  - m4_daily
+  - m4_hourly
+  - m4_monthly
+  - m4_quarterly
+  - m4_weekly
+  - m4_yearly
+  - restaurant
+  - saugeenday/D
+  - saugeenday/M
+  - saugeenday/W
+  - solar/10T
+  - solar/D
+  - solar/H
+  - solar/W
+  - temperature_rain_with_missing
+  - us_births/D
+  - us_births/M
+  - us_births/W
+- term: medium
+  names:
+  - LOOP_SEATTLE/5T
+  - LOOP_SEATTLE/H
+  - M_DENSE/H
+  - SZ_TAXI/15T
+  - bitbrains_fast_storage/5T
+  - bitbrains_rnd/5T
+  - bizitobs_application
+  - bizitobs_l2c/5T
+  - bizitobs_l2c/H
+  - bizitobs_service
+  - electricity/15T
+  - electricity/H
+  - ett1/15T
+  - ett1/H
+  - ett2/15T
+  - ett2/H
+  - jena_weather/10T
+  - jena_weather/H
+  - kdd_cup_2018_with_missing/H
+  - solar/10T
+  - solar/H
+- term: long
+  names:
+  - LOOP_SEATTLE/5T
+  - LOOP_SEATTLE/H
+  - M_DENSE/H
+  - SZ_TAXI/15T
+  - bitbrains_fast_storage/5T
+  - bitbrains_rnd/5T
+  - bizitobs_application
+  - bizitobs_l2c/5T
+  - bizitobs_l2c/H
+  - bizitobs_service
+  - electricity/15T
+  - electricity/H
+  - ett1/15T
+  - ett1/H
+  - ett2/15T
+  - ett2/H
+  - jena_weather/10T
+  - jena_weather/H
+  - kdd_cup_2018_with_missing/H
+  - solar/10T
+  - solar/H
+- domain: Transport
+  term: short
+  names:
+  - LOOP_SEATTLE/5T
+  - LOOP_SEATTLE/D
+  - LOOP_SEATTLE/H
+  - M_DENSE/D
+  - M_DENSE/H
+  - SZ_TAXI/15T
+  - SZ_TAXI/H
+- domain: Transport
+  term: medium
+  names:
+  - LOOP_SEATTLE/5T
+  - LOOP_SEATTLE/H
+  - M_DENSE/H
+  - SZ_TAXI/15T
+- domain: Transport
+  term: long
+  names:
+  - LOOP_SEATTLE/5T
+  - LOOP_SEATTLE/H
+  - M_DENSE/H
+  - SZ_TAXI/15T
+- domain: Web/CloudOps
+  term: short
+  names:
+  - bitbrains_fast_storage/5T
+  - bitbrains_fast_storage/H
+  - bitbrains_rnd/5T
+  - bitbrains_rnd/H
+  - bizitobs_application
+  - bizitobs_l2c/5T
+  - bizitobs_l2c/H
+  - bizitobs_service
+- domain: Web/CloudOps
+  term: medium
+  names:
+  - bitbrains_fast_storage/5T
+  - bitbrains_rnd/5T
+  - bizitobs_application
+  - bizitobs_l2c/5T
+  - bizitobs_l2c/H
+  - bizitobs_service
+- domain: Web/CloudOps
+  term: long
+  names:
+  - bitbrains_fast_storage/5T
+  - bitbrains_rnd/5T
+  - bizitobs_application
+  - bizitobs_l2c/5T
+  - bizitobs_l2c/H
+  - bizitobs_service
+- domain: Sales
+  term: short
+  names:
+  - car_parts_with_missing
+  - hierarchical_sales/D
+  - hierarchical_sales/W
+  - restaurant
+- domain: Healthcare
+  term: short
+  names:
+  - covid_deaths
+  - hospital
+  - us_births/D
+  - us_births/M
+  - us_births/W
+- domain: Energy
+  term: short
+  names:
+  - electricity/15T
+  - electricity/D
+  - electricity/H
+  - electricity/W
+  - ett1/15T
+  - ett1/D
+  - ett1/H
+  - ett1/W
+  - ett2/15T
+  - ett2/D
+  - ett2/H
+  - ett2/W
+  - solar/10T
+  - solar/D
+  - solar/H
+  - solar/W
+- domain: Energy
+  term: medium
+  names:
+  - electricity/15T
+  - electricity/H
+  - ett1/15T
+  - ett1/H
+  - ett2/15T
+  - ett2/H
+  - solar/10T
+  - solar/H
+- domain: Energy
+  term: long
+  names:
+  - electricity/15T
+  - electricity/H
+  - ett1/15T
+  - ett1/H
+  - ett2/15T
+  - ett2/H
+  - solar/10T
+  - solar/H
+- domain: Nature
+  term: short
+  names:
+  - jena_weather/10T
+  - jena_weather/D
+  - jena_weather/H
+  - kdd_cup_2018_with_missing/D
+  - kdd_cup_2018_with_missing/H
+  - saugeenday/D
+  - saugeenday/M
+  - saugeenday/W
+  - temperature_rain_with_missing
+- domain: Nature
+  term: medium
+  names:
+  - jena_weather/10T
+  - jena_weather/H
+  - kdd_cup_2018_with_missing/H
+- domain: Nature
+  term: long
+  names:
+  - jena_weather/10T
+  - jena_weather/H
+  - kdd_cup_2018_with_missing/H
+- domain: Econ/Fin
+  term: short
+  names:
+  - m4_daily
+  - m4_hourly
+  - m4_monthly
+  - m4_quarterly
+  - m4_weekly
+  - m4_yearly
+- term: short
+  names:
+  - LOOP_SEATTLE/5T
+- term: short
+  names:
+  - LOOP_SEATTLE/D
+- term: short
+  names:
+  - LOOP_SEATTLE/H
+- term: short
+  names:
+  - M_DENSE/D
+- term: short
+  names:
+  - M_DENSE/H
+- term: short
+  names:
+  - SZ_TAXI/15T
+- term: short
+  names:
+  - SZ_TAXI/H
+- term: short
+  names:
+  - bitbrains_fast_storage/5T
+- term: short
+  names:
+  - bitbrains_fast_storage/H
+- term: short
+  names:
+  - bitbrains_rnd/5T
+- term: short
+  names:
+  - bitbrains_rnd/H
+- term: short
+  names:
+  - bizitobs_application
+- term: short
+  names:
+  - bizitobs_l2c/5T
+- term: short
+  names:
+  - bizitobs_l2c/H
+- term: short
+  names:
+  - bizitobs_service
+- term: short
+  names:
+  - car_parts_with_missing
+- term: short
+  names:
+  - covid_deaths
+- term: short
+  names:
+  - electricity/15T
+- term: short
+  names:
+  - electricity/D
+- term: short
+  names:
+  - electricity/H
+- term: short
+  names:
+  - electricity/W
+- term: short
+  names:
+  - ett1/15T
+- term: short
+  names:
+  - ett1/D
+- term: short
+  names:
+  - ett1/H
+- term: short
+  names:
+  - ett1/W
+- term: short
+  names:
+  - ett2/15T
+- term: short
+  names:
+  - ett2/D
+- term: short
+  names:
+  - ett2/H
+- term: short
+  names:
+  - ett2/W
+- term: short
+  names:
+  - hierarchical_sales/D
+- term: short
+  names:
+  - hierarchical_sales/W
+- term: short
+  names:
+  - hospital
+- term: short
+  names:
+  - jena_weather/10T
+- term: short
+  names:
+  - jena_weather/D
+- term: short
+  names:
+  - jena_weather/H
+- term: short
+  names:
+  - kdd_cup_2018_with_missing/D
+- term: short
+  names:
+  - kdd_cup_2018_with_missing/H
+- term: short
+  names:
+  - m4_daily
+- term: short
+  names:
+  - m4_hourly
+- term: short
+  names:
+  - m4_monthly
+- term: short
+  names:
+  - m4_quarterly
+- term: short
+  names:
+  - m4_weekly
+- term: short
+  names:
+  - m4_yearly
+- term: short
+  names:
+  - restaurant
+- term: short
+  names:
+  - saugeenday/D
+- term: short
+  names:
+  - saugeenday/M
+- term: short
+  names:
+  - saugeenday/W
+- term: short
+  names:
+  - solar/10T
+- term: short
+  names:
+  - solar/D
+- term: short
+  names:
+  - solar/H
+- term: short
+  names:
+  - solar/W
+- term: short
+  names:
+  - temperature_rain_with_missing
+- term: short
+  names:
+  - us_births/D
+- term: short
+  names:
+  - us_births/M
+- term: short
+  names:
+  - us_births/W
+- term: medium
+  names:
+  - LOOP_SEATTLE/5T
+- term: medium
+  names:
+  - LOOP_SEATTLE/H
+- term: medium
+  names:
+  - M_DENSE/H
+- term: medium
+  names:
+  - SZ_TAXI/15T
+- term: medium
+  names:
+  - bitbrains_fast_storage/5T
+- term: medium
+  names:
+  - bitbrains_rnd/5T
+- term: medium
+  names:
+  - bizitobs_application
+- term: medium
+  names:
+  - bizitobs_l2c/5T
+- term: medium
+  names:
+  - bizitobs_l2c/H
+- term: medium
+  names:
+  - bizitobs_service
+- term: medium
+  names:
+  - electricity/15T
+- term: medium
+  names:
+  - electricity/H
+- term: medium
+  names:
+  - ett1/15T
+- term: medium
+  names:
+  - ett1/H
+- term: medium
+  names:
+  - ett2/15T
+- term: medium
+  names:
+  - ett2/H
+- term: medium
+  names:
+  - jena_weather/10T
+- term: medium
+  names:
+  - jena_weather/H
+- term: medium
+  names:
+  - kdd_cup_2018_with_missing/H
+- term: medium
+  names:
+  - solar/10T
+- term: medium
+  names:
+  - solar/H
+- term: long
+  names:
+  - LOOP_SEATTLE/5T
+- term: long
+  names:
+  - LOOP_SEATTLE/H
+- term: long
+  names:
+  - M_DENSE/H
+- term: long
+  names:
+  - SZ_TAXI/15T
+- term: long
+  names:
+  - bitbrains_fast_storage/5T
+- term: long
+  names:
+  - bitbrains_rnd/5T
+- term: long
+  names:
+  - bizitobs_application
+- term: long
+  names:
+  - bizitobs_l2c/5T
+- term: long
+  names:
+  - bizitobs_l2c/H
+- term: long
+  names:
+  - bizitobs_service
+- term: long
+  names:
+  - electricity/15T
+- term: long
+  names:
+  - electricity/H
+- term: long
+  names:
+  - ett1/15T
+- term: long
+  names:
+  - ett1/H
+- term: long
+  names:
+  - ett2/15T
+- term: long
+  names:
+  - ett2/H
+- term: long
+  names:
+  - jena_weather/10T
+- term: long
+  names:
+  - jena_weather/H
+- term: long
+  names:
+  - kdd_cup_2018_with_missing/H
+- term: long
+  names:
+  - solar/10T
+- term: long
+  names:
+  - solar/H

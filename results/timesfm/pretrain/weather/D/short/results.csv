@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+weather/D/short,timesfm,0.3933425322536006,0.1477831941653474

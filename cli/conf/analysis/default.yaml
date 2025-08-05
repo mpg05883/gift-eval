@@ -1,6 +1,8 @@
 defaults:
-  - datasets: all_datasets
+  - datasets: train_test
   - _self_
+
+index: 0
 
 hydra:
   run:
@@ -8,4 +10,5 @@ hydra:
 analyzer:
   _target_: gift_eval.analysis.Analyzer
   datasets: ${datasets.datasets}
+  index: ${index}
 name: "test"

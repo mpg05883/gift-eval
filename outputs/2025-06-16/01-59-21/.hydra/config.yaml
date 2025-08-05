@@ -1,0 +1,5 @@
+name: bitbrains_fast_storage/5T
+datasets:
+- _target_: gift_eval.data.Dataset
+  name: bitbrains_fast_storage/5T
+  term: long

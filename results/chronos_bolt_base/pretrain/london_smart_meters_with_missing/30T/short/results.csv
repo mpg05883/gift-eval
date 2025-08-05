@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MSE[mean],eval_metrics/MSE[0.5],eval_metrics/MAE[0.5],eval_metrics/MASE[0.5],eval_metrics/MAPE[0.5],eval_metrics/sMAPE[0.5],eval_metrics/MSIS,eval_metrics/RMSE[mean],eval_metrics/NRMSE[mean],eval_metrics/ND[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+london_smart_meters_with_missing/30T/short,chronos_bolt_base,0.042680622217795706,0.042680622217795706,0.0924578837589339,0.7534198169500261,0.5774268764959486,0.4378633026646699,7.0737221824347145,0.20659289004657375,0.9067200157696889,0.4057904112819828,0.3299621300011288

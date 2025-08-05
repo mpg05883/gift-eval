@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+vehicle_trips_with_missing/D/short,timesfm,0.42228212556574296,0.1483879980234168

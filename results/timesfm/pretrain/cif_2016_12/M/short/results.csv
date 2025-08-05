@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+cif_2016_12/M/short,timesfm,0.0323925274931423,0.012034039999266853

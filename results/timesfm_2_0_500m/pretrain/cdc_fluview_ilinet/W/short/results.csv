@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+cdc_fluview_ilinet/W/short,timesfm_2_0_500m,0.18046324629014418,0.042152057738182876

@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+spain/H/short,timesfm_2_0_500m,0.06777411010612404,0.05343990161373255

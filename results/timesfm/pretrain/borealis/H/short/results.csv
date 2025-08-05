@@ -1,0 +1,2 @@
+dataset,model,eval_metrics/MAPE[0.5],eval_metrics/mean_weighted_sum_quantile_loss
+borealis/H/short,timesfm,0.27026839429643,0.25985681803268584
