@@ -257,3 +257,6 @@ logs/
 .vscode/
 
 2025-06-28_transaction_download.csv
+
+tabpfn-time-series/
+toto/
