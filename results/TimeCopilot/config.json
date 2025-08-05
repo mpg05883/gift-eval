@@ -1,7 +1,8 @@
 {
     "model": "TimeCopilot",
-    "model_type": "pretrained",
+    "model_type": "agentic",
     "model_dtype": "float32",
-    "model_link": "https://github.com/AzulGarza/TimeCopilot"
+    "model_link": "https://github.com/AzulGarza/TimeCopilot",
+    "testdata_leakage": "Yes"
 }
 
