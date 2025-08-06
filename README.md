@@ -125,13 +125,44 @@ Submit your results to the leaderboard by creating a pull request that adds your
 ```json
 {
     "model": "YOUR_MODEL_NAME",
-    "model_type": "one of statistical, deep-learning, agentic or pretrained",
+    "model_type": "one of statistical, deep-learning, agentic, pretrained or fine-tuned",
     "model_dtype": "float32, etc."
     "model_link": "To your HF model link, e.g., https://huggingface.co/amazon/chronos-t5-small",
     "org": "YOUR_ORG_NAME",
     "testdata_leakage": "one of Yes or No" 
 }
 ```
+
+#### Field Descriptions
+
+- **`model`**:  
+  A short identifier for your model (e.g., `my_model_v1`).
+
+- **`model_type`**:  
+  Choose one of the following:
+  - `statistical`: Traditional time series models such as ARIMA, ETS, etc.  
+  - `deep-learning`: Neural network models trained from scratch.  
+  - `agentic`: Multi-step systems that use agents or LLMs to reason, generate or select forecasts.  
+  - `pretrained`: Foundation models trained once on large-scale data and applied as-is to each dataset.  
+  - `fine-tuned`: Models that begin from a pretrained base but are further adapted (fine-tuned) individually on each dataset.
+  
+  > **Note:** The key difference between `pretrained` and `fine-tuned` is that fine-tuned models are adapted separately to each dataset using supervision, whereas pretrained models are used without per-dataset tuning.
+
+- **`model_dtype`**:  
+  The floating-point precision used in inference or training (e.g., `float32`, `bfloat16`, etc.).
+
+- **`model_link`**:  
+  A public link to your model (ideally on Hugging Face or another accessible hub).
+
+- **`org`**:  
+  The organization or team submitting the model.
+
+- **`testdata_leakage`**:  
+  Indicates whether the model has been trained on data that overlaps with our test datasets.
+
+  > **Important:** We only consider leakage into the **test** split of the GIFT-Eval benchmark.  
+  > If your training data includes any dataset that is part of our test corpus it must be labeled as `Yes`.  
+  > Models trained solely on our provided [training split](https://huggingface.co/datasets/Salesforce/GiftEval) do **not** count as leaking, since our train splits are carefully constructed using earlier horizons that do not overlap with the test set.
 
 The final `all_results.csv` file should contain `98` lines (one for each dataset configuration) and `15` columns: `4` for dataset, model, domain and num_variates and `11` for the evaluation metrics.
 
