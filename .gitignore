@@ -260,3 +260,6 @@ logs/
 
 tabpfn-time-series/
 toto/
+datasets
+checkpoints
+results_hf_0/

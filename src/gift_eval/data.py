@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import math
-import os
 from enum import Enum
 from functools import cached_property
 from pathlib import Path
@@ -112,7 +111,7 @@ class Dataset:
         storage_env_var: str = "GIFT_EVAL",
     ):
         load_dotenv()
-        storage_path = Path(os.getenv(storage_env_var))
+        storage_path = Path("./datasets/train_test")
         self.hf_dataset = datasets.load_from_disk(str(storage_path / name)).with_format(
             "numpy"
         )
