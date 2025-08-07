@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import List, Optional
 
 import numpy as np
+import pandas as pd
 import torch
-import wandb
 from dotenv import load_dotenv
 from einops import rearrange
 from gluonts.ev.metrics import (
@@ -31,6 +31,7 @@ from gluonts.time_feature import get_seasonality
 from pytorch_lightning import seed_everything
 from tqdm.auto import tqdm
 
+import wandb
 from checkpoints.YingLong_300m.model import GPT
 from checkpoints.YingLong_300m.model_config import YingLongConfig
 from src.gift_eval.data import Dataset
@@ -222,12 +223,31 @@ def get_dataset_config(dataset: Dataset) -> str:
     return f"{cleaned_name}/{cleaned_freq}/{dataset.term.value}"
 
 
+def get_dataset_key(ds_name: str) -> str:
+    pretty_names = {
+        "saugeenday": "saugeen",
+        "temperature_rain_with_missing": "temperature_rain",
+        "kdd_cup_2018_with_missing": "kdd_cup_2018",
+        "car_parts_with_missing": "car_parts",
+    }
+    ds_key = name.split("/")[0]
+    if "/" in ds_name:
+        ds_key, _ = ds_name.split("/")
+        ds_key = ds_key.lower()
+        ds_key = pretty_names.get(ds_key, ds_key)
+    else:
+        ds_key = ds_name.lower()
+        ds_key = pretty_names.get(ds_key, ds_key)
+
+    return ds_key
+
+
 def run_task(
     batch_size: int,
     model,
     future_token: int,
-    short_tasks: List[str],
-    long_tasks: List[str],
+    name: str,
+    term: str,
     output_dir: str,
     dataset_properties_map: dict,
     model_name: str,
@@ -258,15 +278,6 @@ def run_task(
 
     csv_file_path = os.path.join(model_output_dir, "all_results.csv")
 
-    # 美化名称映射
-    pretty_names = {
-        "saugeenday": "saugeen",
-        "temperature_rain_with_missing": "temperature_rain",
-        "kdd_cup_2018_with_missing": "kdd_cup_2018",
-        "car_parts_with_missing": "car_parts",
-    }
-
-    # 如果 CSV 文件不存在，创建并写入表头
     if not os.path.exists(csv_file_path):
         with open(csv_file_path, "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
@@ -290,107 +301,91 @@ def run_task(
                 ]
             )
 
-    # 合并短期任务和长期任务
-    all_datasets = list(set(short_tasks + long_tasks))
+    to_univariate = (
+        False
+        if Dataset(name=name, term=term, to_univariate=False).target_dim == 1
+        else True
+    )
 
-    for ds_num, ds_name in enumerate(all_datasets):
-        ds_key = ds_name.split("/")[0]
-        print(f"Processing dataset: {ds_name} ({ds_num + 1} of {len(all_datasets)})")
-        terms = ["short", "medium", "long"]
-        for term in terms:
-            if (term in ["medium", "long"]) and (ds_name not in long_tasks):
-                continue
+    dataset = Dataset(name, term=term, to_univariate=to_univariate)
 
-            if "/" in ds_name:
-                ds_key, ds_freq = ds_name.split("/")
-                ds_key = ds_key.lower()
-                ds_key = pretty_names.get(ds_key, ds_key)
-            else:
-                ds_key = ds_name.lower()
-                ds_key = pretty_names.get(ds_key, ds_key)
-                ds_freq = dataset_properties_map[ds_key]["frequency"]
-            ds_config = f"{ds_key}/{ds_freq}/{term}"
-            print(ds_config)
-            to_univariate = (
-                False
-                if Dataset(name=ds_name, term=term, to_univariate=False).target_dim == 1
-                else True
-            )
-            dataset = Dataset(name=ds_name, term=term, to_univariate=to_univariate)
-            season_length = get_seasonality(dataset.freq)
-            print(f"Dataset size: {len(dataset.test_data)}")
-            predictor = YingLongPredictor(
-                model=model,
-                prediction_length=dataset.prediction_length,
-                future_token=future_token,
-            )
+    ds_config = get_dataset_config(dataset)
+    ds_key = get_dataset_key(name)
 
-            forecasts = list(predictor.predict(dataset.test_data.input))
+    season_length = get_seasonality(dataset.freq)
+    print(f"Dataset size: {len(dataset.test_data)}")
+    predictor = YingLongPredictor(
+        model=model,
+        prediction_length=dataset.prediction_length,
+        future_token=future_token,
+    )
 
-            dataset_config = get_dataset_config(dataset)
+    forecasts = list(predictor.predict(dataset.test_data.input))
 
-            parts = [
-                "results_hf_0",
-                model_name,
-                "forecasts",
-                dataset_config,
+    dataset_config = get_dataset_config(dataset)
+
+    parts = [
+        "results_hf_0",
+        model_name,
+        "forecasts",
+        dataset_config,
+    ]
+    forecasts_path = (Path(*parts) / "yinglong_300m").with_suffix(".pkl")
+    forecasts_path.parent.mkdir(parents=True, exist_ok=True)
+
+    forecast_dict = serialize_forecasts(forecasts)
+
+    with open(forecasts_path, "wb") as f:
+        pickle.dump(forecast_dict, f)
+
+    forecast_artifact = wandb.Artifact(
+        name=f"{model_name}_forecasts",
+        type="forecast",
+    )
+    forecast_artifact.add_file(forecasts_path)
+    wandb.log_artifact(forecast_artifact)
+
+    res = evaluate_forecasts(
+        forecasts=forecasts,
+        test_data=dataset.test_data,
+        metrics=metrics,
+        batch_size=batch_size,
+        axis=None,
+        mask_invalid_label=True,
+        allow_nan_forecast=False,
+        seasonality=season_length,
+    )
+
+    table.add_data(
+        model_name,
+        res["MSE[mean]"][0].item(),
+        forecast_artifact.name,  # Store reference to forecast artifact
+    )
+
+    # 将结果追加到 CSV 文件
+    with open(csv_file_path, "a", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(
+            [
+                ds_config,
+                model_name_suffix,
+                res["MSE[mean]"][0],
+                res["MSE[0.5]"][0],
+                res["MAE[0.5]"][0],
+                res["MASE[0.5]"][0],
+                res["MAPE[0.5]"][0],
+                res["sMAPE[0.5]"][0],
+                res["MSIS"][0],
+                res["RMSE[mean]"][0],
+                res["NRMSE[mean]"][0],
+                res["ND[0.5]"][0],
+                res["mean_weighted_sum_quantile_loss"][0],
+                dataset_properties_map[ds_key]["domain"],
+                dataset_properties_map[ds_key]["num_variates"],
             ]
-            forecasts_path = (Path(*parts) / "yinglong_300m").with_suffix(".pkl")
-            forecasts_path.parent.mkdir(parents=True, exist_ok=True)
+        )
 
-            forecast_dict = serialize_forecasts(forecasts)
-
-            with open(forecasts_path, "wb") as f:
-                pickle.dump(forecast_dict, f)
-
-            forecast_artifact = wandb.Artifact(
-                name=f"{model_name}_forecasts",
-                type="forecast",
-            )
-            forecast_artifact.add_file(forecasts_path)
-            wandb.log_artifact(forecast_artifact)
-
-            res = evaluate_forecasts(
-                forecasts=forecasts,
-                test_data=dataset.test_data,
-                metrics=metrics,
-                batch_size=batch_size,
-                axis=None,
-                mask_invalid_label=True,
-                allow_nan_forecast=False,
-                seasonality=season_length,
-            )
-
-            table.add_data(
-                model_name,
-                res["MSE[mean]"][0].item(),
-                forecast_artifact.name,  # Store reference to forecast artifact
-            )
-
-            # 将结果追加到 CSV 文件
-            with open(csv_file_path, "a", newline="") as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow(
-                    [
-                        ds_config,
-                        model_name_suffix,
-                        res["MSE[mean]"][0],
-                        res["MSE[0.5]"][0],
-                        res["MAE[0.5]"][0],
-                        res["MASE[0.5]"][0],
-                        res["MAPE[0.5]"][0],
-                        res["sMAPE[0.5]"][0],
-                        res["MSIS"][0],
-                        res["RMSE[mean]"][0],
-                        res["NRMSE[mean]"][0],
-                        res["ND[0.5]"][0],
-                        res["mean_weighted_sum_quantile_loss"][0],
-                        dataset_properties_map[ds_key]["domain"],
-                        dataset_properties_map[ds_key]["num_variates"],
-                    ]
-                )
-
-            print(f"Results for {ds_name} have been written to {csv_file_path}")
+    print(f"Results for {name} have been written to {csv_file_path}")
 
 
 load_dotenv()
@@ -426,92 +421,98 @@ run = wandb.init(
 
 table = wandb.Table(columns=["model", "val_loss", "forecast_artifact"])
 
-tasks = [
-    {
-        "batch_size": 1024,
-        "short_tasks": [
-            # "temperature_rain_with_missing",
-            # "m4_yearly",
-            # "electricity/D",
-            # "restaurant",
-            # "kdd_cup_2018_with_missing/D",
-            # "covid_deaths",
-            # "M_DENSE/D",
-            # "jena_weather/D",
-            # "saugeenday/D",
-            # "saugeenday/W",
-            # "m4_monthly",
-        ],
-        "long_tasks": [
-            # "LOOP_SEATTLE/5T",
-            # "kdd_cup_2018_with_missing/H",
-            # "SZ_TAXI/15T",
-            # "ett1/15T",
-            # "bizitobs_l2c/5T",
-            # "bizitobs_l2c/H",
-        ],
-    },
-    {
-        "batch_size": 1024,
-        "short_tasks": [
-            # "bitbrains_fast_storage/H",
-            # "m4_daily",
-            # "electricity/W",
-            # "hierarchical_sales/W",
-            # "m4_weekly",
-            # "ett2/W",
-            # "us_births/W",
-            # "us_births/M",
-        ],
-        "long_tasks": [
-            # "bitbrains_rnd/5T",
-            # "electricity/H",
-            # "bizitobs_service",
-            # "jena_weather/H",
-            # "ett2/15T",
-        ],
-    },
-    {
-        "batch_size": 1024,
-        "short_tasks": [
-            # "hospital",
-            # "LOOP_SEATTLE/D",
-            "m4_hourly",
-            # "ett1/D",
-            # "ett2/D",
-            # "ett1/W",
-            # "saugeenday/M",
-        ],
-        "long_tasks": [
-            # "bitbrains_fast_storage/5T",
-            # "solar/10T",
-            # "M_DENSE/H",
-            # "ett1/H",
-            # "bizitobs_application",
-        ],
-    },
-    {
-        "batch_size": 32,
-        "short_tasks": [
-            # "car_parts_with_missing",
-        ],
-        "long_tasks": [],
-    },
-]
+# tasks = [
+#     {
+#         "batch_size": 1024,
+#         "short_tasks": [
+#             "temperature_rain_with_missing",
+#             "m4_yearly",
+#             "electricity/D",
+#             "restaurant",
+#             "kdd_cup_2018_with_missing/D",
+#             "covid_deaths",
+#             "M_DENSE/D",
+#             "jena_weather/D",
+#             "saugeenday/D",
+#             "saugeenday/W",
+#             "m4_monthly",
+#         ],
+#         "long_tasks": [
+#             "LOOP_SEATTLE/5T",
+#             "kdd_cup_2018_with_missing/H",
+#             "SZ_TAXI/15T",
+#             "ett1/15T",
+#             "bizitobs_l2c/5T",
+#             "bizitobs_l2c/H",
+#         ],
+#     },
+#     {
+#         "batch_size": 1024,
+#         "short_tasks": [
+#             "bitbrains_fast_storage/H",
+#             "m4_daily",
+#             "electricity/W",
+#             "hierarchical_sales/W",
+#             "m4_weekly",
+#             "ett2/W",
+#             "us_births/W",
+#             "us_births/M",
+#         ],
+#         "long_tasks": [
+#             "bitbrains_rnd/5T",
+#             "electricity/H",
+#             "bizitobs_service",
+#             "jena_weather/H",
+#             "ett2/15T",
+#         ],
+#     },
+#     {
+#         "batch_size": 1024,
+#         "short_tasks": [
+#             "hospital",
+#             "LOOP_SEATTLE/D",
+#             "m4_hourly",
+#             "ett1/D",
+#             "ett2/D",
+#             "ett1/W",
+#             "saugeenday/M",
+#         ],
+#         "long_tasks": [
+#             "bitbrains_fast_storage/5T",
+#             "solar/10T",
+#             "M_DENSE/H",
+#             "ett1/H",
+#             "bizitobs_application",
+#         ],
+#     },
+#     {
+#         "batch_size": 32,
+#         "short_tasks": [
+#             "car_parts_with_missing",
+#         ],
+#         "long_tasks": [],
+#     },
+# ]
+
+task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
+metadata_path = Path("meta") / "train_test" / "metadata"
+df = pd.read_csv(metadata_path.with_suffix(".csv"), usecols=["name", "term"])
+name = df.iloc[task_id]["name"]
+term = df.iloc[task_id]["term"]
+
 
 # 依次执行所有任务
-for idx, task in enumerate(tasks, 1):
-    print(f"\n=== Running Task {idx} ===")
-    run_task(
-        batch_size=task["batch_size"],
-        model=model,
-        future_token=future_token,
-        short_tasks=task["short_tasks"],
-        long_tasks=task["long_tasks"],
-        output_dir=output_dir,
-        dataset_properties_map=dataset_properties_map,
-        model_name=model_name,
-    )
+print(f"\n=== Running Task {task_id} on {name} ({term}-term) ===")
+run_task(
+    batch_size=32 if name == "car_parts_with_missing" else 1024,
+    model=model,
+    future_token=future_token,
+    name=name,
+    term=term,
+    output_dir=output_dir,
+    dataset_properties_map=dataset_properties_map,
+    model_name=model_name,
+)
 
 
 table_artifact = wandb.Artifact(

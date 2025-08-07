@@ -18,19 +18,19 @@ log_error() {
     echo "[${timestamp}] $*" >&2
 }
 
-# Creates a log directory for a given job name, array ID, and log type
-make_log_dir() {
-    local job_name="$1"
-    local array_id="$2"
-    local log_type="$3"
-    local dir_path="logs/${job_name}/${array_id}/${log_type}"
-    mkdir -p "$dir_path"
-    echo "$dir_path"
+# Deletes Lightning logs from previous runs
+delete_lightning_logs() {
+    if [ -d "lightning_logs" ]; then
+        rm -rf lightning_logs
+    fi
+}
+
+activate_tempo_env() {
+    source /sw/external/python/anaconda3/etc/profile.d/conda.sh
+    conda activate tempo
 }
 
 # Logs the following slurm job information:
-# - `num_nodes`: Number of nodes (machines) used for the job.
-# - `devices`: Number of devices (e.g. GPUs) used per each node.
 # - `SLURM_JOB_NAME`: The job's name.
 # - `SLURM_JOB_ID`: The unique job ID assigned by SLURM if the job is part of an
 #   array. E.g. 123456_0 for task 0, 123456_1 for task 1, etc.
@@ -38,36 +38,35 @@ make_log_dir() {
 #   for all tasks in the array. E.g. 123456.
 # - `SLURM_ARRAY_TASK_ID`: The specific task index within the array job (if
 #   applicable). E.g. 0 for task 0, 1 for task 1, etc.
+# - `SLURM_GPUS_ON_NODE`: Number of devices (e.g. GPUs) used per each node.
+# - `SLURM_JOB_NUM_NODES`: Number of nodes (i.e. machines) used for the job.
 log_job_info() {
-    local num_nodes="${1:-N/A}"
-    local devices="${2:-N/A}"
-
     # Check if SLURM variables are set. Otherwise, use "N/A".
     {
         echo -e "Field\t|\tValue"
         echo -e "-----\t|\t-----"
-        echo -e "Job Name\t|\t${SLURM_JOB_NAME:-N/A}"
+        echo -e "Job name\t|\t${SLURM_JOB_NAME:-N/A}"
         echo -e "Job ID\t|\t${SLURM_JOB_ID:-N/A}"
-        echo -e "Array Job ID\t|\t${SLURM_ARRAY_JOB_ID:-N/A}"
-        echo -e "Array Task ID\t|\t${SLURM_ARRAY_TASK_ID:-N/A}"
-        echo -e "Number of Nodes\t|\t$num_nodes"
-        echo -e "Devices per Node\t|\t$devices"
+        echo -e "Array job ID\t|\t${SLURM_ARRAY_JOB_ID:-N/A}"
+        echo -e "Array task ID\t|\t${SLURM_ARRAY_TASK_ID:-N/A}"
+        echo -e "Devices per node\t|\t${SLURM_GPUS_ON_NODE:-N/A}"
+        echo -e "Number of nodes\t|\t${SLURM_JOB_NUM_NODES:-N/A}"
     } | column -t -s $'\t'
 }
 
 # Returns a "done" directory path for marking job completion and ensures the
 # directory exists using `mkdir -p`.
-# 
+#
 # The directory path depends on whether the job is part of a SLURM array:
 # - If part of an array, the path is:
-#     ./logs/<SLURM_JOB_NAME>/done/<SLURM_ARRAY_JOB_ID>
+#     ./ouput/logs/<SLURM_JOB_NAME>/done/<SLURM_ARRAY_JOB_ID>
 # - Else, the path is:
-#     ./logs/<SLURM_JOB_NAME>/done
+#     ./ouput/logs/<SLURM_JOB_NAME>/done
 #
 # - `SLURM_JOB_NAME`: The name of the SLURM job.
 # - `SLURM_ARRAY_JOB_ID`: The array job ID, if applicable.
 get_done_dir() {
-    local base_dir="./logs/${SLURM_JOB_NAME}/done"
+    local base_dir="./output/logs/${SLURM_JOB_NAME}/done"
 
     if [[ -n "$SLURM_ARRAY_JOB_ID" ]]; then
         done_dir="${base_dir}/${SLURM_ARRAY_JOB_ID}"
@@ -109,4 +108,36 @@ get_done_file() {
     local done_path="${done_dir}/${done_file}"
     touch "$done_path"
     echo "$done_path"
+}
+
+# Sets common W&B environment variables that'll remain the same over multiple
+# runs like:
+# - `WANDB_CACHE_DIR`: Directory for W&B cache.
+# - `WANDB_DATA_DIR`: Directory for W&B data.
+# - `WANDB_ARTIFACTS_DIR`: Directory where W&B artifacts are downloaded.
+# - `WANDB_JOB_NAME`: Name of the SLURM job.
+# - `WANDB_JOB_TYPE`: Type of the SLURM job.
+# - `WANDB_SHOW_RUN`: Whether to show the run in W&B UI.
+# - `WANDB_TAGS`: Tags for the W&B run, including SLURM job ID and name.
+set_common_wandb_env_vars() {
+    CACHE_DIR=./output/wandb/cache
+    CONFIG_DIR=./output/wandb/config
+    DATA_DIR=./output/wandb/data
+    ARTIFACTS_DIR=./downloads/wandb
+    WANDB_DIR=./output/wandb
+    mkdir -p "$WANDB_DIR"
+    mkdir -p "$DATA_DIR"
+    mkdir -p "$ARTIFACTS_DIR"
+
+    export WANDB_CACHE_DIR="$CACHE_DIR"
+    export WANDB_CONFIG_DIR="$CONFIG_DIR"
+    export WANDB_DATA_DIR="$DATA_DIR"
+    export WANDB_ARTIFACTS_DIR="$ARTIFACTS_DIR"
+    export WANDB_DIR="$WANDB_DIR"
+    export WANDB_ENTITY="mpgee-usc"
+    export WANDB_JOB_NAME="$SLURM_JOB_NAME"
+    export WANDB_JOB_TYPE="$SLURM_JOB_NAME"
+    export WANDB_PROJECT="TEMPO"
+    export WANDB_SHOW_RUN=true
+    export WANDB_TAGS="slurm_job_id=${SLURM_JOB_ID},slurm_job_name=${SLURM_JOB_NAME}"
 }
