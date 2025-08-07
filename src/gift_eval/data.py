@@ -36,32 +36,55 @@ TEST_SPLIT = 0.1
 MAX_WINDOW = 20
 
 M4_PRED_LENGTH_MAP = {
-    "A": 6,
-    "Q": 8,
-    "M": 18,
-    "W": 13,
-    "D": 14,
-    "H": 48,
+    "H": 48,  # Hourly
+    "h": 48,
+    "D": 14,  # Daily
+    "d": 14,
+    "W": 13,  # Weekly
+    "w": 13,
+    "M": 18,  # Monthly
+    "m": 18,
+    "ME": 18,  # End of month
+    "Q": 8,  # Quarterly
+    "q": 8,
+    "QE": 8,  # End of quarter
+    "A": 6,  # Annualy/yearly
+    "y": 6,
+    "YE": 6,  # End of year
 }
 
 PRED_LENGTH_MAP = {
-    "M": 12,
-    "W": 8,
-    "D": 30,
-    "H": 48,
-    "T": 48,
-    "S": 60,
+    "S": 60,  # Seconds
+    "s": 60,
+    "T": 48,  # Minutely
+    "min": 48,
+    "H": 48,  # Hourly
+    "h": 48,
+    "D": 30,  # Daily
+    "d": 30,
+    "W": 8,  # Weekly
+    "w": 8,
+    "M": 12,  # Monthly
+    "m": 12,
+    "ME": 12,
+    "Q": 8,  # Quarterly
+    "q": 8,
+    "QE": 8,
+    "y": 6,  # Annualy/yearly
+    "A": 6,
 }
 
+# Prediction lengths from TFB: https://arxiv.org/abs/2403.20150
 TFB_PRED_LENGTH_MAP = {
-    "A": 6,
-    "H": 48,
-    "Q": 8,
-    "D": 14,
-    "M": 18,
-    "W": 13,
     "U": 8,
-    "T": 8,
+    "T": 8,  # Minutely
+    "H": 48,  # Hourly
+    "h": 48,
+    "D": 14,  # Daily
+    "W": 13,  # Weekly
+    "M": 18,  # Monthly
+    "Q": 8,  # Quarterly
+    "A": 6,  # Annualy/yearly
 }
 
 

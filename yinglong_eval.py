@@ -1,19 +1,15 @@
-# Forecasting with YingLong Model
-
-## 1. Setup and Imports
-
-# First, we'll install any necessary packages and import all required libraries.
-# Install required packages (uncomment if not already installed)
-
 import csv
 import json
 import logging
 import os
+import pickle
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Optional
 
 import numpy as np
 import torch
+import wandb
 from dotenv import load_dotenv
 from einops import rearrange
 from gluonts.ev.metrics import (
@@ -29,17 +25,20 @@ from gluonts.ev.metrics import (
     MeanWeightedSumQuantileLoss,
 )
 from gluonts.itertools import batcher
-from gluonts.model import Forecast, evaluate_model
+from gluonts.model import Forecast, evaluate_forecasts
 from gluonts.model.forecast import SampleForecast
 from gluonts.time_feature import get_seasonality
+from pytorch_lightning import seed_everything
 from tqdm.auto import tqdm
 
 from checkpoints.YingLong_300m.model import GPT
 from checkpoints.YingLong_300m.model_config import YingLongConfig
 from src.gift_eval.data import Dataset
+from utils.serde import serialize_forecasts
+
+seed_everything(42, workers=True)
 
 
-# 定义日志过滤器以抑制特定的警告信息
 class WarningFilter(logging.Filter):
     def __init__(self, text_to_filter):
         super().__init__()
@@ -55,7 +54,6 @@ gts_logger.addFilter(
 )
 
 
-# 定义模型配置
 @dataclass
 class ModelConfig:
     quantile_levels: Optional[List[float]] = None
@@ -82,7 +80,6 @@ class ModelConfig:
         self.intervals = sorted(intervals)
 
 
-# 定义 YingLongPredictor 类
 class YingLongPredictor:
     def __init__(
         self,
@@ -211,8 +208,18 @@ class YingLongPredictor:
         return forecasts
 
 
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
-gpu_device = device
+def get_dataset_config(dataset: Dataset) -> str:
+    name = dataset.name
+    pretty_names = {
+        "saugeenday": "saugeen",
+        "temperature_rain_with_missing": "temperature_rain",
+        "kdd_cup_2018_with_missing": "kdd_cup_2018",
+        "car_parts_with_missing": "car_parts",
+    }
+    name = name.split("/")[0] if "/" in name else name
+    cleaned_name = pretty_names.get(name.lower(), name.lower())
+    cleaned_freq = dataset.freq.split("-")[0]
+    return f"{cleaned_name}/{cleaned_freq}/{dataset.term.value}"
 
 
 def run_task(
@@ -225,7 +232,6 @@ def run_task(
     dataset_properties_map: dict,
     model_name: str,
 ):
-    # 实例化评估指标
     metrics = [
         MSE(forecast_type="mean"),
         MSE(forecast_type=0.5),
@@ -242,17 +248,14 @@ def run_task(
         ),
     ]
 
-    # 将模型移动到指定设备并设为评估模式
     model = model.to(device).bfloat16()
     model.eval()
 
-    # 构建模型输出目录
-    model_name_suffix = f"{model_name.split('/')[-1]}-{future_token}-4096"
+    model_name_suffix = "yinglong_300m"
     model_output_dir = os.path.join(output_dir, model_name_suffix)
     if not os.path.isdir(model_output_dir):
         os.makedirs(model_output_dir, exist_ok=True)
 
-    # 定义 CSV 文件路径
     csv_file_path = os.path.join(model_output_dir, "all_results.csv")
 
     # 美化名称映射
@@ -321,9 +324,34 @@ def run_task(
                 prediction_length=dataset.prediction_length,
                 future_token=future_token,
             )
-            # 执行模型评估
-            res = evaluate_model(
-                predictor,
+
+            forecasts = list(predictor.predict(dataset.test_data.input))
+
+            dataset_config = get_dataset_config(dataset)
+
+            parts = [
+                "results_hf_0",
+                model_name,
+                "forecasts",
+                dataset_config,
+            ]
+            forecasts_path = (Path(*parts) / "yinglong_300m").with_suffix(".pkl")
+            forecasts_path.parent.mkdir(parents=True, exist_ok=True)
+
+            forecast_dict = serialize_forecasts(forecasts)
+
+            with open(forecasts_path, "wb") as f:
+                pickle.dump(forecast_dict, f)
+
+            forecast_artifact = wandb.Artifact(
+                name=f"{model_name}_forecasts",
+                type="forecast",
+            )
+            forecast_artifact.add_file(forecasts_path)
+            wandb.log_artifact(forecast_artifact)
+
+            res = evaluate_forecasts(
+                forecasts=forecasts,
                 test_data=dataset.test_data,
                 metrics=metrics,
                 batch_size=batch_size,
@@ -331,6 +359,12 @@ def run_task(
                 mask_invalid_label=True,
                 allow_nan_forecast=False,
                 seasonality=season_length,
+            )
+
+            table.add_data(
+                model_name,
+                res["MSE[mean]"][0].item(),
+                forecast_artifact.name,  # Store reference to forecast artifact
             )
 
             # 将结果追加到 CSV 文件
@@ -359,15 +393,15 @@ def run_task(
             print(f"Results for {ds_name} have been written to {csv_file_path}")
 
 
-# 加载环境变量
 load_dotenv()
 
-# 定义模型和输出配置
-model_name = "qcw2333/YingLong_300m"
+model_name = "yinglong_300m"
 future_token = 4096
 output_dir = "results_hf_0"
 
-# 加载模型
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
+gpu_device = device
+
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
@@ -376,81 +410,93 @@ model = GPT.from_pretrained(
     "./checkpoints/YingLong_300m",
     torch_dtype=torch.bfloat16,
 )
-print(type(model))
 model = model.to(device).bfloat16()
-# model.eval()
+model.eval()
 
-# 加载数据集属性
 with open("dataset_properties.json", "r") as f:
     dataset_properties_map = json.load(f)
 
+run = wandb.init(
+    entity="mpgee-usc",
+    project="TEMPO",
+    name=f"yinglong_eval_{model_name.split('/')[-1]}_{future_token}",
+    group="base_learner_eval",
+    tags=["yinglong", "eval"],
+)
 
-# 定义任务列表，模仿 run-hf-4.sh 的四个并行任务
+table = wandb.Table(columns=["model", "val_loss", "forecast_artifact"])
+
 tasks = [
     {
         "batch_size": 1024,
         "short_tasks": [
-            "temperature_rain_with_missing",
-            "m4_yearly",
-            "electricity/D",
-            "restaurant",
-            "kdd_cup_2018_with_missing/D",
-            "covid_deaths",
-            "M_DENSE/D",
-            "jena_weather/D",
-            "saugeenday/D",
-            "saugeenday/W",
-            "m4_monthly",
+            # "temperature_rain_with_missing",
+            # "m4_yearly",
+            # "electricity/D",
+            # "restaurant",
+            # "kdd_cup_2018_with_missing/D",
+            # "covid_deaths",
+            # "M_DENSE/D",
+            # "jena_weather/D",
+            # "saugeenday/D",
+            # "saugeenday/W",
+            # "m4_monthly",
         ],
         "long_tasks": [
-            "LOOP_SEATTLE/5T",
-            "kdd_cup_2018_with_missing/H",
-            "SZ_TAXI/15T",
-            "ett1/15T",
-            "bizitobs_l2c/5T",
-            "bizitobs_l2c/H",
+            # "LOOP_SEATTLE/5T",
+            # "kdd_cup_2018_with_missing/H",
+            # "SZ_TAXI/15T",
+            # "ett1/15T",
+            # "bizitobs_l2c/5T",
+            # "bizitobs_l2c/H",
         ],
     },
     {
         "batch_size": 1024,
         "short_tasks": [
-            "bitbrains_fast_storage/H",
-            "m4_daily",
-            "electricity/W",
-            "hierarchical_sales/W",
-            "m4_weekly",
-            "ett2/W",
-            "us_births/W",
-            "us_births/M",
+            # "bitbrains_fast_storage/H",
+            # "m4_daily",
+            # "electricity/W",
+            # "hierarchical_sales/W",
+            # "m4_weekly",
+            # "ett2/W",
+            # "us_births/W",
+            # "us_births/M",
         ],
         "long_tasks": [
-            "bitbrains_rnd/5T",
-            "electricity/H",
-            "bizitobs_service",
-            "jena_weather/H",
-            "ett2/15T",
+            # "bitbrains_rnd/5T",
+            # "electricity/H",
+            # "bizitobs_service",
+            # "jena_weather/H",
+            # "ett2/15T",
         ],
     },
     {
         "batch_size": 1024,
         "short_tasks": [
-            "hospital",
-            "LOOP_SEATTLE/D",
+            # "hospital",
+            # "LOOP_SEATTLE/D",
             "m4_hourly",
-            "ett1/D",
-            "ett2/D",
-            "ett1/W",
-            "saugeenday/M",
+            # "ett1/D",
+            # "ett2/D",
+            # "ett1/W",
+            # "saugeenday/M",
         ],
         "long_tasks": [
-            "bitbrains_fast_storage/5T",
-            "solar/10T",
-            "M_DENSE/H",
-            "ett1/H",
-            "bizitobs_application",
+            # "bitbrains_fast_storage/5T",
+            # "solar/10T",
+            # "M_DENSE/H",
+            # "ett1/H",
+            # "bizitobs_application",
         ],
     },
-    {"batch_size": 32, "short_tasks": ["car_parts_with_missing"], "long_tasks": []},
+    {
+        "batch_size": 32,
+        "short_tasks": [
+            # "car_parts_with_missing",
+        ],
+        "long_tasks": [],
+    },
 ]
 
 # 依次执行所有任务
@@ -466,3 +512,11 @@ for idx, task in enumerate(tasks, 1):
         dataset_properties_map=dataset_properties_map,
         model_name=model_name,
     )
+
+
+table_artifact = wandb.Artifact(
+    name=model_name,
+    type="evaluation",
+)
+table_artifact.add(table, name="evaluation")
+wandb.log_artifact(table_artifact)
