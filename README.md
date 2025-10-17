@@ -174,14 +174,14 @@ Submit your results to the leaderboard by creating a pull request that adds your
 - **`org`**:  
   The organization or team submitting the model.
 
-- **`testdata_leakage`**:  
+- **`testdata_leakage`**:
   Indicates whether the model has been trained on data that overlaps with our test datasets.
 
   > **Important:** We only consider leakage into the **test** split of the GIFT-Eval benchmark.  
   > If your training data includes any dataset that is part of our test corpus it must be labeled as `Yes`.  
   > Models trained solely on our provided [training split](https://huggingface.co/datasets/Salesforce/GiftEval) do **not** count as leaking, since our train splits are carefully constructed using earlier horizons that do not overlap with the test set.
 
-- ***`replication_code_available`**:
+- **`replication_code_available`**:
   Indicates whether the evaluation code is made available to the public by the submission author. The preferable way to share the evaluation code is to share a notebook in the GIFT-Eval github repository (as many previous submissions have done), but a standalone repo for the evaluation code is also acceptable as long as it is accessible to the public and the link is provided in the config.json file through `code_link`.
 
 The final `all_results.csv` file should contain `98` lines (one for each dataset configuration) and `15` columns: `4` for dataset, model, domain and num_variates and `11` for the evaluation metrics.
