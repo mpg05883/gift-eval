@@ -21,6 +21,9 @@ To facilitate the effective pretraining and evaluation of foundation models, we 
 
 ## Update Log
 
+### 2025-10-17
+- Added new column: Replication Code to indicate whether the model' evaluation replication code is made available. This column is a binary indicator specifying whether the evaluation code is made available to the public by the submission author. The preferable way to share the evaluation code is to share a notebook in the GIFT-Eval github repository (as many previous submissions have done), but a standalone repo for the evaluation code is also acceptable as long as it is accessible to the public and the link is provided in the config.json file through the `code_link` field.
+
 ### 2025-08-25
 - Added new model type: Zero-shot to distinguish between foundation model submissions that don't use training data of GIFT-Eval. Now models tagged with zero-shot indicate that the model is not trained on the GIFT-Eval training data. Test data leakage is still separately tracked with the TestData Leakage column. For a model be tagged as `zero-shot`, it must both not have test data leakage and not use any training split from GIFT-Eval. (You can check the [discussion](https://github.com/SalesforceAIResearch/gift-eval/discussions/47) that led to this change.)
 
@@ -132,7 +135,8 @@ Submit your results to the leaderboard by creating a pull request that adds your
     "model_dtype": "float32, etc."
     "model_link": "To your HF model link, e.g., https://huggingface.co/amazon/chronos-t5-small",
     "org": "YOUR_ORG_NAME",
-    "testdata_leakage": "one of Yes or No" 
+    "testdata_leakage": "one of Yes or No",
+    "replication_code_available": "one of Yes or No"
 }
 ```
 
@@ -163,6 +167,9 @@ Submit your results to the leaderboard by creating a pull request that adds your
 - **`model_link`**:  
   A public link to your model (ideally on Hugging Face or another accessible hub).
 
+- **`code_link`**:
+  A public link to your replication code (ideally a notebook in this repo).
+
 - **`org`**:  
   The organization or team submitting the model.
 
@@ -172,6 +179,9 @@ Submit your results to the leaderboard by creating a pull request that adds your
   > **Important:** We only consider leakage into the **test** split of the GIFT-Eval benchmark.  
   > If your training data includes any dataset that is part of our test corpus it must be labeled as `Yes`.  
   > Models trained solely on our provided [training split](https://huggingface.co/datasets/Salesforce/GiftEval) do **not** count as leaking, since our train splits are carefully constructed using earlier horizons that do not overlap with the test set.
+
+- ***`replication_code_available`**:
+  Indicates whether the evaluation code is made available to the public by the submission author. The preferable way to share the evaluation code is to share a notebook in the GIFT-Eval github repository (as many previous submissions have done), but a standalone repo for the evaluation code is also acceptable as long as it is accessible to the public and the link is provided in the config.json file through `code_link`.
 
 The final `all_results.csv` file should contain `98` lines (one for each dataset configuration) and `15` columns: `4` for dataset, model, domain and num_variates and `11` for the evaluation metrics.
 
