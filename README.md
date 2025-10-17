@@ -132,8 +132,9 @@ Submit your results to the leaderboard by creating a pull request that adds your
 {
     "model": "YOUR_MODEL_NAME",
     "model_type": "one of statistical, deep-learning, agentic, pretrained, fine-tuned or zero-shot",
-    "model_dtype": "float32, etc."
+    "model_dtype": "float32, etc.",
     "model_link": "To your HF model link, e.g., https://huggingface.co/amazon/chronos-t5-small",
+    "code_link": "To you replication code, e.g., https://github.com/SalesforceAIResearch/gift-eval/blob/main/notebooks/chronos.ipynb",
     "org": "YOUR_ORG_NAME",
     "testdata_leakage": "one of Yes or No",
     "replication_code_available": "one of Yes or No"
