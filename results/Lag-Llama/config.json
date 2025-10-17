@@ -4,5 +4,6 @@
     "model_dtype": "float32",
     "model_link": "https://huggingface.co/time-series-foundation-models/Lag-Llama",
     "org": "Morgan Stanley & Service Now",
-    "testdata_leakage": "Yes"
+    "testdata_leakage": "Yes",
+    "replication_code_available": "No"
 }

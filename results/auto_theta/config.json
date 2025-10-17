@@ -2,5 +2,6 @@
     "model": "Auto_Theta",
     "model_type": "statistical",
     "model_dtype": "float32",
-    "testdata_leakage": "No"
+    "testdata_leakage": "No",
+    "replication_code_available": "No"
 }

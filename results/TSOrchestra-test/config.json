@@ -4,5 +4,6 @@
     "model_dtype": "float32",
     "model_link": "https://huggingface.co/Melady/TEMPO",
     "org": "Melady Lab @ USC",
-    "testdata_leakage": "Yes"
+    "testdata_leakage": "Yes",
+    "replication_code_available": "No"
 }

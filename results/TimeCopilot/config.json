@@ -3,5 +3,7 @@
     "model_type": "agentic",
     "model_dtype": "float32",
     "model_link": "https://github.com/AzulGarza/TimeCopilot",
-    "testdata_leakage": "No"
+    "code_link": "https://github.com/AzulGarza/timecopilot/tree/main/experiments/gift-eval",
+    "testdata_leakage": "No",
+    "replication_code_available": "Yes"
 }

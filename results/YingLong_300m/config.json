@@ -3,6 +3,8 @@
     "model_type": "zero-shot",
     "model_dtype": "bf16",
     "model_link": "https://huggingface.co/qcw2333/YingLong_300m",
+    "code_link": "https://github.com/SalesforceAIResearch/gift-eval/blob/main/notebooks/yinglong.ipynb",
     "org": "Alibaba",
-    "testdata_leakage": "No"
+    "testdata_leakage": "No",
+    "replication_code_available": "Yes"
 }

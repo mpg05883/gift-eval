@@ -5,5 +5,6 @@
     "model_link": "https://huggingface.co/ibm-research/flowstate",
     "code_link": "https://github.com/SalesforceAIResearch/gift-eval/blob/main/notebooks/flowstate.ipynb",
     "org": "IBM Research",
-    "testdata_leakage": "No"
+    "testdata_leakage": "No",
+    "replication_code_available": "Yes"
 }
