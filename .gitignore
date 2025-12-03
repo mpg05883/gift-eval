@@ -255,3 +255,4 @@ data
 dataset_properties.json
 *.ckpt
 **/lightning_logs/
+/ts-orchestra/
