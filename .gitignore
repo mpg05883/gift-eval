@@ -251,3 +251,7 @@ fabric.properties
 
 /data/
 data
+**/tabpfn-time-series/
+dataset_properties.json
+*.ckpt
+**/lightning_logs/
