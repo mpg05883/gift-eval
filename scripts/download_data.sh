@@ -17,4 +17,4 @@ until hf download Salesforce/GiftEval \
     sleep 10
 done
 
-grep -qxF "GIFT_EVAL=\"$LOCAL_DIR\"" .env 2>/dev/null || echo "GIFT_EVAL=\"../$LOCAL_DIR\"" >> .env
+grep -qxF "GIFT_EVAL=\"$LOCAL_DIR\"" .env 2>/dev/null || echo "GIFT_EVAL=\"../../$LOCAL_DIR\"" >> .env
