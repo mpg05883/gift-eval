@@ -251,4 +251,5 @@ fabric.properties
 
 .cursor/
 .claude/
+.vscode/
 data/
