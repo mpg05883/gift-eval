@@ -77,7 +77,9 @@ We provide a simple class, `Dataset` to load each dataset in our benchmark follo
 This class provides the following properties:
 
 - `training_dataset`: The training dataset.
+- `training_data`: The training dataset split into as many input/output windows as fit.
 - `validation_dataset`: The validation dataset.
+- `validation_data`: The training windows plus one extra window reserved for validation, as input/output pairs.
 - `test_data`: The test dataset.
 
 Please refer to the [dataset.ipynb](notebooks/dataset.ipynb) for an example of how to iterate the train/val/test splits of the dataset.

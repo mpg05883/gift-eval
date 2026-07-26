@@ -13,14 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import math
-from functools import cached_property
+import os
+from collections.abc import Iterable, Iterator
 from enum import Enum
+from functools import cached_property
 from pathlib import Path
-from typing import Iterable, Iterator
 
 import datasets
+import pyarrow.compute as pc
 from dotenv import load_dotenv
 from gluonts.dataset import DataEntry
 from gluonts.dataset.common import ProcessDataEntry
@@ -29,7 +30,6 @@ from gluonts.itertools import Map
 from gluonts.time_feature import norm_freq_str
 from gluonts.transform import Transformation
 from pandas.tseries.frequencies import to_offset
-import pyarrow.compute as pc
 from toolz import compose
 
 TEST_SPLIT = 0.1
@@ -186,11 +186,18 @@ class Dataset:
             return 1
 
     @cached_property
-    def windows(self) -> int:
+    def test_windows(self) -> int:
         if "m4" in self.name:
             return 1
         w = math.ceil(TEST_SPLIT * self._min_series_length / self.prediction_length)
         return min(max(1, w), MAX_WINDOW)
+
+    @cached_property
+    def training_windows(self) -> int:
+        training_length = self._min_series_length - self.prediction_length * (
+            self.test_windows + 1
+        )
+        return max(1, training_length // self.prediction_length)
 
     @cached_property
     def _min_series_length(self) -> int:
@@ -217,25 +224,54 @@ class Dataset:
     @property
     def training_dataset(self) -> TrainingDataset:
         training_dataset, _ = split(
-            self.gluonts_dataset, offset=-self.prediction_length * (self.windows + 1)
+            self.gluonts_dataset,
+            offset=-self.prediction_length * (self.test_windows + 1),
         )
         return training_dataset
 
     @property
     def validation_dataset(self) -> TrainingDataset:
         validation_dataset, _ = split(
-            self.gluonts_dataset, offset=-self.prediction_length * self.windows
+            self.gluonts_dataset, offset=-self.prediction_length * self.test_windows
         )
         return validation_dataset
 
     @property
     def test_data(self) -> TestData:
         _, test_template = split(
-            self.gluonts_dataset, offset=-self.prediction_length * self.windows
+            self.gluonts_dataset, offset=-self.prediction_length * self.test_windows
         )
         test_data = test_template.generate_instances(
             prediction_length=self.prediction_length,
-            windows=self.windows,
+            windows=self.test_windows,
             distance=self.prediction_length,
         )
         return test_data
+
+    @property
+    def training_data(self) -> TestData:
+        _, training_template = split(
+            self.gluonts_dataset,
+            offset=-self.prediction_length
+            * (self.training_windows + self.test_windows + 1),
+        )
+        training_data = training_template.generate_instances(
+            prediction_length=self.prediction_length,
+            windows=self.training_windows,
+            distance=self.prediction_length,
+        )
+        return training_data
+
+    @property
+    def validation_data(self) -> TestData:
+        _, validation_template = split(
+            self.gluonts_dataset,
+            offset=-self.prediction_length
+            * (self.training_windows + self.test_windows + 1),
+        )
+        validation_data = validation_template.generate_instances(
+            prediction_length=self.prediction_length,
+            windows=self.training_windows + 1,
+            distance=self.prediction_length,
+        )
+        return validation_data
