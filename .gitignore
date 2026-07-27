@@ -3,9 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Outputs 
+# Outputs
 outputs/
 lsf_outputs/
+
+# PyTorch model checkpoints
+*.pth
 
 # C extensions
 *.so
