@@ -55,7 +55,7 @@ If you want to run baselines, you can install the required dependencies as follo
 ```
 pip install -e .[baseline]
 ```
-Note: The specific instructions for installing the [Moirai](notebooks/moirai.ipynb) and [Chronos](notebooks/chronos.ipynb) models are available in their relevant notebooks.
+Note: The specific instructions for installing the [Moirai](notebooks/gift_eval/moirai.ipynb) and [Chronos](notebooks/gift_eval/chronos.ipynb) models are available in their relevant notebooks.
 
 4. Get the train/test dataset from [huggingface](https://huggingface.co/datasets/Salesforce/GiftEval).
 
@@ -77,13 +77,15 @@ We provide a simple class, `Dataset` to load each dataset in our benchmark follo
 This class provides the following properties:
 
 - `training_dataset`: The training dataset.
+- `training_data`: The training dataset split into as many input/output windows as fit.
 - `validation_dataset`: The validation dataset.
+- `validation_data`: The training windows plus one extra window reserved for validation, as input/output pairs.
 - `test_data`: The test dataset.
 
-Please refer to the [dataset.ipynb](notebooks/dataset.ipynb) for an example of how to iterate the train/val/test splits of the dataset.
+Please refer to the [dataset.ipynb](notebooks/gift_eval/dataset.ipynb) for an example of how to iterate the train/val/test splits of the dataset.
 ### Running baselines
 
-We provide examples of how to run the statistical, deep learning, and foundation baselines in the [naive.ipynb](notebooks/naive.ipynb), [feedforward.ipynb](notebooks/feedforward.ipynb) and [moirai.ipynb](notebooks/moirai.ipynb) and [chronos.ipynb](notebooks/chronos.ipynb) notebooks. Each of these notebooks wrap models available in different libraries to help you get started. You can either follow these examples or implement your own wrapper class to iterate over the splits of the dataset as explained in the [dataset.ipynb](notebooks/dataset.ipynb) notebook.
+We provide examples of how to run the statistical, deep learning, and foundation baselines in the [naive.ipynb](notebooks/gift_eval/naive.ipynb), [feedforward.ipynb](notebooks/gift_eval/feedforward.ipynb) and [moirai.ipynb](notebooks/gift_eval/moirai.ipynb) and [chronos.ipynb](notebooks/gift_eval/chronos.ipynb) notebooks. Each of these notebooks wrap models available in different libraries to help you get started. You can either follow these examples or implement your own wrapper class to iterate over the splits of the dataset as explained in the [dataset.ipynb](notebooks/gift_eval/dataset.ipynb) notebook.
 
 Each of these notebooks will generate a csv file called `all_results.csv` under the `results/<MODEL_NAME>` folder containing the results for your model on the gift-eval benchmark. Regardless of the model you choose and how you run it, you can submit your results to the leaderboard by following the instructions in the [Submitting your results](#submitting-your-results) section.
 
@@ -98,7 +100,7 @@ The file contains the following columns:
 - `domain`: The domain of the dataset, e.g. `Web/CloudOps`.
 - `num_variates`: The number of variates in the dataset, e.g. `1`.
 
-The first column in the csv file is the dataset config name which is a combination of the prettified dataset name, frequency and the term (The sample notebooks, e.g. [naive.ipynb](notebooks/naive.ipynb), show how to get this name, please follow the same format to align with the leaderboard.):
+The first column in the csv file is the dataset config name which is a combination of the prettified dataset name, frequency and the term (The sample notebooks, e.g. [naive.ipynb](notebooks/gift_eval/naive.ipynb), show how to get this name, please follow the same format to align with the leaderboard.):
 ```python
 f"{dataset_name}/{freq}/{term}"
 ```
@@ -134,7 +136,7 @@ Submit your results to the leaderboard by creating a pull request that adds your
     "model_type": "one of statistical, deep-learning, agentic, pretrained, fine-tuned or zero-shot",
     "model_dtype": "float32, etc.",
     "model_link": "To your HF model link, e.g., https://huggingface.co/amazon/chronos-t5-small",
-    "code_link": "To you replication code, e.g., https://github.com/SalesforceAIResearch/gift-eval/blob/main/notebooks/chronos.ipynb",
+    "code_link": "To you replication code, e.g., https://github.com/SalesforceAIResearch/gift-eval/blob/main/notebooks/gift_eval/chronos.ipynb",
     "org": "YOUR_ORG_NAME",
     "testdata_leakage": "one of Yes or No",
     "replication_code_available": "one of Yes or No"
