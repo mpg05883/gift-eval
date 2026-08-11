@@ -15,10 +15,42 @@
 
 import math
 import os
+import ssl
+import sys
+import warnings
 from collections.abc import Iterable, Iterator
 from enum import Enum
 from functools import cached_property
 from pathlib import Path
+
+if sys.platform == "win32":
+    # Some Windows machines have a malformed certificate in their CA/ROOT
+    # store (e.g. injected by VPN/AV software). ssl.SSLContext.load_default_certs()
+    # loads a store's certs in one bulk call, so a single corrupt entry raises
+    # "SSLError: [ASN1: NOT_ENOUGH_DATA]" and takes the whole store down. aiohttp
+    # (imported by `datasets`) builds its default SSLContext at import time, so
+    # this crashes the `import datasets` below. Fall back to loading certs one
+    # at a time so a single bad entry is skipped instead of failing the import.
+    _original_load_windows_store_certs = ssl.SSLContext._load_windows_store_certs
+
+    def _load_windows_store_certs_safe(self, storename, purpose):
+        try:
+            return _original_load_windows_store_certs(self, storename, purpose)
+        except ssl.SSLError:
+            certs = bytearray()
+            try:
+                for cert, encoding, trust in ssl.enum_certificates(storename):
+                    if encoding == "x509_asn" and (trust is True or purpose.oid in trust):
+                        try:
+                            self.load_verify_locations(cadata=cert)
+                            certs.extend(cert)
+                        except ssl.SSLError:
+                            continue
+            except PermissionError:
+                warnings.warn("unable to enumerate Windows certificate store")
+            return certs
+
+    ssl.SSLContext._load_windows_store_certs = _load_windows_store_certs_safe
 
 import datasets
 import pyarrow.compute as pc
@@ -129,6 +161,8 @@ class Dataset:
     ):
         load_dotenv()
         storage_path = Path(os.getenv(storage_env_var))
+
+        print("Loading dataset from: ", storage_path / name)
         self.hf_dataset = datasets.load_from_disk(str(storage_path / name)).with_format(
             "numpy"
         )
