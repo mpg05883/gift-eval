@@ -199,13 +199,6 @@ class Dataset:
         return min(max(1, w), MAX_WINDOW)
 
     @cached_property
-    def training_windows(self) -> int:
-        training_length = self._min_series_length - self.prediction_length * (
-            self.test_windows + 1
-        )
-        return max(1, training_length // self.prediction_length)
-
-    @cached_property
     def _min_series_length(self) -> int:
         if self.hf_dataset[0]["target"].ndim > 1:
             lengths = pc.list_value_length(
@@ -254,6 +247,17 @@ class Dataset:
         )
         return test_data
 
+    @cached_property
+    def training_windows(self) -> int:
+        training_length = self._min_series_length - self.prediction_length * (
+            self.test_windows + 1
+        )
+        return max(1, training_length // self.prediction_length)
+
+    @cached_property
+    def validation_windows(self) -> int:
+        return self.training_windows + 1
+
     @property
     def training_data(self) -> TestData:
         _, training_template = split(
@@ -273,11 +277,11 @@ class Dataset:
         _, validation_template = split(
             self.gluonts_dataset,
             offset=-self.prediction_length
-            * (self.training_windows + self.test_windows + 1),
+            * (self.validation_windows + self.test_windows + 1),
         )
         validation_data = validation_template.generate_instances(
             prediction_length=self.prediction_length,
-            windows=self.training_windows + 1,
+            windows=self.validation_windows,
             distance=self.prediction_length,
         )
         return validation_data
