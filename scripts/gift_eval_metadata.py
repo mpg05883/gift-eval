@@ -20,19 +20,23 @@ def main(args: argparse.Namespace):
     output_path = metadata_dir / "gift_eval.csv"
 
     rows = []
-    done_names = set()
+    done_datasets = set()
     if output_path.exists():
         rows = pd.read_csv(output_path).to_dict("records")
-        done_names = {row["name"] for row in rows}
-        print(f"Resuming from {output_path} ({len(done_names)} datasets already done)")
+        done_datasets = {row["name"] for row in rows}
+        print(
+            f"Resuming from {output_path} ({len(done_datasets)} datasets already done)"
+        )
 
-    remaining_short_names = [name for name in short_datasets if name not in done_names]
+    remaining_short_datasets = [
+        name for name in short_datasets if name not in done_datasets
+    ]
 
     dataset_properties_map = json.load(
         open("notebooks/gift_eval/dataset_properties.json")
     )
 
-    pretty_names = {
+    pretty_datasets = {
         "saugeenday": "saugeen",
         "temperature_rain_with_missing": "temperature_rain",
         "kdd_cup_2018_with_missing": "kdd_cup_2018",
@@ -40,21 +44,21 @@ def main(args: argparse.Namespace):
     }
 
     kwargs = {
-        "desc": "Loading short datasets",
-        "total": len(remaining_short_names),
+        "desc": "Processing datasets",
+        "total": len(remaining_short_datasets),
         "unit": "dataset",
     }
 
-    for i, name in enumerate(tqdm(remaining_short_names, **kwargs), start=1):
+    for i, name in enumerate(tqdm(remaining_short_datasets, **kwargs), start=1):
         dataset = Dataset(name)
 
         if "/" in name:
             ds_key = name.split("/")[0]
             ds_key = ds_key.lower()
-            ds_key = pretty_names.get(ds_key, ds_key)
+            ds_key = pretty_datasets.get(ds_key, ds_key)
         else:
             ds_key = name.lower()
-            ds_key = pretty_names.get(ds_key, ds_key)
+            ds_key = pretty_datasets.get(ds_key, ds_key)
 
         rows.append(
             {

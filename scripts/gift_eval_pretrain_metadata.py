@@ -16,19 +16,21 @@ def main(args: argparse.Namespace):
 
     metadata_dir = data_dir / "metadata"
     metadata_dir.mkdir(parents=True, exist_ok=True)
-    output_path = metadata_dir / f"{args.corpus}.csv"
+    output_path = metadata_dir / "gift_eval_pretrain.csv"
 
     rows = []
     done_names = set()
     if output_path.exists():
         rows = pd.read_csv(output_path).to_dict("records")
         done_names = {row["name"] for row in rows}
-        print(f"Resuming from {output_path} ({len(done_names)} datasets already done)")
+        print(
+            f"Found existing metadata for {len(done_names)}/{len(names)} datasets at {output_path}"
+        )
 
     remaining_names = [name for name in names if name not in done_names]
 
     kwargs = {
-        "desc": "Loading datasets",
+        "desc": "Processing datasets",
         "total": len(remaining_names),
         "unit": "dataset",
     }
@@ -69,7 +71,7 @@ if __name__ == "__main__":
         "--save-every",
         type=int,
         default=10,
-        help="Save the metadata CSV to disk every N datasets processed",
+        help="Save the metadata CSV after processing every N datasets",
     )
     args = parser.parse_args()
     main(args)
