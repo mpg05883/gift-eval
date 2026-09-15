@@ -1,0 +1,75 @@
+import argparse
+from pathlib import Path
+
+import pandas as pd
+from tqdm import tqdm
+
+from gift_eval.data import Dataset
+
+
+def main(args: argparse.Namespace):
+    root = Path(__file__).resolve().parents[1]
+    data_dir = root / "data" / args.corpus
+    names = [d.name for d in data_dir.iterdir() if d.is_dir() and d.name != ".cache"]
+    names = sorted(names, key=lambda x: x.lower())
+    print(f"Number of datasets: {len(names)}")
+
+    metadata_dir = data_dir / "metadata"
+    metadata_dir.mkdir(parents=True, exist_ok=True)
+    output_path = metadata_dir / f"{args.corpus}.csv"
+
+    rows = []
+    done_names = set()
+    if output_path.exists():
+        rows = pd.read_csv(output_path).to_dict("records")
+        done_names = {row["name"] for row in rows}
+        print(f"Resuming from {output_path} ({len(done_names)} datasets already done)")
+
+    remaining_names = [name for name in names if name not in done_names]
+
+    kwargs = {
+        "desc": "Loading datasets",
+        "total": len(remaining_names),
+        "unit": "dataset",
+    }
+    for i, name in enumerate(tqdm(remaining_names, **kwargs), start=1):
+        dataset = Dataset(name)
+        rows.append(
+            {
+                "name": dataset.name,
+                "freq": dataset.freq,
+                "num_series": len(dataset.hf_dataset),
+                "min_series_length": dataset._min_series_length,
+                "sum_series_length": dataset.sum_series_length,
+                "target_dim": dataset.target_dim,
+                "past_feat_dynamic_real_dim": dataset.past_feat_dynamic_real_dim,
+            }
+        )
+
+        if args.save_every > 0 and i % args.save_every == 0:
+            pd.DataFrame(rows).to_csv(output_path, index=False)
+
+    df = pd.DataFrame(rows)
+    print(f"Number of datasets: {len(df)}")
+
+    df.to_csv(output_path, index=False)
+    print(f"Saved {args.corpus} metadata to: {output_path}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--corpus",
+        type=str,
+        choices=["GiftEvalPretrain"],
+        default="GiftEvalPretrain",
+        help="The corpus to get metadata for",
+    )
+    parser.add_argument(
+        "--save-every",
+        type=int,
+        default=10,
+        help="Save the metadata CSV to disk every N datasets processed",
+    )
+    args = parser.parse_args()
+    main(args)
