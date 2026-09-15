@@ -7,14 +7,14 @@ from tqdm import tqdm
 from gift_eval.data import Dataset
 
 
-def main(args: argparse.Namespace):
+def main(args: argparse.Namespace) -> None:
     root = Path(__file__).resolve().parents[1]
-    data_dir = root / "data" / args.corpus
+    data_dir = root / "data" / "GiftEvalPretrain"
     names = [d.name for d in data_dir.iterdir() if d.is_dir() and d.name != ".cache"]
     names = sorted(names, key=lambda x: x.lower())
-    print(f"Number of datasets: {len(names)}")
+    print(f"Number of names: {len(names)}")
 
-    metadata_dir = data_dir / "metadata"
+    metadata_dir = root / "data" / "metadata"
     metadata_dir.mkdir(parents=True, exist_ok=True)
     output_path = metadata_dir / "gift_eval_pretrain.csv"
 
@@ -23,22 +23,21 @@ def main(args: argparse.Namespace):
     if output_path.exists():
         rows = pd.read_csv(output_path).to_dict("records")
         done_names = {row["name"] for row in rows}
-        print(
-            f"Found existing metadata for {len(done_names)}/{len(names)} datasets at {output_path}"
-        )
+        print(f"Found existing metadata for {len(done_names)}/{len(names)} datasets")
 
-    remaining_names = [name for name in names if name not in done_names]
+    missing_names = [n for n in names if n not in done_names]
 
     kwargs = {
         "desc": "Processing datasets",
-        "total": len(remaining_names),
+        "total": len(missing_names),
         "unit": "dataset",
     }
-    for i, name in enumerate(tqdm(remaining_names, **kwargs), start=1):
+    for i, name in enumerate(tqdm(missing_names, **kwargs), start=1):
         dataset = Dataset(name)
         rows.append(
             {
                 "name": dataset.name,
+                "domain": "",
                 "freq": dataset.freq,
                 "num_series": len(dataset.hf_dataset),
                 "min_series_length": dataset._min_series_length,
@@ -55,18 +54,11 @@ def main(args: argparse.Namespace):
     print(f"Number of datasets: {len(df)}")
 
     df.to_csv(output_path, index=False)
-    print(f"Saved {args.corpus} metadata to: {output_path}")
+    print(f"Saved metadata to: {output_path}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--corpus",
-        type=str,
-        choices=["GiftEvalPretrain"],
-        default="GiftEvalPretrain",
-        help="The corpus to get metadata for",
-    )
     parser.add_argument(
         "--save-every",
         type=int,
