@@ -48,11 +48,11 @@ classifiers = [
 
 [project.optional-dependencies]
 baseline = [
-  "torch==2.5.1",
-  "torchvision==0.20.1",
-  "statsforecast==2.1.1",
-  "tensorboard==2.21.0",
-  "lightning==2.6.5",
+  "torch>=2.1",
+  "statsforecast",
+  "tensorboard",
+  "torch>=2.1",
+  "lightning>=2.0",
 ]
 
 [tool.hatch.version]
@@ -71,10 +71,4 @@ target-version = ['py310']
 [tool.pytest.ini_options]
 pythonpath = [
   ".", "src",
-]
-
-[dependency-groups]
-dev = [
-    "ipykernel>=7.3.0",
-    "pytest>=9.1.1",
 ]

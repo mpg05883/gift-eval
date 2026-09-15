@@ -30,6 +30,7 @@ from gluonts.transform import Transformation
 from pandas.tseries.frequencies import to_offset
 from toolz import compose
 
+
 TEST_SPLIT = 0.1
 MAX_WINDOW = 20
 
@@ -117,23 +118,6 @@ class MultivariateToUnivariate(Transformation):
                 yield univariate_entry
 
 
-_ROOT_DIR = Path(__file__).resolve().parents[2]
-_DATA_DIR = _ROOT_DIR / "data"
-_DATASET_GROUPS = ("GiftEval", "GiftEvalPretrain")
-
-
-def resolve_dataset_path(name: str) -> Path:
-    """Resolve a dataset name (e.g. "ett1/15T") to its path on disk under
-    data/GiftEval or data/GiftEvalPretrain, whichever contains it."""
-    dataset_name = name.split("/", 1)[0]
-    for group in _DATASET_GROUPS:
-        if (_DATA_DIR / group / dataset_name).is_dir():
-            return _DATA_DIR / group / name
-    raise FileNotFoundError(
-        f"Could not find dataset {dataset_name!r} under "
-        f"{', '.join(str(_DATA_DIR / group) for group in _DATASET_GROUPS)}"
-    )
-
 
 class Dataset:
     def __init__(
@@ -142,9 +126,19 @@ class Dataset:
         term: Term | str = Term.SHORT,
         to_univariate: bool = False,
     ):
-        self.hf_dataset = datasets.load_from_disk(
-            str(resolve_dataset_path(name))
-        ).with_format("numpy")
+        root = Path(__file__).resolve().parents[2]
+        data_dir = root / "data"
+        splits = ["GiftEval", "GiftEvalPretrain"]
+        
+        for split in splits:
+            if (data_dir / split / name).is_dir():
+                storage_path = data_dir / split / name
+                
+                break
+            
+        datasets.utils.disable_progress_bars()
+        
+        self.hf_dataset = datasets.load_from_disk(str(storage_path)).with_format("numpy")
         process = ProcessDataEntry(
             self.freq,
             one_dim_target=self.target_dim == 1,
