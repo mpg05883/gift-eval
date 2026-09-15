@@ -256,3 +256,4 @@ fabric.properties
 .claude/
 .vscode/
 data/
+.ruff_cache/

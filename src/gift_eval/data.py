@@ -30,7 +30,6 @@ from gluonts.transform import Transformation
 from pandas.tseries.frequencies import to_offset
 from toolz import compose
 
-
 TEST_SPLIT = 0.1
 MAX_WINDOW = 20
 
@@ -118,7 +117,6 @@ class MultivariateToUnivariate(Transformation):
                 yield univariate_entry
 
 
-
 class Dataset:
     def __init__(
         self,
@@ -128,17 +126,18 @@ class Dataset:
     ):
         root = Path(__file__).resolve().parents[2]
         data_dir = root / "data"
-        splits = ["GiftEval", "GiftEvalPretrain"]
-        
-        for split in splits:
-            if (data_dir / split / name).is_dir():
-                storage_path = data_dir / split / name
-                
+        corpora = ["GiftEval", "GiftEvalPretrain"]
+
+        for corpus in corpora:
+            if (data_dir / corpus / name).is_dir():
+                storage_path = data_dir / corpus / name
                 break
-            
+
         datasets.utils.disable_progress_bars()
-        
-        self.hf_dataset = datasets.load_from_disk(str(storage_path)).with_format("numpy")
+
+        self.hf_dataset = datasets.load_from_disk(str(storage_path)).with_format(
+            "numpy"
+        )
         process = ProcessDataEntry(
             self.freq,
             one_dim_target=self.target_dim == 1,
