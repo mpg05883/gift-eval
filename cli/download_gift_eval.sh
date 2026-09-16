@@ -10,7 +10,7 @@
 set -e
 
 dataset_name="GiftEval"
-local_dir="./data/gift_eval"
+local_dir="../data/gift_eval"
 max_attempts=5
 delay_seconds=10
 
