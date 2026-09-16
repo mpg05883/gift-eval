@@ -255,5 +255,8 @@ fabric.properties
 .cursor/
 .claude/
 .vscode/
-data/
+# Ignore contents of data/ dirs, but keep metadata/
+data/*
+!data/metadata/
+!data/metadata/**
 .ruff_cache/

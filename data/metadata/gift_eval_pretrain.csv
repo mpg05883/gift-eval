@@ -1,0 +1,11 @@
+name,domain,freq,num_series,min_series_length,sum_series_length,target_dim,past_feat_dynamic_real_dim
+alibaba_cluster_trace_2018,,5T,58409,100,190385060,2,6
+australian_electricity_demand,,30T,5,230400,1153584,1,0
+azure_vm_traces_2017,,5T,159472,97,885522908,1,2
+bdg-2_bear,,H,91,8760,1482312,1,0
+bdg-2_fox,,H,135,8760,2324568,1,0
+bdg-2_panther,,H,105,8760,919800,1,0
+bdg-2_rat,,H,280,8760,4728288,1,0
+beijing_air_quality,,H,12,35064,4628448,11,0
+BEIJING_SUBWAY_30MIN,,30T,276,1572,867744,2,11
+bitcoin_with_missing,,D,18,4551,81918,1,0
