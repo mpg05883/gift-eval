@@ -10,7 +10,7 @@
 set -e
 
 dataset_name="GiftEvalPretrain"
-local_dir="./data/$dataset_name"
+local_dir="./data/gift_eval_pretrain"
 max_attempts=5
 delay_seconds=10
 

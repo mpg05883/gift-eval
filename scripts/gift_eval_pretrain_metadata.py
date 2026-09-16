@@ -9,7 +9,7 @@ from gift_eval.data import Dataset
 
 def main(args: argparse.Namespace) -> None:
     root = Path(__file__).resolve().parents[1]
-    data_dir = root / "data" / "GiftEvalPretrain"
+    data_dir = root / "data" / "gift_eval_pretrain"
     names = [d.name for d in data_dir.iterdir() if d.is_dir() and d.name != ".cache"]
     names = sorted(names, key=lambda x: x.lower())
     print(f"Number of names: {len(names)}")

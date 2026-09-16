@@ -126,7 +126,7 @@ class Dataset:
     ):
         root = Path(__file__).resolve().parents[2]
         data_dir = root / "data"
-        corpora = ["GiftEval", "GiftEvalPretrain"]
+        corpora = ["gift_eval", "gift_eval_pretrain"]
 
         for corpus in corpora:
             if (data_dir / corpus / name).is_dir():

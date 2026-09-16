@@ -260,3 +260,4 @@ data/*
 !data/metadata/
 !data/metadata/**
 .ruff_cache/
+notebooks/*/data
