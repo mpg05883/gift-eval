@@ -261,3 +261,6 @@ data/*
 !data/metadata/**
 .ruff_cache/
 notebooks/*/data
+notebooks/*/lightning_logs
+archive/*/data
+archive/*/lightning_logs
