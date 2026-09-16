@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# Utility functions for bash scripts.
+# Utility functions for bash scripts
 
-# Activate a conda environment named `env_name` (default: "gift_eval").
+# Activate a conda environment named `env` (default: "gift_eval")
 activate_conda_env() {
-    env_name="gift_eval"
+    env="gift_eval"
 
     # Look for conda.sh in common locations and load it if found
     if ! command -v conda >/dev/null 2>&1; then
@@ -27,6 +27,7 @@ activate_conda_env() {
         exit 1
     fi
 
+    # shellcheck disable=SC1091
     source "$(conda info --base)/etc/profile.d/conda.sh"
-    conda activate "$env_name"
+    conda activate "$env"
 }
